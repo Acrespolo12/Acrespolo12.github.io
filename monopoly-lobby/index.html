@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio - Monopoly</title>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-image: url('monopoly-background.jpg'); /* Añadir imagen de fondo */
+            background-size: cover; /* Hacer que la imagen cubra toda la pantalla */
+            background-position: center; /* Centrar la imagen de fondo */
+            font-family: 'Luckiest Guy', sans-serif; /* Aplicar la nueva tipografía */
+            color: white; /* Cambiar el color del texto a blanco para mayor legibilidad */
+        }
+        .container {
+            margin-top: 50px; /* Margen superior para separación */
+            text-align: center; /* Centrar el texto en la página */
+            background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente para mejorar la legibilidad */
+            border-radius: 10px; /* Bordes redondeados para el contenedor */
+            padding: 20px; /* Espaciado interno para el contenedor */
+        }
+        .header {
+            margin-bottom: 20px; /* Espaciado inferior */
+        }
+        .input-group {
+            max-width: 400px; /* Limitar el ancho del grupo de entrada */
+            margin: 0 auto; /* Centrar horizontalmente */
+        }
+        .btn-start {
+            margin-top: 20px; /* Margen superior para separación del botón */
+        }
+        .player-name {
+            font-size: 24px;
+            font-weight: bold;
+            color: #fff; /* Color de texto en blanco */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="player-name">¡Bienvenido a Monopoly!</h1>
+            <p>Introduce tu nombre y comienza a jugar con un amigo.</p>
+        </div>
+        <div class="input-group">
+            <input type="text" id="player1Input" class="form-control" placeholder="Nombre del Jugador 1" required>
+        </div>
+        <div class="input-group">
+            <input type="text" id="player2Input" class="form-control" placeholder="Nombre del Jugador 2" required>
+        </div>
+        <button id="startGameBtn" class="btn btn-primary btn-start">Empezar Juego</button>
+    </div>
+    <script>
+        document.getElementById('startGameBtn').addEventListener('click', () => {
+            const player1Name = document.getElementById('player1Input').value;
+            const player2Name = document.getElementById('player2Input').value;
+    
+            if (player1Name && player2Name) {
+                // Almacenar los nombres en el almacenamiento local como un array
+                localStorage.setItem('players', JSON.stringify([player1Name, player2Name]));
+                // Redirigir al tablero
+                window.location.href = 'tablero.html';
+            } else {
+                alert("Por favor, introduce los nombres de ambos jugadores.");
+            }
+        });
+    </script>
+    
+</body>
+</html>
