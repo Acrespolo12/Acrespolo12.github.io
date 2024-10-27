@@ -5,120 +5,150 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monopoly - Tablero</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Agregar Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
     <style>
         body {
-            background-color: #e0f7fa; /* Color de fondo suave */
-            font-family: 'Luckiest Guy', sans-serif; /* Aplicar la nueva tipografía */
-            background-image: url('monopoly-background.jpg'); /* Imagen de fondo */
-            background-size: cover; /* Cubrir toda la pantalla */
-            background-position: center; /* Centrar la imagen de fondo */
-            margin: 0; /* Eliminar margenes por defecto */
+            background-color: #e0f7fa;
+            font-family: 'Luckiest Guy', sans-serif;
+            background-image: url('monopoly-background.jpg');
+            background-size: cover;
+            background-position: center;
+            margin: 0;
         }
 
         .tablero {
             padding: 20px;
             border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con transparencia */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Sombra del tablero */
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
 
         .player-name {
-            font-size: 26px; /* Aumentar tamaño de fuente */
+            font-size: 26px;
             font-weight: bold;
             color: #333;
         }
 
         #cartasContainer {
             display: flex;
-            overflow-x: auto; /* Permitir desplazamiento horizontal */
-            white-space: nowrap; /* Mantiene las cartas en una sola línea */
+            overflow-x: auto;
+            white-space: nowrap;
             margin-top: 20px;
-            padding: 10px; /* Espaciado interno para el contenedor */
-            border: 2px solid #333; /* Borde para el contenedor de cartas */
-            border-radius: 8px; /* Bordes redondeados */
-            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con un poco de transparencia */
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.9);
         }
 
         .carta {
-            width: 220px; /* Cambiar ancho de carta */
-            height: 140px; /* Cambiar altura de carta */
-            border: 2px solid #00796b; /* Color del borde */
-            border-radius: 12px; /* Bordes más redondeados */
-            margin: 10px; /* Espacio entre cartas */
-            display: flex; /* Alinear el contenido de la carta */
-            flex-direction: column; /* Para que el texto esté en columnas */
-            justify-content: flex-start; /* Alinear el texto hacia arriba */
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Sombra para las cartas */
-            cursor: move; /* Cambiar cursor para indicar que es arrastrable */
-            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efectos al pasar el mouse */
-            background-color: white; /* Color blanco de fondo */
+            width: 220px;
+            height: 140px;
+            border: 2px solid #00796b;
+            border-radius: 12px;
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+            cursor: move;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: white;
+            position: relative;
         }
 
         .carta:hover {
-            transform: scale(1.05); /* Escalar al pasar el mouse */
-            box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.3); /* Aumentar sombra al pasar el mouse */
+            transform: scale(1.05);
+            box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Efecto al arrastrar */
+        .carta:active {
+            transform: scale(1.1);
+            box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Indicador de carta jugable */
+        .carta.pulse {
+            animation: pulseAnimation 1s infinite;
+        }
+
+        @keyframes pulseAnimation {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         .carta-header {
-            background-color: #ffeb3b; /* Color amarillo de Monopoly */
+            background-color: #ffeb3b;
             padding: 10px;
             text-align: center;
             font-weight: bold;
-            font-size: 18px; /* Aumentar tamaño de fuente del encabezado */
-            color: #333; /* Color de texto */
-            border-top-left-radius: 12px; /* Bordes redondeados */
-            border-top-right-radius: 12px; /* Bordes redondeados */
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Sombra para el encabezado */
-            margin-bottom: 5px; /* Espaciado inferior */
-            transition: background-color 0.3s; /* Suave cambio de color */
-        }
-
-        .carta-header:hover {
-            background-color: #ffd600; /* Color más brillante al pasar el mouse */
+            font-size: 16px;
+            color: #333;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+            margin-bottom: 5px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .carta-content {
-            flex-grow: 1; /* Para ocupar el espacio restante */
+            flex-grow: 1;
             display: flex;
             justify-content: center;
-            align-items: center; /* Alinear el texto al centro */
-            font-size: 16px; /* Tamaño de fuente de la descripción */
-            color: #333; /* Color de texto */
+            align-items: center;
+            font-size: 16px;
+            color: #333;
             padding: 10px;
-            text-align: center; /* Asegurarnos que el texto esté centrado */
-            overflow-wrap: break-word; /* Permitir que las palabras se dividan */
+            text-align: center;
+            overflow-wrap: break-word;
+        }
+
+        /* Icono especial */
+        .special-icon {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 18px;
+            color: #ffeb3b;
         }
 
         .column-container {
             display: flex;
-            justify-content: space-between; /* Espacio entre las columnas */
-            margin-top: 20px; /* Margen superior para separación */
+            justify-content: space-between;
+            margin-top: 20px;
         }
 
         .drop-area {
-            width: 48%; /* Columna de 50% de ancho */
-            height: 300px; /* Altura fija para las áreas de entrega */
-            border: 2px solid #00796b; /* Color de borde más atractivo */
+            width: 48%;
+            height: 300px;
+            border: 2px solid #00796b;
             padding: 10px;
             display: flex;
-            flex-direction: row; /* Mantener las cartas en filas */
-            flex-wrap: wrap; /* Permitir que las cartas se ajusten a múltiples filas */
-            background-color: rgba(240, 240, 240, 0.9); /* Fondo claro para las áreas de entrega */
-            overflow-y: auto; /* Permitir el desplazamiento vertical */
-            border-radius: 8px; /* Bordes redondeados */
+            flex-direction: row;
+            flex-wrap: wrap;
+            background-color: rgba(240, 240, 240, 0.9);
+            overflow-y: auto;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .player-cards {
-            margin-top: 10px;
-            display: flex;
-            flex-wrap: wrap; /* Permitir que las cartas se ajusten a la fila */
-            gap: 10px; /* Espaciado entre cartas */
-            min-height: 50px; /* Espacio mínimo para las cartas */
+        .drop-area:hover {
+            background-color: rgba(200, 230, 201, 0.8);
         }
 
+        .drop-area .carta {
+            background-color: #f9fbe7;
+            border-color: #ff9800;
+            transition: transform 0.2s ease-out;
+        }
     </style>
 </head>
 <body>
@@ -129,7 +159,8 @@
             <div id="playerRight" class="player-name position-absolute" style="right: 20px; top: 20px;"></div>
             
             <h2 class="mt-4">Cartas del Monopoly:</h2>
-            <div id="cartasContainer" class="cartas-fila"></div>
+            <div id="cartasContainer" class="cartas-fila">
+            </div>
 
             <div class="column-container">
                 <div class="drop-area" id="dropLeft" ondrop="drop(event, 'left')" ondragover="allowDrop(event)">

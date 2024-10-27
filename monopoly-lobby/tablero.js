@@ -23,18 +23,33 @@ mostrarJugadores();
 
 // Lista de cartas de Monopoly con precios
 const cartas = [
-    { nombre: "Calle del Prado", precio: 250 },
-    { nombre: "Avenida de Neptuno", precio: 300 },
-    { nombre: "Calle de Alcalá", precio: 400 },
-    { nombre: "Gran Vía", precio: 500 },
-    { nombre: "Plaza Mayor", precio: 350 },
-    { nombre: "Calle Serrano", precio: 450 },
-    { nombre: "Estación de Atocha", precio: 200 },
-    { nombre: "Avenida de América", precio: 320 },
-    { nombre: "Plaza de España", precio: 600 },
-    { nombre: "Estación del Norte", precio: 180 },
-    { nombre: "Calle de Vallehermoso", precio: 230 },
-    { nombre: "Calle de Bravo Murillo", precio: 290 }
+    { nombre: "MUAK MUAK", precio: 600 },
+    { nombre: "Besame el cuello", precio: 600 },
+    { nombre: "Estación 1", precio: 2000 },
+    { nombre: "Masaje Espalda", precio: 1200 },
+    { nombre: "Besame Entero", precio: 1200 },
+    { nombre: "Acariciame", precio: 1200 },
+    { nombre: "Acaricia, Besa y Lame espalda", precio: 1400 },
+    { nombre: "Cambiar Ropa", precio: 1500 },
+    { nombre: "Manosea como Sabes", precio: 1400 },
+    { nombre: "Estación 2", precio: 2000 },
+    { nombre: "Lame de pie a parte intima", precio: 1800 },
+    { nombre: "Tapa los OJOS y lleva mi mano", precio: 1800 },
+    { nombre: "Adivina Juguete manos atadas y OJOS cerrados", precio: 2200 },
+    { nombre: "Lame Empieza Por detras", precio: 2200 },
+    { nombre: "Girate y siente la Lengua", precio: 2200 },
+    { nombre: "Estación 3", precio: 2000 },
+    { nombre: "Ojos vendados y juguete parte intima", precio: 2600 },
+    { nombre: "SWITCH ROLES", precio: 1500 },
+    { nombre: "69 o 96", precio: 2600 },
+    { nombre: "Imagina y Recrea", precio: 2600 },
+    { nombre: "Empieza Preliminar", precio: 3200 },
+    { nombre: "Oral + Dedo Detras", precio: 3200 },
+    { nombre: "Pon de rodillas", precio: 3200 },
+    { nombre: "Estación 4", precio: 2000 },
+    { nombre: "Oral + Babas", precio: 4000 },
+    { nombre: "Inclinado Cama TOY / ORAL", precio: 4000 },
+    { nombre: "Manosea por dentro Ropa", precio: 1800 }
 ];
 
 // Generar cartas aleatorias
@@ -44,8 +59,8 @@ function generarCartas() {
     // Mezclar las cartas aleatoriamente
     const cartasAleatorias = cartas.sort(() => 0.5 - Math.random());
 
-    // Mostrar 10 cartas en pantalla
-    for (let i = 0; i < 10; i++) {
+    // Mostrar 27 cartas en pantalla
+    for (let i = 0; i < 27; i++) {
         const cartaElement = document.createElement('div');
         cartaElement.classList.add('carta');
 
@@ -53,6 +68,44 @@ function generarCartas() {
         const cartaHeader = document.createElement('div');
         cartaHeader.classList.add('carta-header');
         cartaHeader.textContent = cartasAleatorias[i].nombre;
+
+        // Asignar color de fondo al encabezado según el precio de la carta
+        switch (cartasAleatorias[i].precio) {
+            case 600:
+                cartaHeader.style.backgroundColor = '#71635a'; // Marrón
+                break;
+            case 1200:
+                cartaHeader.style.backgroundColor = '#ADD8E6'; // Azul claro
+                break;
+            case 1400:
+                cartaHeader.style.backgroundColor = '#FFC0CB'; // Rosa
+                break;
+            case 1500:
+                cartaHeader.style.backgroundColor = '#800080'; // Morado
+                break;
+            case 1800:
+                cartaHeader.style.backgroundColor = '#FFA500'; // Naranja
+                break;
+            case 2000:
+                cartaHeader.style.backgroundColor = '#D3D3D3'; // Gris
+                break;
+            case 2200:
+                cartaHeader.style.backgroundColor = '#FF0000'; // Rojo
+                break;
+            case 2600:
+                cartaHeader.style.backgroundColor = '#FFFF00'; // Amarillo
+                break;
+            case 3200:
+                cartaHeader.style.backgroundColor = '#008000'; // Verde
+                break;
+            case 4000:
+                cartaHeader.style.backgroundColor = '#00008B'; // Azul oscuro
+                cartaHeader.style.color = '#c2c0c0'; // Cambiar color de letra a blanco
+                break;                
+            default:
+                cartaHeader.style.backgroundColor = '#FFFFFF'; // Blanco por defecto
+                break;
+        }
 
         // Crear el contenido de la carta
         const cartaContent = document.createElement('div');
@@ -71,7 +124,6 @@ function generarCartas() {
         cartasContainer.appendChild(cartaElement);
     }
 }
-
 // Funciones de arrastrar y soltar
 function allowDrop(ev) {
     ev.preventDefault(); // Permitir que se suelte la carta
@@ -98,7 +150,7 @@ function drop(ev, playerSide) {
 
         // Marcar la carta como "usada" para que no se pueda seleccionar de nuevo
         cartaElementOriginal.setAttribute('draggable', false); // Deshabilitar arrastre en la carta original
-        cartaElementOriginal.style.opacity = '0.5'; // Cambiar la opacidad para indicar que la carta ya fue usada
+        cartaElementOriginal.style.opacity = '1'; // Cambiar la opacidad para indicar que la carta ya fue usada
     }
 
     // Organizar las cartas en filas
