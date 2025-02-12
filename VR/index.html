@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💋 Verdad o Reto 💋</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css" rel="stylesheet"> <!-- Añadir Font Awesome para iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+
+    <style>
+html, body {
+    height: 100%; /* Asegura que el contenido cubra todo el alto */
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Evita que aparezca el scroll */
+    background: linear-gradient(135deg, #2a0b19 0%, #1f1e1f 50%, #353535 100%);
+background-size: 400% 400%;
+animation: gradient 12s ease infinite;
+
+    color: #fff;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1em;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+        .container {
+            margin-top: 25px;
+        }
+        /* Título */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #ff4081;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        h1:hover {
+            color: #ff80ab;
+        }
+
+        /* Formulario de entrada */
+        #setup {
+            margin-top: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-control {
+            font-size: 1.2em;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #ff4081;
+            background-color: rgba(15, 15, 15, 0.1);
+            color: white;
+            width: 300px;
+            margin: 10px auto;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 10px rgba(255, 64, 129, 0.5);
+            border-color: #ff80ab;
+        }
+
+        .btn-custom {
+    background-color: #e91e63;
+    color: white;
+    border: none;
+    font-size: 1.2em;
+    padding: 15px 30px;
+    margin: 10px;
+    width: 200px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+}
+
+.btn-custom:hover {
+    background-color: #c2185b;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btns-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+        .form-control {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        #pregunta, #tipo-pregunta {
+    font-size: 1.6em;
+    margin-top: 20px;
+    color: #ff80ab;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    max-height: 200px;  /* Máxima altura de la sección */
+    overflow-y: auto;  /* Habilitar el scroll vertical cuando el contenido es largo */
+    word-wrap: break-word;  /* Para que las palabras largas se dividan correctamente */
+    padding-right: 10px;  /* Para asegurarnos de que no se vean cortadas las palabras al final */
+}
+
+        .turno, .intensidad, .puntos {
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        .hidden {
+            display: none;
+        }
+        #rechazar, #hecho {
+            font-size: 1.2em;
+            margin-top: 20px;
+            padding: 12px 25px;
+            border-radius: 30px;
+            width: 250px;
+            margin: 10px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        #rechazar {
+            background-color: #aaa;
+            color: white;
+        }
+        #rechazar:hover {
+            background-color: #888;
+        }
+        #hecho {
+            background-color: #4caf50;
+            color: white;
+        }
+        #hecho:hover {
+            background-color: #388e3c;
+        }
+        .jugador-info {
+            margin-top: 20px;
+        }
+        .jugador-info span {
+            font-weight: bold;
+            color: #ff4081;
+        }
+        .puntos span {
+            font-weight: bold;
+            color: #ff4081;
+        }
+        .turno {
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            margin: 10px 0;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-container button {
+            width: auto;
+            margin: 0 10px;
+        }
+
+        #pregunta.show, #tipo-pregunta.show {
+            opacity: 1;
+        }
+        
+        .btn-container button:hover {
+            transform: scale(1.1);
+            transition: transform 0.2s ease;
+        }
+        .jugador-info {
+    margin-top: 30px;
+    font-size: 1.2em;
+    color: #fff;
+}
+
+.jugador-info p {
+    margin: 10px 0;
+}
+
+.jugador-info .intensidad {
+    font-weight: bold;
+    font-size: 1.3em;
+    color: #ff4081;
+}
+
+.jugador-info .puntos {
+    font-size: 1em;
+    margin-top: 15px;
+    color: #ff80ab;
+}
+
+.jugador-info span {
+    font-weight: bold;
+    color: #ff4081;
+}
+
+.jugador-info .row {
+    margin-bottom: 20px;
+}
+
+.jugador-info .col-md-4 {
+    border: 2px solid #ff4081;
+    border-radius: 15px;
+    padding: 15px;
+    margin: 10px;
+    background-color: rgba(255, 64, 129, 0.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.jugador-info .col-md-4 p {
+    font-weight: bold;
+}
+
+.jugador-info .col-md-4 p.intensidad {
+    color: #e91e63;
+}
+
+#consentimiento {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    text-align: center;
+    padding: 15px;
+    font-size: 1.1em;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💋 Verdad o Reto 💋</h1>
+        <div id="setup">
+            <input type="text" id="jugador1" class="form-control" placeholder="Nombre del Jugador 1" required>
+            <input type="text" id="jugador2" class="form-control" placeholder="Nombre del Jugador 2" required>
+            <button class="btn btn-custom" onclick="iniciarJuego()">Iniciar Juego</button>
+        </div>
+        <div id="juego" class="hidden">
+            <p class="turno">Turno de: <span id="jugador-turno">Jugador 1</span></p>
+            <div class="jugador-info">
+                <div class="row justify-content-center">
+                    <!-- Intensidad de Jugador 1 -->
+                    <div class="col-md-4 text-center">
+                        <p><span id="nombre-jugador1">Jugador 1</span> 💖</p>
+                        <p class="intensidad">
+                            <strong>Intensidad:</strong> <span id="nivel-intensidad-1">1</span> 🔥
+                        </p>
+                    </div>
+                    <!-- Intensidad de Jugador 2 -->
+                    <div class="col-md-4 text-center">
+                        <p><span id="nombre-jugador2">Jugador 2</span> 💋</p>
+                        <p class="intensidad">
+                            <strong>Intensidad:</strong> <span id="nivel-intensidad-2">1</span> 🔥
+                        </p>
+                    </div>
+                </div>
+                <div class="puntos">
+                    <p><strong>Puntos:</strong> 
+                        <span id="puntos-jugador1">Jugador 1: 0 </span>💖 | 
+                        <span id="puntos-jugador2">Jugador 2: 0</span>💋
+                    </p>
+                </div>
+            </div>
+            
+            <div class="btn-container">
+                <button class="btn btn-custom btn-block" onclick="elegir('verdad')"><i class="fa fa-check-circle"></i> Verdad</button>
+                <button class="btn btn-custom btn-block" onclick="elegir('reto')"><i class="fa fa-gift"></i> Reto</button>                
+            </div>
+            <p id="tipo-pregunta"></p>
+            <p id="pregunta"></p>
+            <div class="btns-actions">
+                <button class="btn btn-custom hidden" id="rechazar" onclick="subirIntensidad()">No quiero hacerlo 😏</button>
+                <button class="btn btn-custom hidden" id="hecho" onclick="siguienteTurno()">Hecho ✔</button>
+            </div>   
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="consentimiento" class="footer text-center">
+        <p>🔒 Asegúrate de que todos los jugadores estén cómodos y hayan dado su consentimiento antes de continuar.</p>
+    </div>
+
+    <script>
+        let turno = 1;
+        let intensidad = [1, 1];
+        let puntos = [0, 0];
+        let jugadores = [];
+
+        let preguntas = {
+    1: {
+        // Nivel 1: Calentarse y provocar, pero sin hacer nada explícito
+        verdad: [
+            "¿Te sientes cómodo/a con la idea de probar algo nuevo en la cama?",
+            "¿Cuál es tu tipo de juego de rol favorito?",
+            "¿Has tenido alguna vez una fantasía que nunca has compartido con nadie?",
+            "¿Prefieres tener relaciones de manera lenta y suave o rápida y apasionada?",
+            "¿Te gustaría experimentar con el control durante una cita íntima?",
+            "¿Alguna vez has usado algún accesorio sexy? Cuéntanos cuál.",
+            "¿Te sentirías cómodo/a probando una pequeña atadura durante un juego íntimo?",
+            "¿Tienes alguna fantasía secreta sobre el sexo que nunca hayas mencionado?",
+            "¿Qué piensas sobre la idea de probar un masaje erótico con aceites?",
+            "¿Te gustaría experimentar con algún tipo de juego con los sentidos, como vendarte los ojos?"
+        ],
+        reto: [
+            "Haz un beso lento y sensual por 10 segundos.",
+            "Desnúdate parcialmente (puedes empezar con una prenda) mientras tu compañero/a te observa.",
+            "Tienes 1 minuto para besar de manera sensual y tierna una parte de su cuerpo, elige la zona.",
+            "Realiza un masaje en la espalda de tu compañero/a durante 1 minuto, usando aceites o loción.",
+            "Usa solo la lengua para dar pequeños besos o lamer una zona específica de su cuerpo durante 1 minuto.",
+            "Juega a quitarle una prenda a tu compañero/a lentamente, sin apresurarte.",
+            "Haz que tu compañero/a se sienta deseado/a con un susurro sensual al oído durante 30 segundos.",
+            "Toca suavemente las piernas de tu compañero/a con las manos durante 1 minuto.",
+            "Haz que tu compañero/a se desvista lentamente, mientras tú sigues con una estimulación suave con la lengua en su cuello.",
+            "Tienes 1 minuto para lamer y besar el cuerpo de tu compañero/a, cambiando de zona de vez en cuando.",
+            "Sigue un ritmo lento mientras besas y acaricias de manera sensitiva la parte interior del muslo de tu compañero/a."
+        ]
+    },
+    2: {
+        // Nivel 2: Juegos preliminares, juguetes, sin penetración aún, pero más sensual
+        verdad: [
+            "¿Alguna vez has sentido una gran conexión emocional con tu pareja durante el sexo?",
+            "¿Qué fantasía te gustaría compartir con tu pareja?",
+            "Si pudieras elegir entre ser dominante o sumiso/a, ¿qué elegirías?",
+            "¿Te gustaría experimentar con cambios de roles en la intimidad? ¿Qué roles te atraen?",
+            "¿Qué tan importante es para ti la comunicación durante un encuentro íntimo?",
+            "¿Alguna vez has jugado a un juego de sumisión y dominación?",
+            "¿Te gustaría que tu pareja tomara el control alguna vez? ¿Por qué?",
+            "¿Qué piensas sobre usar juguetes sexuales en pareja?",
+            "¿Cómo te sentirías probando un juego con vendajes o ataduras?",
+            "¿Te gustaría explorar nuevas posiciones durante el sexo?"
+        ],
+        reto: [
+            "Realiza una escena de 'desnudez progresiva', donde vas quitando lentamente las prendas de tu compañero/a mientras te estimula.",
+            "Haz un masaje erótico con aceites en la espalda de tu compañero/a y bésalo suavemente en el cuello durante 2 minutos.",
+            "Quítale una prenda a tu compañero/a mientras lo acaricias de forma sensual.",
+            "Tienes 1 minuto para darle un beso muy sensual en cada zona de su cuerpo que puedas alcanzar, sin tocar ninguna zona íntima.",
+            "Haz un juego de 'pasar la lengua' por el cuerpo de tu compañero/a durante 1 minuto, alternando entre zonas sensibles.",
+            "Actúa como si fueras un amante experimentado/a durante 2 minutos, guiando a tu compañero/a con caricias y besos.",
+            "Realiza una escena de 'masaje erótico' donde uses tus manos para acariciar la piel de tu compañero/a y déjale disfrutar del momento.",
+            "Realiza una demostración de un juego de roles en el que eres un/a experto/a en dar placer, mientras usas la lengua y las manos.",
+            "Tienes 1 minuto para acariciar la espalda y las piernas de tu compañero/a con los ojos vendados.",
+            "Haz que tu compañero/a se desvista lentamente mientras tú lo acaricias con una pluma o un suave juguete de estimulación.",
+            "Baila lentamente y de manera sensual para tu compañero/a mientras te quitas una prenda lentamente."
+        ]
+    },
+    3: {
+        // Nivel 3: Más intenso, usando las manos, la boca y juguetes, pero sin penetración directa
+        verdad: [
+            "¿Te excita más un beso apasionado o un roce suave con las manos?",
+            "¿Cómo te sentirías si tu pareja te acariciara lentamente con la lengua por todo el cuerpo?",
+            "Si pudieras elegir, ¿qué parte de tu cuerpo te gustaría que tu pareja besara más intensamente?",
+            "¿Te gustaría que tu pareja te acariciara con las manos mientras te besa con pasión?",
+            "Si pudieras pedirle a tu pareja que te acaricie en una zona específica de tu cuerpo, ¿cuál sería?",
+            "¿Qué piensas sobre la idea de usar las manos de tu pareja para explorar tu cuerpo de forma lenta?",
+            "¿Te gustaría que tu pareja te acariciara mientras te besa el cuello o los lóbulos de las orejas?",
+            "¿Qué zona de tu cuerpo crees que más excita a tu pareja cuando la tocas con las manos?",
+            "¿Te excitaría que tu pareja usara su lengua para acariciar partes de tu cuerpo mientras te acaricia con las manos?",
+            "¿Qué opinas sobre la idea de acariciar a tu pareja solo con la boca y las manos, sin ningún tipo de penetración?"
+        ],
+        reto: [
+            // Usando las manos, la boca y juguetes, pero sin penetración directa
+            "Usa tus manos para acariciar el cuello, los hombros y la espalda de tu compañero/a durante 2 minutos, mientras lo besas lentamente.",
+            "Usa un vibrador en la pierna o la espalda de tu compañero/a mientras lo besas de forma sensual durante 1 minuto.",
+            "Sujeta unas esposas (pueden ser de juguete) y, mientras tu compañero/a está inmovilizado/a, acaríciale con las manos las piernas y besa su cuello con pasión.",
+            "Tienes 1 minuto para masajear los hombros de tu compañero/a con aceite, mientras lo besas lentamente en la nuca, usando también un vibrador en la parte inferior de la espalda.",
+            "Usa un dildo (sin penetración) para acariciar y explorar las zonas sensibles de su abdomen y piernas, mientras lo besas intensamente.",
+            "Tienes 1 minuto para acariciar suavemente las nalgas de tu compañero/a con tus manos, luego utiliza un látigo suave (puede ser un flogger) en sus nalgas mientras lo besas.",
+            "Usa un strap-on de juguete (sin penetración) y realiza un juego de roles en el que tu compañero/a se siente dominado/a, mientras lo acaricias con las manos y besas su cuello.",
+            "Haz que tu compañero/a se quede inmóvil mientras usas un vibrador en sus muslos, pasándolo suavemente mientras lo besas intensamente en la boca.",
+            "Durante 2 minutos, acaricia con las manos las piernas de tu compañero/a mientras lo besas en los labios y usas un vibrador en su cuello para crear un contraste de sensaciones.",
+            "Coloca unas esposas a tu compañero/a mientras lo acaricias con la lengua por todo el cuerpo, deteniéndote en zonas erógenas como el abdomen, el cuello y la parte interna de los muslos.",
+            "Usa un strap-on de juguete (sin penetración) para acariciar las piernas de tu compañero/a mientras lo besas lentamente y susurras palabras sensuales."
+        ]
+    },
+    4: {
+    // Nivel 4: Más explícito, penetración, juegos de juguetes y tríos imaginarios
+    "verdad": [
+            "¿Estarías dispuesto/a a probar penetración con un strap-on o dildo en un juego de roles?",
+            "¿Qué opinas sobre los tríos y las dinámicas de intercambio de pareja?",
+            "Si pudieras tener sexo en cualquier lugar sin restricciones, ¿dónde lo harías?",
+            "¿Te gustaría probar la penetración con un dildo o vibrador en una parte de tu cuerpo que nunca has explorado?",
+            "¿Qué fantasía te gustaría cumplir que involucre más de una persona?",
+            "¿Te excitaría un juego de rol en el que tú y tu pareja estéis dominando a otra persona?",
+            "¿Cómo te sentirías si tu pareja te propusiera tener un trío con otra persona, o tal vez con otra pareja?",
+            "Si pudieras elegir entre un trío o un intercambio de pareja, ¿qué preferirías?",
+            "¿Cómo te sientes con la idea de ser penetrado/a con un juguete mientras participas en una fantasía de trío?",
+            "¿Te gustaría participar en un juego de dominación con un strap-on o un juguete similar?"
+        ],
+        "reto": [
+            // Usando juguetes, penetración y fantasías de trío
+            "Crea una fantasía de trío donde eres el centro de atención, mientras usas un dildo o un strap-on para simular la penetración (sin detalles explícitos).",
+            "Haz un juego de roles en el que eres el dominante/a, usando un strap-on o dildo para explorar las zonas sensibles de tu compañero/a mientras ambos disfrutan de la fantasía de un trío.",
+            "Durante 2 minutos, simula un trío usando juguetes como un dildo, vibrador o strap-on, mientras describes cómo interactúan las tres personas en la fantasía.",
+            "Usa un vibrador en la parte inferior de la espalda de tu compañero/a mientras lo acaricias y lo besas, interpretando un escenario en el que sois dos personas dominando a una tercera (puede ser una persona imaginaria o con un rol definido).",
+            "Tienes 1 minuto para simular una escena de trío con tu compañero/a usando un vibrador en su cuerpo y describiendo el rol que cada uno tiene en la fantasía, sin detalles explícitos de penetración.",
+            "Actúa como si fueras el sumiso/a en un juego de trío, con un strap-on (sin penetración), mientras tu pareja te guía usando un látigo o flogger.",
+            "Usa un dildo en tu compañero/a mientras lo besas y acaricias intensamente, mientras interpretas un juego de intercambio de parejas.",
+            "Imita una escena de sexo en un intercambio de pareja, usando un strap-on para penetrar mientras interactúas con otro/a que también está usando un juguete en tu compañero/a.",
+            "Crea una fantasía de penetración con un dildo mientras te describes a ti mismo/a y a tu compañero/a como personajes en un trío, disfrutando de la exploración con diferentes juguetes.",
+            "Durante 2 minutos, domina a tu compañero/a mientras usas un vibrador en su cuerpo, explorando su cuello, abdomen, piernas y parte interna de los muslos. Luego describe cómo otro/a miembro de la fantasía se une a la escena.",
+            "Simula una escena de penetración con un strap-on, mientras besas apasionadamente a tu compañero/a, interpretando roles como el dominante o la dominada en un trío con juguetes.",
+            "Haz el misionero durante 2 minutos, pero mientras estás penetrando, coloca un vibrador en la parte inferior de tu compañero/a para estimularlo/a al mismo tiempo.",
+            "Realiza la posición de perrito, pero usando un strap-on mientras acaricias la parte interna de los muslos de tu compañero/a con tus manos, explorando la penetración y el placer de ambos.",
+            "Prueba la posición de cucharita mientras usas un dildo en la parte posterior de tu compañero/a, dándole una estimulación extra mientras te acarician y besan.",
+            "Imita la posición de la amazona mientras te encuentras sobre tu compañero/a, usando un strap-on para penetrarlo/a lentamente, mientras ambos se miran y se acarician suavemente.",
+            "Prueba el sexo oral combinado con penetración, usando un dildo o vibrador mientras realizas sexo oral a tu compañero/a en la posición de perrito. Cambia entre penetración y estimulación con juguetes.",
+            "Haz una fantasía de trío usando un dildo mientras simulas penetración con otro miembro de la escena, mientras en realidad te encuentras en la posición de perrito con tu compañero/a.",
+            "Usa un vibrador mientras estás en la posición de 69, alternando entre la penetración y la estimulación mutua con los juguetes, asegurándote de que ambos disfruten cada movimiento.",
+            "Haz el sexo en la posición del misionero durante 3 minutos, asegurándote de mantener un ritmo intenso mientras besas y acaricias profundamente a tu compañero/a.",
+            "Prueba la posición de perrito sin juguetes, penetrando profundamente mientras acaricias y exploras cada parte del cuerpo de tu compañero/a con tus manos.",
+            "Realiza la posición de cucharita mientras te aseguras de besar y acariciar a tu compañero/a durante 2 minutos, manteniendo un ritmo lento pero profundo de penetración.",
+            "Cambia a la posición de la amazona, montando a tu compañero/a mientras lo besas con intensidad y lo estimulas con las manos mientras realizas un ritmo penetrante.",
+            "Haz sexo oral mientras penetras a tu compañero/a en la posición de perrito, alternando entre estimulación oral y penetración con un ritmo controlado y sensual.",
+            "Realiza un intercambio de posiciones, pasando de misionero a perrito y cucharita, mientras exploras diferentes ritmos de penetración con tu compañero/a, disfrutando del contacto físico."
+        ]
+    }
+};
+
+        // Define los eventos de visibilidad
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                // Guardar el estado del juego en el localStorage si la página se oculta
+                localStorage.setItem("turno", turno);
+                localStorage.setItem("intensidad", JSON.stringify(intensidad));
+                localStorage.setItem("puntos", JSON.stringify(puntos));
+                localStorage.setItem("jugadores", JSON.stringify(jugadores));
+            } else {
+                // Recuperar el estado del juego cuando la página se muestra
+                turno = parseInt(localStorage.getItem("turno") || "1");
+                intensidad = JSON.parse(localStorage.getItem("intensidad") || "[1, 1]");
+                puntos = JSON.parse(localStorage.getItem("puntos") || "[0, 0]");
+                jugadores = JSON.parse(localStorage.getItem("jugadores") || '["Jugador 1", "Jugador 2"]');
+                actualizarInterfaz();
+            }
+        });
+
+function iniciarJuego() {
+    jugadores = [
+        document.getElementById("jugador1").value || "Jugador 1", 
+        document.getElementById("jugador2").value || "Jugador 2"
+    ];
+
+    document.getElementById("nombre-jugador1").innerText = jugadores[0];
+    document.getElementById("nombre-jugador2").innerText = jugadores[1];
+    document.getElementById("jugador-turno").innerText = jugadores[0];
+
+    document.getElementById("puntos-jugador1").innerText = `${jugadores[0]}: 0`;
+    document.getElementById("puntos-jugador2").innerText = `${jugadores[1]}: 0`;
+
+    document.getElementById("setup").style.display = "none";
+    document.getElementById("juego").style.display = "block";
+}
+
+function elegir(opcion) {
+    let tipo = opcion.charAt(0).toUpperCase() + opcion.slice(1); // Capitaliza la primera letra
+    document.getElementById("tipo-pregunta").innerText = tipo; // Muestra "Verdad" o "Reto"
+    let pregunta = preguntas[intensidad[turno - 1]][opcion][Math.floor(Math.random() * preguntas[intensidad[turno - 1]][opcion].length)];
+    document.getElementById("pregunta").innerText = pregunta;
+
+    document.getElementById("tipo-pregunta").classList.add('show');
+    document.getElementById("pregunta").classList.add('show');
+    // Mostrar los botones "No quiero hacerlo" y "Hecho"
+    document.getElementById("rechazar").classList.remove("hidden");
+    document.getElementById("hecho").classList.remove("hidden");
+}
+
+
+function siguienteTurno() {
+    console.log("Antes de cambiar turno, turno es:", turno);
+
+    // Aumentar puntos si el jugador completó el reto
+    if (!document.getElementById("hecho").classList.contains("hidden")) {
+        puntos[turno - 1]++;
+        document.getElementById(`puntos-jugador${turno}`).innerText = `${jugadores[turno - 1]}: ${puntos[turno - 1]}`;
+    }
+
+    // Alternar entre Jugador 1 y Jugador 2
+    turno = (turno % 2) + 1; // Si turno es 1, pasa a 2, si turno es 2, pasa a 1
+
+    console.log("Después de cambiar turno, turno es:", turno);
+
+    // Actualizar el texto del turno en la interfaz
+    const jugadorTurnoElement = document.getElementById("jugador-turno");
+    if (jugadorTurnoElement) {
+        jugadorTurnoElement.textContent = jugadores[turno - 1];  // Actualiza el texto de turno
+    }
+
+    // Actualizar la intensidad de ambos jugadores
+    document.getElementById(`nivel-intensidad-1`).innerText = intensidad[0];
+    document.getElementById(`nivel-intensidad-2`).innerText = intensidad[1];
+
+    // Actualizar los nombres de los jugadores (si es necesario)
+    document.getElementById("nombre-jugador1").innerText = jugadores[0];
+    document.getElementById("nombre-jugador2").innerText = jugadores[1];
+
+    // Actualizar la intensidad en la interfaz para el jugador que tiene el turno
+    document.getElementById(`nivel-intensidad-${turno}`).innerText = intensidad[turno - 1];
+
+    // Ocultar botones y limpiar preguntas
+    document.getElementById("rechazar").classList.add("hidden");
+    document.getElementById("hecho").classList.add("hidden");
+    document.getElementById("tipo-pregunta").innerText = '';
+    document.getElementById("pregunta").innerText = '';
+    document.getElementById("tipo-pregunta").classList.remove('show');
+    document.getElementById("pregunta").classList.remove('show');
+
+    // Mostrar los botones de selección después de un breve retraso
+    setTimeout(() => {
+        document.querySelectorAll(".btn-custom").forEach(button => button.classList.remove("hidden"));
+    }, 255500); // Reducido de 355500ms a 500ms
+}
+
+function subirIntensidad() {
+    if (intensidad[turno - 1] < 4) {
+        intensidad[turno - 1]++;
+        document.getElementById(`nivel-intensidad-${turno}`).innerText = intensidad[turno - 1];
+    }
+    
+    // Esconder botones y mostrar una nueva pregunta de reto
+    document.getElementById("rechazar").classList.add("hidden");
+    elegir('reto');
+}
+
+function hechoYMostrarFelicidades() {
+
+    // Luego, muestra el mensaje de "¡Genial!"
+    mostrarFelicidades();
+}
+
+function mostrarFelicidades() {
+    let felicidades = document.createElement('div');
+    felicidades.textContent = "Sabía que lo harías! Excita eh..🎉";
+    felicidades.style.fontSize = "2em";
+    felicidades.style.color = "#ff4081";  // Puedes personalizar el color si quieres
+    felicidades.style.textAlign = "center";
+    felicidades.style.marginTop = "20px";
+    felicidades.style.padding = "10px";
+    felicidades.style.borderRadius = "10px";
+    felicidades.style.backgroundColor = "rgba(255, 64, 129, 0.2)";
+    document.body.appendChild(felicidades);
+
+    // El mensaje desaparecerá después de 3 segundos
+    setTimeout(() => {
+        felicidades.remove();
+    }, 1000);
+}
+
+// Asignamos la función que muestra el mensaje de felicitación al hacer clic en "Hecho"
+document.getElementById("hecho").addEventListener("click", hechoYMostrarFelicidades);
+
+// Función para ocultar el footer después de 5 segundos
+function ocultarFooter() {
+    setTimeout(() => {
+        document.getElementById("consentimiento").style.display = "none"; // Esconde el footer
+    }, 10000); // 5000 ms = 5 segundos
+}
+
+// Llamar a la función para que el footer desaparezca después de 5 segundos
+window.onload = function() {
+    ocultarFooter();
+};
+
+
+    </script>
+</body>
+</html>
