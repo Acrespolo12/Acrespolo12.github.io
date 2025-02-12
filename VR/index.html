@@ -11,9 +11,10 @@
 
     <style>
 html, body {
-    height: auto;  /* Permite que el contenido sea más alto que la ventana sin limitar el desplazamiento */
+    height: 100%;  /* Asegura que la página cubra todo el alto de la pantalla */
     margin: 0;
     padding: 0;
+    overflow-y: auto;  /* Permite el scroll en toda la página */
     background: linear-gradient(135deg, #2a0b19 0%, #1f1e1f 50%, #353535 100%);
     background-size: 400% 400%;
     animation: gradient 12s ease infinite;
@@ -21,7 +22,6 @@ html, body {
     text-align: center;
     font-family: 'Playfair Display', serif;
     font-size: 1em;
-    overflow: auto;  /* Permite que se haga scroll si es necesario */
 }
 
 @keyframes gradient {
@@ -104,24 +104,30 @@ html, body {
             border-radius: 5px;
             padding: 15px;
         }
-        #pregunta, #tipo-pregunta {
+        /* Para asegurar que el área de la pregunta y tipo de pregunta sea scrollable */
+#pregunta, #tipo-pregunta {
     font-size: 1.6em;
     margin-top: 20px;
     color: #ff80ab;
     font-weight: 700;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
-    max-height: none;  /* Eliminar límite de altura */
-    overflow-y: auto;  /* Habilita el scroll si el contenido es largo */
-    word-wrap: break-word;  /* Para que las palabras largas se dividan correctamente */
-    padding-right: 10px;  /* Para evitar que se corte el texto */
+    max-height: none;  /* Permite que el área crezca sin límite de altura */
+    overflow-y: auto;  /* Permite desplazarse cuando el contenido sea largo */
+    word-wrap: break-word;  /* Asegura que las palabras largas no se corten */
+    padding-right: 10px;
+    margin: 0 15px;  /* Añadir margen a los lados para que no quede pegado al borde */
 }
+/* Responsivo para pantallas pequeñas */
 @media (max-width: 767px) {
     .form-control {
-        width: 90%;  /* Asegura que los campos de texto no sean tan pequeños en móviles */
+        width: 90%;  /* Ajusta el ancho de los campos de texto para pantallas pequeñas */
     }
     .btn-custom {
         width: 90%;  /* Botones más grandes en dispositivos móviles */
+    }
+    #pregunta, #tipo-pregunta {
+        font-size: 1.4em;  /* Reduce ligeramente el tamaño de fuente en dispositivos pequeños */
     }
 }
 
