@@ -11,18 +11,17 @@
 
     <style>
 html, body {
-    height: 100%; /* Asegura que el contenido cubra todo el alto */
+    height: auto;  /* Permite que el contenido sea más alto que la ventana sin limitar el desplazamiento */
     margin: 0;
     padding: 0;
-    overflow: hidden; /* Evita que aparezca el scroll */
     background: linear-gradient(135deg, #2a0b19 0%, #1f1e1f 50%, #353535 100%);
-background-size: 400% 400%;
-animation: gradient 12s ease infinite;
-
+    background-size: 400% 400%;
+    animation: gradient 12s ease infinite;
     color: #fff;
     text-align: center;
     font-family: 'Playfair Display', serif;
     font-size: 1em;
+    overflow: auto;  /* Permite que se haga scroll si es necesario */
 }
 
 @keyframes gradient {
@@ -112,10 +111,18 @@ animation: gradient 12s ease infinite;
     font-weight: 700;
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
-    max-height: 200px;  /* Máxima altura de la sección */
-    overflow-y: auto;  /* Habilitar el scroll vertical cuando el contenido es largo */
+    max-height: none;  /* Eliminar límite de altura */
+    overflow-y: auto;  /* Habilita el scroll si el contenido es largo */
     word-wrap: break-word;  /* Para que las palabras largas se dividan correctamente */
-    padding-right: 10px;  /* Para asegurarnos de que no se vean cortadas las palabras al final */
+    padding-right: 10px;  /* Para evitar que se corte el texto */
+}
+@media (max-width: 767px) {
+    .form-control {
+        width: 90%;  /* Asegura que los campos de texto no sean tan pequeños en móviles */
+    }
+    .btn-custom {
+        width: 90%;  /* Botones más grandes en dispositivos móviles */
+    }
 }
 
         .turno, .intensidad, .puntos {
