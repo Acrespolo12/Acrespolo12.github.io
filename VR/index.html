@@ -414,7 +414,9 @@ body {
             "Simula un secuestro erótico con vendas en los ojos, esposas y un interrogatorio sexy.",
             "Recibe una tanda de 20 nalgadas con un cinturón o látigo, sin quejarte.",
             "Graben juntos un video XXX con la promesa de verlo juntos después y eliminarlo.",
-            "Simula sexo oral en el aire durante 10 segundos."
+            "Simula sexo oral en el aire durante 10 segundos.",
+            "Sientalo en una silla, atalo pero solo provoca.",
+            "Desnuda al otro de forma muy sensual."
 
         ]
     },
@@ -454,7 +456,15 @@ body {
             "Introduce lentamente un juguete anal en tu pareja mientras la estimulas de otra manera.",
             "Déjate esposar a la cama y dale a tu pareja el control absoluto sobre lo que pase durante 10 minutos.",
             "Lame cada centímetro del cuerpo de tu pareja sin dejar nada sin explorar.",
-            "Amárrate los brazos a la espalda y deja que tu pareja haga lo que quiera sin resistencia."
+            "Amárrate los brazos a la espalda y deja que tu pareja haga lo que quiera sin resistencia.",
+            "Dejate atar y que tu pareja tenga el control sobre ti, recuerda no se puede penetrar",
+            "Tocale la zona intima y mira como disfruta.",
+            "Atala y pasa la lengua varias veces por su zona favorita",
+            "Girate y dejate lamer por detras",
+            "A ver como abres esa boca mientras te introducen.",
+            "Sientate en su boca y disfruta.",
+            "Dale sexo oral mientras te masturbas con un juguete.",
+            "Hay muchos lubricantes elige el que mas te guste y que no quede ninguna gota."
         ]
     },
     4: {
@@ -500,7 +510,13 @@ body {
             "Realiza un intercambio de posiciones, pasando de misionero a perrito y cucharita, mientras exploras diferentes ritmos de penetración con tu compañero/a, disfrutando del contacto físico.",
             "Haz el amor en una posición que nunca hayas probado antes.",
             "Usa un vibrador mientras penetras a tu pareja para elevar el placer de ambos.",
-            "Jueguen a no puedes acabar: el primero en correrse pierde y recibe un castigo."
+            "Jueguen a no puedes acabar: el primero en correrse pierde y recibe un castigo.",
+            "Toca posición de perrito pero con roles cambiados",
+            "Haz que llegue al orgasmo y cortale antes de que se corra, si se corre debe limpiar.",
+            "Toc toc, pican a la puerta... cierra los ojos e imagina mientras se cumple.",
+            "Tienes 1 minuto para darle como cajon que no cierra.",
+            "Ponla en la pared y penetrala hasta el fondo",
+            "Encima de la mesa, suena bien no?",
 
         ]
     }
@@ -604,12 +620,52 @@ function subirIntensidad() {
     if (intensidad[turno - 1] < 4) {
         intensidad[turno - 1]++;
         document.getElementById(`nivel-intensidad-${turno}`).innerText = intensidad[turno - 1];
+
+        // Verificar si la intensidad llega al nivel 3
+        if (intensidad[turno - 1] === 3) {
+            mostrarPopUp();
+        }
     }
     
     // Esconder botones y mostrar una nueva pregunta de reto
     document.getElementById("rechazar").classList.add("hidden");
     elegir('reto');
 }
+
+// Función para mostrar el pop-up
+function mostrarPopUp() {
+    // Crear el pop-up
+    let popUp = document.createElement('div');
+    popUp.textContent = "Alguno de los 2 sigue vestido? o con alguna prenda?, vaya cumple el reto que marque la otra persona.";
+
+// Estilos responsivos
+popUp.style.fontSize = "clamp(1.5em, 5vw, 3em)"; // Ajusta el tamaño de la fuente de manera flexible
+popUp.style.color = "#ff4081";
+popUp.style.textAlign = "center";
+popUp.style.marginTop = "30px";
+popUp.style.padding = "clamp(20px, 5vw, 60px)"; // Ajusta el padding para pantallas pequeñas y grandes
+popUp.style.borderRadius = "15px";
+popUp.style.backgroundColor = "#2a0b19";
+popUp.style.position = "fixed";
+popUp.style.top = "50%";
+popUp.style.left = "50%";
+popUp.style.transform = "translate(-50%, -50%)";
+popUp.style.zIndex = "1000";  // Asegura que esté por encima de otros elementos
+
+// Ancho máximo para el pop-up
+popUp.style.maxWidth = "90%"; // Asegura que el pop-up no sea más ancho que el 90% de la pantalla
+popUp.style.width = "auto";
+
+// Añadir el pop-up al body
+document.body.appendChild(popUp);
+
+// Desaparecer el pop-up después de 5 segundos
+setTimeout(() => {
+    popUp.remove();
+}, 3000);
+
+}
+
 
 function hechoYMostrarFelicidades() {
 
