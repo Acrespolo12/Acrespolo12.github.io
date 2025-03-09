@@ -425,3 +425,200 @@
     </script>
 </body>
 </html>
+
+</head>
+<body>
+    <div id="start-screen" class="start-screen">
+        <h2>¡Oca Sexy Couple 😘!</h2>
+        <input type="text" id="player1-name" placeholder="Tu nombre... 😏" style="padding: 10px; font-size: 18px; border: 2px solid #fd4560; border-radius: 10px; background-color: #34495e; color: #fff;">
+        <div class="player-selection">
+            <div class="player-icon red" onclick="selectIcon(0, 'red')">💋</div>
+            <div class="player-icon blue" onclick="selectIcon(0, 'blue')">💎</div>
+        </div>
+        <input type="text" id="player2-name" placeholder="Tu nombre... 😏" style="padding: 10px; font-size: 18px; border: 2px solid #fd4560; border-radius: 10px; background-color: #34495e; color: #fff;">
+        <div class="player-selection">
+            <div class="player-icon yellow" onclick="selectIcon(1, 'yellow')">🔥</div>
+            <div class="player-icon white" onclick="selectIcon(1, 'white')">💖</div>
+        </div>
+        <button onclick="startGame()" class="dice">¡Comienza la Diversión! 🔥</button>
+    </div>
+    
+    <div id="game-screen" class="hidden">
+        <div class="players-info">
+            <div id="player1-info">Jugador 1: 💋</div>
+            <div id="player2-info">Jugador 2: 💎</div>
+            <button id="reset-button" onclick="resetGame()">Reiniciar Juego</button>
+        </div>
+        <div class="board" id="board"></div>
+        <button class="dice" onclick="rollDice()">Lanzar Dado 🎲</button>
+        <div id="dice-result"></div> <!-- Div para mostrar el resultado -->
+    </div>
+    
+    <script>
+        const board = document.getElementById("board");
+        const diceResult = document.getElementById("dice-result");
+        const rows = 5;
+        const cols = 6;
+        const totalCells = rows * cols;
+        let playerPositions = [0, 0];
+        let currentPlayer = 0;
+        let playerNames = ["Jugador 1", "Jugador 2"];
+        let playerIcons = ["red", "blue"];
+
+        // Cargar el estado del juego desde localStorage si existe
+        window.onload = function() {
+            if (localStorage.getItem("gameState")) {
+                loadGameState();
+            }
+        };
+
+        function selectIcon(playerIndex, color) {
+            playerIcons[playerIndex] = color;
+            document.querySelectorAll(".player-selection")[playerIndex]
+                .querySelectorAll(".player-icon").forEach(icon => icon.classList.remove("selected"));
+            document.querySelectorAll(".player-selection")[playerIndex]
+                .querySelector(`.${color}`).classList.add("selected");
+        }
+
+        function startGame() {
+            playerNames[0] = document.getElementById("player1-name").value || "Jugador 1";
+            playerNames[1] = document.getElementById("player2-name").value || "Jugador 2";
+            document.getElementById("start-screen").style.display = "none";
+            document.getElementById("game-screen").classList.remove("hidden");
+            updatePlayerInfo();
+            initializeBoard();
+            saveGameState();  // Guardamos el estado del juego al comenzar
+        }
+
+        function initializeBoard() {
+            const casillasTexto = [
+                "Haz un beso lento y sensual por 10 segundos", "Realiza un masaje en la espalda de tu compañero/a durante 1 minuto", "Juega a quitarle una prenda a tu compañero/a lentamente, sin apresurarte.", "Haz un striptease lento para tu pareja durante 1 minuto.", "Chupa suavemente los dedos",
+                "Simula sexo oral en el aire durante 10 segundos.", "Baila lentamente y de manera sensual para tu compañero/a mientras te quitas una prenda lentamente.", "Sientalo en una silla, atalo pero solo provoca.", "Simula un secuestro erótico con vendas en los ojos, esposas y un interrogatorio sexy.", "Graben juntos un video XXX con la promesa de verlo juntos después y eliminarlo.", "Haz un juego de 'pasar la lengua' por el cuerpo de tu compañero/a durante 1 minuto, alternando entre zonas sensibles.",
+                "Usa un dildo (sin penetración) para acariciar y explorar las zonas sensibles de su abdomen y piernas, mientras lo besas intensamente.", "Déjate esposar a la cama y dale a tu pareja el control absoluto sobre lo que pase durante 10 minutos.", "A ver como abres esa boca mientras te introducen.", "Dale sexo oral mientras te masturbas con un juguete.", "Introduce lentamente un juguete anal en tu pareja mientras la estimulas de otra manera.", "Siéntate encima de tu pareja sin ropa y deja que use solo la boca para estimularte durante 2 minutos.",
+                "Crea una fantasía de trío donde eres el centro de atención, mientras usas un dildo o un strap-on para simular la penetración (sin detalles explícitos).", "Usa un dildo en tu compañero/a mientras lo besas y acaricias intensamente, mientras interpretas un juego de intercambio de parejas.", "Toc toc, pican a la puerta... cierra los ojos e imagina mientras se cumple", "Ponla en la pared y penetrala hasta el fondo", "Haz el sexo en la posición del misionero durante 3 minutos, asegurándote de mantener un ritmo intenso mientras besas y acaricias profundamente a tu compañero/a.", "Realiza la posición de cucharita mientras te aseguras de besar y acariciar a tu compañero/a durante 2 minutos, manteniendo un ritmo lento pero profundo de penetración.", "Haz un juego de roles en el que eres el dominante/a, usando un strap-on o dildo para explorar las zonas sensibles de tu compañero/a mientras ambos disfrutan de la fantasía de un trío.", "Dejate dar a cuatro hasta al fondo.", "Tienes 1 minuto para darle como cajon que no cierra.", "El otro decide tu reto.", "Decide lo que quieras, tu mandas.", "Dejate dar por detras.", "Acaba dentro anal."
+            ];
+            board.innerHTML = "";
+            for (let i = totalCells - 1; i >= 0; i--) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.textContent = casillasTexto[i] || `Casilla ${i + 1}`;
+                cell.id = "cell-" + i;
+                if (i % 4 === 0) cell.classList.add("blue");
+                if (i % 4 === 1) cell.classList.add("red");
+                if (i % 4 === 2) cell.classList.add("yellow");
+                if (i % 4 === 3) cell.classList.add("white");
+
+                board.appendChild(cell);
+            }
+            updatePlayerPositions();
+        }
+
+        function updatePlayerInfo() {
+            document.getElementById("player1-info").textContent = `Jugador 1: ${playerNames[0]} 💋`;
+            document.getElementById("player2-info").textContent = `Jugador 2: ${playerNames[1]} 💎`;
+        }
+
+        function updatePlayerPositions() {
+            document.querySelectorAll(".player").forEach(player => player.remove());
+            playerPositions.forEach((pos, index) => {
+                let player = document.createElement("div");
+                player.className = `player ${playerIcons[index]}`;
+                player.textContent = playerIcons[index] === "red" ? "💋" : 
+                                     playerIcons[index] === "blue" ? "💎" : 
+                                     playerIcons[index] === "yellow" ? "🔥" : 
+                                     "💖";
+                document.getElementById("cell-" + pos).appendChild(player);
+            });
+        }
+
+        function rollDice() {
+    let randomNumber = Math.floor(Math.random() * 6) + 1;
+    let newPosition = playerPositions[currentPlayer] + randomNumber;
+
+    // Si el jugador pasa de la casilla "FIN", retrocede
+    if (newPosition > totalCells - 1) {
+        newPosition = totalCells - 2 - (newPosition - totalCells); // Retroceder si excede el total de casillas
+    }
+    playerPositions[currentPlayer] = newPosition;
+    updatePlayerPositions();
+
+    const currentCell = document.getElementById("cell-" + playerPositions[currentPlayer]);
+    const currentPlayerIcon = currentCell.querySelector(".player");
+
+    if (currentPlayerIcon) {
+        currentPlayerIcon.remove();
+    }
+
+    diceResult.textContent = `Resultado: ${randomNumber}`;
+
+    setTimeout(() => {
+        currentCell.classList.add("expanded");
+
+        setTimeout(() => {
+            currentCell.classList.remove("expanded");
+
+            let player = document.createElement("div");
+            player.className = `player ${playerIcons[currentPlayer]}`;
+            player.textContent = playerIcons[currentPlayer] === "red" ? "💋" : 
+                                 playerIcons[currentPlayer] === "blue" ? "💎" : 
+                                 playerIcons[currentPlayer] === "yellow" ? "🔥" : 
+                                 "💖";
+            currentCell.appendChild(player);
+            
+            // Guardar el estado después de cada movimiento
+            saveGameState();
+
+        }, 5000);
+    }, 1500);
+}
+
+        // Función para guardar el estado del juego en localStorage
+        function saveGameState() {
+            const gameState = {
+                playerNames,
+                playerIcons,
+                playerPositions,
+                currentPlayer
+            };
+            localStorage.setItem("gameState", JSON.stringify(gameState));
+        }
+
+        // Función para cargar el estado del juego desde localStorage
+        function loadGameState() {
+            const savedState = JSON.parse(localStorage.getItem("gameState"));
+            playerNames = savedState.playerNames;
+            playerIcons = savedState.playerIcons;
+            playerPositions = savedState.playerPositions;
+            currentPlayer = savedState.currentPlayer;
+
+            updatePlayerInfo();
+            initializeBoard();
+            updatePlayerPositions();
+        }
+
+        function resetGame() {
+    // Reiniciar las variables del juego
+    playerNames = ["Jugador 1", "Jugador 2"];
+    playerIcons = ["red", "blue"];
+    playerPositions = [0, 0];
+    currentPlayer = 0;
+
+    // Limpiar el tablero y las posiciones de los jugadores
+    board.innerHTML = "";
+    initializeBoard();
+    updatePlayerPositions();
+
+    // Limpiar el estado guardado en localStorage
+    localStorage.removeItem("gameState");
+
+    // Volver a mostrar la pantalla de inicio si es necesario
+    document.getElementById("start-screen").style.display = "block";
+    document.getElementById("game-screen").classList.add("hidden");
+
+    // Reiniciar la interfaz de jugadores
+    updatePlayerInfo();
+}
+
+    </script>
+</body>
+</html>
