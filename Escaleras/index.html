@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tablero de Juego Sensual 😈</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #1f1f1f; /* Fondo oscuro sexy */
+            overflow: hidden;
+            font-family: 'Caveat', cursive; /* Tipografía juguetona y sensual */
+        }
+        .hidden { display: none; }
+        .start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            color: #ecf0f1;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+        .start-screen h2 {
+            font-size: 36px;
+            text-align: center;
+            color: #fd4560; /* Color sensual */
+            font-family: 'Sacramento', cursive; /* Fuente sensual */
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+        .player-selection {
+            display: flex;
+            gap: 20px;
+        }
+        .player-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: none; /* Elimina el borde */
+            background: none; /* Elimina el fondo */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 32px; /* Tamaño adecuado para los iconos */
+        }
+        .player-icon:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.8); /* Sombra seductora */
+        }
+        .selected {
+            box-shadow: 0 0 10px 5px rgba(231, 76, 60, 0.8); /* Sombra alrededor cuando es seleccionado */
+        }
+        .board {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 10px;
+    background-color: #34495e;
+    padding: 30px;
+    width: 100%;
+    max-width: 600px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+        .cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5px;
+    font-family: 'Sacramento', cursive; /* Fuente sensual */
+    color: #ecf0f1;
+    background-color: #bf2948; /* Color sensual */
+    border-radius: 10px;
+    position: relative;
+    transition: background-color 0.3s;
+    text-align: center; /* Centrado del texto */
+    padding: 10px; /* Aseguramos que haya un pequeño espacio */
+    word-wrap: break-word; /* Permite que las palabras largas se dividan y ajusten */
+    overflow-wrap: break-word; /* Asegura que el texto no se desborde */
+    white-space: normal; /* Permite que el texto se divida en varias líneas si es necesario */
+    min-height: 60px; /* Aseguramos que cada celda tenga un mínimo de altura */
+    height: auto; /* Deja que la celda crezca según el contenido */
+}
+
+        .cell:hover {
+            background-color: #fd4560; /* Rojo sensual al pasar el ratón */
+            cursor: pointer;
+        }
+        .blue { background-color: #6a1232; } /* Color 1 */
+        .red { background-color: #8a1b39; } /* Color 2 */
+        .yellow { background-color: #bf2948; } /* Color 3 */
+        .white { background-color: #ff7578; } /* Color 5 */
+        .player {
+            font-size: 30px;
+            position: absolute;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .dice {
+            margin-top: 30px;
+            padding: 14px 28px;
+            font-size: 24px;
+            cursor: pointer;
+            background-color: #fd4560; /* Color sensual para el botón */
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.6);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .dice:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
+        }
+        .dice.animate {
+            animation: roll 0.5s ease-in-out;
+        }
+        @keyframes roll {
+            0% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .players-info {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 20px;
+            color: #ecf0f1;
+        }
+        #dice-result {
+            margin-top: 20px;
+            font-size: 28px;
+            color: #fd4560; /* Color sensual */
+        }
+        @media (max-width: 600px) {
+            .board {
+        grid-template-columns: repeat(6, minmax(40px, 1fr));
+    }
+    .cell {
+        font-size: 5px; /* Ajustamos el tamaño de texto para pantallas pequeñas */
+        padding: 5px;
+        min-height: 40px; /* Ajuste para pantallas pequeñas */
+    }
+            .player-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 28px; /* Ajustamos el tamaño de los iconos */
+            }
+            .dice {
+                font-size: 20px;
+                padding: 10px 20px;
+            }
+            .start-screen h2 {
+                font-size: 28px; /* Reducimos el tamaño del título */
+            }
+            .player-selection {
+                gap: 10px; /* Reducimos el espacio entre los iconos */
+            }
+        }
+
+        /* Celda expandida */
+.cell.expanded {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw; /* Ocupa toda la pantalla */
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2vw; /* Ajuste dinámico del tamaño de la fuente con respecto al ancho de la pantalla */
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente */
+    color: #ecf0f1; /* Color de texto */
+    transition: all 1s ease;
+    padding: 20px;
+    text-align: center;
+    overflow: hidden; /* Evitar que el texto se desborde */
+    white-space: normal; /* Permite que el texto se divida en varias líneas si es necesario */
+    word-wrap: break-word; /* Permite que las palabras largas se dividan si es necesario */
+    max-width: 100%; /* Asegura que el texto no se desborde horizontalmente */
+}
+
+.cell.expanded .player {
+    font-size: 10vw; /* Tamaño del ícono del jugador ajustado dinámicamente */
+}
+
+@media (max-width: 600px) {
+    .cell.expanded {
+        font-size: 2vw; /* Reducimos el tamaño de la fuente en dispositivos pequeños */
+        padding: 15px; /* Ajustamos el espaciado */
+        overflow: hidden; /* Evitar que el texto se desborde */
+    white-space: normal; /* Permite que el texto se divida en varias líneas si es necesario */
+    word-wrap: break-word; /* Permite que las palabras largas se dividan si es necesario */
+    max-width: 80%; /* Asegura que el texto no se desborde horizontalmente */
+    }
+
+    .cell.expanded .player {
+        font-size: 20vw; /* Reducimos el tamaño del ícono en dispositivos pequeños */
+    }
+}
+
+        .cell {
+            transition: transform 0.5s ease; /* Agregamos transición para la celda */
+        }
+
+        /* Animación adicional para que la celda se agrande más */
+        .cell.expanded {
+            transform: scale(2); /* Hacemos que la celda se agrande un 3x */
+        }
+
+        #reset-button {
+    background-color: #f00;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#reset-button:hover {
+    background-color: #c00;
+}
+
+    </style>
+</head>
+<body>
+    <div id="start-screen" class="start-screen">
+        <h2>¡Oca Sexy Couple 😘!</h2>
+        <input type="text" id="player1-name" placeholder="Tu nombre... 😏" style="padding: 10px; font-size: 18px; border: 2px solid #fd4560; border-radius: 10px; background-color: #34495e; color: #fff;">
+        <div class="player-selection">
+            <div class="player-icon red" onclick="selectIcon(0, 'red')">💋</div>
+            <div class="player-icon blue" onclick="selectIcon(0, 'blue')">💎</div>
+        </div>
+        <input type="text" id="player2-name" placeholder="Tu nombre... 😏" style="padding: 10px; font-size: 18px; border: 2px solid #fd4560; border-radius: 10px; background-color: #34495e; color: #fff;">
+        <div class="player-selection">
+            <div class="player-icon yellow" onclick="selectIcon(1, 'yellow')">🔥</div>
+            <div class="player-icon white" onclick="selectIcon(1, 'white')">💖</div>
+        </div>
+        <button onclick="startGame()" class="dice">¡Comienza la Diversión! 🔥</button>
+    </div>
+    
+    <div id="game-screen" class="hidden">
+        <div class="players-info">
+            <div id="player1-info">Jugador 1: 💋</div>
+            <div id="player2-info">Jugador 2: 💎</div>
+            <button id="reset-button" onclick="resetGame()">Reiniciar Juego</button>
+        </div>
+        <div class="board" id="board"></div>
+        <button class="dice" onclick="rollDice()">Lanzar Dado 🎲</button>
+        <div id="dice-result"></div> <!-- Div para mostrar el resultado -->
+    </div>
+    
+    <script>
+        const board = document.getElementById("board");
+        const diceResult = document.getElementById("dice-result");
+        const rows = 5;
+        const cols = 6;
+        const totalCells = rows * cols;
+        let playerPositions = [0, 0];
+        let currentPlayer = 0;
+        let playerNames = ["Jugador 1", "Jugador 2"];
+        let playerIcons = ["red", "blue"];
+
+        // Cargar el estado del juego desde localStorage si existe
+        window.onload = function() {
+            if (localStorage.getItem("gameState")) {
+                loadGameState();
+            }
+        };
+
+        function selectIcon(playerIndex, color) {
+            playerIcons[playerIndex] = color;
+            document.querySelectorAll(".player-selection")[playerIndex]
+                .querySelectorAll(".player-icon").forEach(icon => icon.classList.remove("selected"));
+            document.querySelectorAll(".player-selection")[playerIndex]
+                .querySelector(`.${color}`).classList.add("selected");
+        }
+
+        function startGame() {
+            playerNames[0] = document.getElementById("player1-name").value || "Jugador 1";
+            playerNames[1] = document.getElementById("player2-name").value || "Jugador 2";
+            document.getElementById("start-screen").style.display = "none";
+            document.getElementById("game-screen").classList.remove("hidden");
+            updatePlayerInfo();
+            initializeBoard();
+            saveGameState();  // Guardamos el estado del juego al comenzar
+        }
+
+        function initializeBoard() {
+            const casillasTexto = [
+                "Haz un beso lento y sensual por 10 segundos", "Realiza un masaje en la espalda de tu compañero/a durante 1 minuto", "Juega a quitarle una prenda a tu compañero/a lentamente, sin apresurarte.", "Haz un striptease lento para tu pareja durante 1 minuto.", "Chupa suavemente los dedos",
+                "Simula sexo oral en el aire durante 10 segundos.", "Baila lentamente y de manera sensual para tu compañero/a mientras te quitas una prenda lentamente.", "Sientalo en una silla, atalo pero solo provoca.", "Simula un secuestro erótico con vendas en los ojos, esposas y un interrogatorio sexy.", "Graben juntos un video XXX con la promesa de verlo juntos después y eliminarlo.", "Haz un juego de 'pasar la lengua' por el cuerpo de tu compañero/a durante 1 minuto, alternando entre zonas sensibles.",
+                "Usa un dildo (sin penetración) para acariciar y explorar las zonas sensibles de su abdomen y piernas, mientras lo besas intensamente.", "Déjate esposar a la cama y dale a tu pareja el control absoluto sobre lo que pase durante 10 minutos.", "A ver como abres esa boca mientras te introducen.", "Dale sexo oral mientras te masturbas con un juguete.", "Introduce lentamente un juguete anal en tu pareja mientras la estimulas de otra manera.", "Siéntate encima de tu pareja sin ropa y deja que use solo la boca para estimularte durante 2 minutos.",
+                "Crea una fantasía de trío donde eres el centro de atención, mientras usas un dildo o un strap-on para simular la penetración (sin detalles explícitos).", "Usa un dildo en tu compañero/a mientras lo besas y acaricias intensamente, mientras interpretas un juego de intercambio de parejas.", "Toc toc, pican a la puerta... cierra los ojos e imagina mientras se cumple", "Ponla en la pared y penetrala hasta el fondo", "Haz el sexo en la posición del misionero durante 3 minutos, asegurándote de mantener un ritmo intenso mientras besas y acaricias profundamente a tu compañero/a.", "Realiza la posición de cucharita mientras te aseguras de besar y acariciar a tu compañero/a durante 2 minutos, manteniendo un ritmo lento pero profundo de penetración.", "Haz un juego de roles en el que eres el dominante/a, usando un strap-on o dildo para explorar las zonas sensibles de tu compañero/a mientras ambos disfrutan de la fantasía de un trío.", "Dejate dar a cuatro hasta al fondo.", "Tienes 1 minuto para darle como cajon que no cierra.", "El otro decide tu reto.", "Decide lo que quieras, tu mandas.", "Dejate dar por detras.", "Acaba dentro anal."
+            ];
+            board.innerHTML = "";
+            for (let i = totalCells - 1; i >= 0; i--) {
+                let cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.textContent = casillasTexto[i] || `Casilla ${i + 1}`;
+                cell.id = "cell-" + i;
+                if (i % 4 === 0) cell.classList.add("blue");
+                if (i % 4 === 1) cell.classList.add("red");
+                if (i % 4 === 2) cell.classList.add("yellow");
+                if (i % 4 === 3) cell.classList.add("white");
+
+                board.appendChild(cell);
+            }
+            updatePlayerPositions();
+        }
+
+        function updatePlayerInfo() {
+            document.getElementById("player1-info").textContent = `Jugador 1: ${playerNames[0]} 💋`;
+            document.getElementById("player2-info").textContent = `Jugador 2: ${playerNames[1]} 💎`;
+        }
+
+        function updatePlayerPositions() {
+            document.querySelectorAll(".player").forEach(player => player.remove());
+            playerPositions.forEach((pos, index) => {
+                let player = document.createElement("div");
+                player.className = `player ${playerIcons[index]}`;
+                player.textContent = playerIcons[index] === "red" ? "💋" : 
+                                     playerIcons[index] === "blue" ? "💎" : 
+                                     playerIcons[index] === "yellow" ? "🔥" : 
+                                     "💖";
+                document.getElementById("cell-" + pos).appendChild(player);
+            });
+        }
+
+        function rollDice() {
+    let randomNumber = Math.floor(Math.random() * 6) + 1;
+    let newPosition = playerPositions[currentPlayer] + randomNumber;
+
+    // Si el jugador pasa de la casilla "FIN", retrocede
+    if (newPosition > totalCells - 1) {
+        newPosition = totalCells - 2 - (newPosition - totalCells); // Retroceder si excede el total de casillas
+    }
+    playerPositions[currentPlayer] = newPosition;
+    updatePlayerPositions();
+
+    const currentCell = document.getElementById("cell-" + playerPositions[currentPlayer]);
+    const currentPlayerIcon = currentCell.querySelector(".player");
+
+    if (currentPlayerIcon) {
+        currentPlayerIcon.remove();
+    }
+
+    diceResult.textContent = `Resultado: ${randomNumber}`;
+
+    setTimeout(() => {
+        currentCell.classList.add("expanded");
+
+        setTimeout(() => {
+            currentCell.classList.remove("expanded");
+
+            let player = document.createElement("div");
+            player.className = `player ${playerIcons[currentPlayer]}`;
+            player.textContent = playerIcons[currentPlayer] === "red" ? "💋" : 
+                                 playerIcons[currentPlayer] === "blue" ? "💎" : 
+                                 playerIcons[currentPlayer] === "yellow" ? "🔥" : 
+                                 "💖";
+            currentCell.appendChild(player);
+            
+            // Guardar el estado después de cada movimiento
+            saveGameState();
+
+        }, 5000);
+    }, 1500);
+}
+
+        // Función para guardar el estado del juego en localStorage
+        function saveGameState() {
+            const gameState = {
+                playerNames,
+                playerIcons,
+                playerPositions,
+                currentPlayer
+            };
+            localStorage.setItem("gameState", JSON.stringify(gameState));
+        }
+
+        // Función para cargar el estado del juego desde localStorage
+        function loadGameState() {
+            const savedState = JSON.parse(localStorage.getItem("gameState"));
+            playerNames = savedState.playerNames;
+            playerIcons = savedState.playerIcons;
+            playerPositions = savedState.playerPositions;
+            currentPlayer = savedState.currentPlayer;
+
+            updatePlayerInfo();
+            initializeBoard();
+            updatePlayerPositions();
+        }
+
+        function resetGame() {
+    // Reiniciar las variables del juego
+    playerNames = ["Jugador 1", "Jugador 2"];
+    playerIcons = ["red", "blue"];
+    playerPositions = [0, 0];
+    currentPlayer = 0;
+
+    // Limpiar el tablero y las posiciones de los jugadores
+    board.innerHTML = "";
+    initializeBoard();
+    updatePlayerPositions();
+
+    // Limpiar el estado guardado en localStorage
+    localStorage.removeItem("gameState");
+
+    // Volver a mostrar la pantalla de inicio si es necesario
+    document.getElementById("start-screen").style.display = "block";
+    document.getElementById("game-screen").classList.add("hidden");
+
+    // Reiniciar la interfaz de jugadores
+    updatePlayerInfo();
+}
+
+    </script>
+</body>
+</html>
