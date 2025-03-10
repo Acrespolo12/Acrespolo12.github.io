@@ -6,58 +6,65 @@
     <title>Tablero de Juego Sensual 😈</title>
     <link href="https://fonts.googleapis.com/css2?family=Sacramento&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background-color: #1f1f1f; /* Fondo oscuro sexy */
-            overflow: hidden;
-            font-family: 'Caveat', cursive; /* Tipografía juguetona y sensual */
-        }
-        .hidden { display: none; }
-        .start-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 15px;
-            color: #ecf0f1;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-        }
-        .start-screen h2 {
-            font-size: 36px;
-            text-align: center;
-            color: #fd4560; /* Color sensual */
-            font-family: 'Sacramento', cursive; /* Fuente sensual */
-            text-transform: uppercase;
-            letter-spacing: 5px;
-        }
-        .player-selection {
-            display: flex;
-            gap: 20px;
-        }
-        .player-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.3s, box-shadow 0.3s;
-            border: none; /* Elimina el borde */
-            background: none; /* Elimina el fondo */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 32px; /* Tamaño adecuado para los iconos */
-        }
-        .player-icon:hover {
-            transform: scale(1.2);
-            box-shadow: 0 0 15px rgba(231, 76, 60, 0.8); /* Sombra seductora */
-        }
-        .selected {
-            box-shadow: 0 0 10px 5px rgba(231, 76, 60, 0.8); /* Sombra alrededor cuando es seleccionado */
-        }
-        .board {
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1f1f1f;
+    overflow: auto;
+    font-family: 'Caveat', cursive;
+}
+.hidden { display: none; }
+
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    color: #ecf0f1;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.start-screen h2 {
+    font-size: 36px;
+    text-align: center;
+    color: #fd4560;
+    font-family: 'Sacramento', cursive;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+.player-selection {
+    display: flex;
+    gap: 20px;
+}
+
+.player-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: none;
+    background: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+}
+
+.player-icon:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.8);
+}
+
+.selected {
+    box-shadow: 0 0 10px 5px rgba(231, 76, 60, 0.8);
+}
+
+.board {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     gap: 10px;
@@ -68,166 +75,183 @@
     border-radius: 15px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
 }
-        .cell {
+
+.cell {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 5px;
-    font-family: 'Sacramento', cursive; /* Fuente sensual */
     color: #ecf0f1;
-    background-color: #bf2948; /* Color sensual */
+    background-color: #bf2948;
     border-radius: 10px;
     position: relative;
     transition: background-color 0.3s;
-    text-align: center; /* Centrado del texto */
-    padding: 10px; /* Aseguramos que haya un pequeño espacio */
-    word-wrap: break-word; /* Permite que las palabras largas se dividan y ajusten */
-    overflow-wrap: break-word; /* Asegura que el texto no se desborde */
-    white-space: normal; /* Permite que el texto se divida en varias líneas si es necesario */
-    min-height: 60px; /* Aseguramos que cada celda tenga un mínimo de altura */
-    height: auto; /* Deja que la celda crezca según el contenido */
+    text-align: center;
+    padding: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    min-height: 60px;
 }
 
-        .cell:hover {
-            background-color: #fd4560; /* Rojo sensual al pasar el ratón */
-            cursor: pointer;
-        }
-        .blue { background-color: #6a1232; } /* Color 1 */
-        .red { background-color: #8a1b39; } /* Color 2 */
-        .yellow { background-color: #bf2948; } /* Color 3 */
-        .white { background-color: #ff7578; } /* Color 5 */
-        .player {
-            font-size: 30px;
-            position: absolute;
-            transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        .dice {
-            margin-top: 30px;
-            padding: 14px 28px;
-            font-size: 24px;
-            cursor: pointer;
-            background-color: #fd4560; /* Color sensual para el botón */
-            color: #fff;
-            border: none;
-            border-radius: 30px;
-            box-shadow: 0 10px 20px rgba(231, 76, 60, 0.6);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .dice:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
-        }
-        .dice.animate {
-            animation: roll 0.5s ease-in-out;
-        }
-        @keyframes roll {
-            0% { transform: rotate(0deg); }
-            50% { transform: rotate(180deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .players-info {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            margin-bottom: 20px;
-            color: #ecf0f1;
-        }
-        #dice-result {
-            margin-top: 20px;
-            font-size: 28px;
-            color: #fd4560; /* Color sensual */
-        }
-        @media (max-width: 600px) {
-            .board {
+.cell .text-content {
+    display: none;
+}
+
+.cell .icon-content {
+    font-size: 20px;
+}
+
+.cell:hover {
+    background-color: #fd4560;
+    cursor: pointer;
+}
+
+.blue { background-color: #6a1232; }
+.red { background-color: #8a1b39; }
+.yellow { background-color: #bf2948; }
+.white { background-color: #ff7578; }
+
+.player {
+    font-size: 20px;
+    position: absolute;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.dice {
+    margin-top: 30px;
+    padding: 14px 28px;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #fd4560;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0 10px 20px rgba(231, 76, 60, 0.6);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.dice:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.8);
+}
+
+.dice.animate {
+    animation: roll 0.5s ease-in-out;
+}
+
+@keyframes roll {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.players-info {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 10px;
+    color: #ecf0f1;
+    margin-top: 15px;
+    padding: 14px 28px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+#dice-result {
+    margin-top: 20px;
+    font-size: 28px;
+    color: #fd4560;
+}
+
+/* Media Query para pantallas pequeñas */
+@media (max-width: 600px) {
+    .board {
         grid-template-columns: repeat(6, minmax(40px, 1fr));
     }
     .cell {
-        font-size: 5px; /* Ajustamos el tamaño de texto para pantallas pequeñas */
+        font-size: 5px;
         padding: 5px;
-        min-height: 40px; /* Ajuste para pantallas pequeñas */
+        min-height: 40px;
     }
-            .player-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 28px; /* Ajustamos el tamaño de los iconos */
-            }
-            .dice {
-                font-size: 20px;
-                padding: 10px 20px;
-            }
-            .start-screen h2 {
-                font-size: 28px; /* Reducimos el tamaño del título */
-            }
-            .player-selection {
-                gap: 10px; /* Reducimos el espacio entre los iconos */
-            }
-        }
+    .player-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 28px;
+    }
+    .dice {
+        font-size: 20px;
+    }
+    .start-screen h2 {
+        font-size: 28px;
+    }
+    .player-selection {
+        gap: 10px;
+    }
+}
 
-        /* Celda expandida */
+/* Celda expandida */
 .cell.expanded {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw; /* Ocupa toda la pantalla */
-    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    width: 100vw;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2vw; /* Ajuste dinámico del tamaño de la fuente con respecto al ancho de la pantalla */
+    font-size: 5vw;
     z-index: 9999;
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo oscuro semitransparente */
-    color: #ecf0f1; /* Color de texto */
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #ecf0f1;
     transition: all 1s ease;
     padding: 20px;
     text-align: center;
-    overflow: hidden; /* Evitar que el texto se desborde */
-    white-space: normal; /* Permite que el texto se divida en varias líneas si es necesario */
-    word-wrap: break-word; /* Permite que las palabras largas se dividan si es necesario */
-    max-width: 100%; /* Asegura que el texto no se desborde horizontalmente */
+    box-sizing: border-box;
+    overflow: auto;
+    white-space: normal;
+    word-wrap: break-word;
 }
 
 .cell.expanded .player {
-    font-size: 10vw; /* Tamaño del ícono del jugador ajustado dinámicamente */
+    font-size: 10vw;
 }
 
 @media (max-width: 600px) {
     .cell.expanded {
-        font-size: 2vw; /* Reducimos el tamaño de la fuente en dispositivos pequeños */
-        padding: 15px; /* Ajustamos el espaciado */
-        overflow: hidden; /* Evitar que el texto se desborde */
-    white-space: normal; /* Permite que el texto se divida en varias líneas si es necesario */
-    word-wrap: break-word; /* Permite que las palabras largas se dividan si es necesario */
-    max-width: 80%; /* Asegura que el texto no se desborde horizontalmente */
+        font-size: 8vw;
+        padding: 15px;
     }
 
     .cell.expanded .player {
-        font-size: 20vw; /* Reducimos el tamaño del ícono en dispositivos pequeños */
+        font-size: 12vw;
     }
 }
 
-        .cell {
-            transition: transform 0.5s ease; /* Agregamos transición para la celda */
-        }
+.cell {
+    transition: transform 0.5s ease;
+}
 
-        /* Animación adicional para que la celda se agrande más */
-        .cell.expanded {
-            transform: scale(2); /* Hacemos que la celda se agrande un 3x */
-        }
+/* Animación adicional para que la celda se agrande más */
+.cell.expanded {
+    transform: scale(1);
+}
 
-        #reset-button {
-    background-color: #f00;
-    color: white;
-    padding: 10px 20px;
-    font-size: 16px;
-    border: none;
+#reset-button {
+    font-size: 24px;
     cursor: pointer;
-    margin-top: 20px;
+    background-color: #fd4560;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    box-shadow: 0 10px 20px rgba(231, 76, 60, 0.6);
+    transition: transform 0.3s, box-shadow 0.3s;
+    margin-right:30px;
 }
 
 #reset-button:hover {
     background-color: #c00;
 }
-
     </style>
 </head>
 <body>
@@ -260,8 +284,8 @@
     <script>
         const board = document.getElementById("board");
         const diceResult = document.getElementById("dice-result");
-        const rows = 5;
-        const cols = 6;
+        const rows = 7;
+        const cols = 7;
         const totalCells = rows * cols;
         let playerPositions = [0, 0];
         let currentPlayer = 0;
