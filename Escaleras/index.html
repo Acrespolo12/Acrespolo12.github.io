@@ -459,9 +459,13 @@ body {
             // Guardar el estado después de cada movimiento
             saveGameState();
 
+            // **Cambio de turno al siguiente jugador**
+            currentPlayer = (currentPlayer + 1) % 2;
+
         }, 5000);
     }, 1500);
 }
+
 
         // Función para guardar el estado del juego en localStorage
         function saveGameState() {
