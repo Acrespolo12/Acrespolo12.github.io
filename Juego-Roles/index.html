@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Rol Dominante/Sumiso</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: url('https://img.pikbest.com/wp/202344/sleek-and-mysterious-abstract-black-background-texture-surface_9931240.jpg!w700wp') no-repeat center center fixed;
+            background-size: cover;
+            color: #f7f7f7;
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 4rem;
+            color: #e63946;
+            text-shadow: 2px 2px 4px #000000;
+        }
+
+        h2, h3 {
+            font-family: 'Open Sans', sans-serif;
+            font-size: 2rem;
+            color: #f1faee;
+            text-shadow: 1px 1px 3px #000000;
+        }
+
+        .form-group label {
+            color: #a8dadc;
+        }
+
+        #action-result {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e63946;
+            text-shadow: 1px 1px 3px #000000;
+            animation: fadeInOut 3s forwards;
+        }
+
+        .emote {
+            font-size: 2rem;
+            margin-left: 10px;
+        }
+
+        .action-option {
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background-color: #e63946;
+            border-color: #e63946;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .btn-outline-primary {
+            color: #e63946;
+            border-color: #e63946;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #e63946;
+            color: #f7f7f7;
+        }
+
+        .container {
+            background-color: rgba(44, 44, 44, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px 5px rgba(0,0,0,0.5);
+        }
+        
+        .form-control {
+            background-color: #2c2c2c;
+            color: #f7f7f7;
+            border: 1px solid #555;
+        }
+        
+        .form-control::placeholder {
+            color: #a8dadc;
+        }
+
+        .history {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            margin-bottom: 10px;
+        }
+
+        .points {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e63946;
+            margin-top: 20px;
+        }
+
+        .dice-result {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #e63946;
+            margin-top: 20px;
+        }
+
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            h2, h3 {
+                font-size: 1.5rem;
+            }
+
+            #action-result {
+                font-size: 1rem;
+            }
+
+            .points, .dice-result {
+                font-size: 1rem;
+            }
+
+            .btn-primary, .btn-outline-primary {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Juego de Rol Dominante/Sumiso</h1>
+        <div id="name-role-selection" class="text-center">
+            <h2>Introduce los nombres</h2>
+            <div class="form-group">
+                <label for="player1-name">Nombre del Jugador 1 (Dominante):</label>
+                <input type="text" id="player1-name" class="form-control" placeholder="Nombre del Jugador 1">
+            </div>
+            <div class="form-group">
+                <label for="player2-name">Nombre del Jugador 2 (Sumiso):</label>
+                <input type="text" id="player2-name" class="form-control" placeholder="Nombre del Jugador 2">
+            </div>
+            <div class="mt-4">
+                <button type="button" class="btn btn-primary" onclick="startGame()">Empezar el Juego</button>
+            </div>
+        </div>
+        <div id="gameplay" class="mt-5" style="display:none;">
+            <h2 id="player1-role" class="text-center"></h2>
+            <h2 id="player2-role" class="text-center"></h2>
+            <div class="points text-center">
+                <span id="player1-points">0</span> puntos para <span id="player1-name-display"></span> | <span id="player2-points">0</span> puntos para <span id="player2-name-display"></span>
+            </div>
+            <div id="actions" class="text-center mt-4"></div>
+            <div id="options" class="text-center mt-4" style="display:none;"></div>
+            <div id="action-result" class="mt-4"></div>
+            <div class="dice-result text-center" id="dice-result"></div>
+            <div class="history" id="history">
+                <h3>Historial de Acciones</h3>
+            </div>
+            <div class="text-center mt-4">
+                <button type="button" class="btn btn-danger" onclick="resetGame()">Reiniciar Partida</button>
+            </div>
+        </div>
+        <audio id="background-music" loop>
+            <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mp3">
+        </audio>
+        <script>
+            let player1 = '';
+            let player2 = '';
+            let player1Points = 0;
+            let player2Points = 0;
+            let currentTurn = 'Dominante';
+            let dominanteActions = ['Ordenar', 'Posiciones', 'Castigar', 'Premiar'];
+            let sumisoActions = ['Obedecer', 'Desafiar', 'Suplicar', 'Complacer'];
+
+            const actionOptions = {
+                'Ordenar': ['Usa una venda en los ojos', 'Usa esposas', '10 Látigazos', 'Tocame', 'Desnúdate', 'Chupame', 'Espera de rodillas', 'Striptease', 'Usa solo la lengua para dar pequeños besos o lamer una zona específica de su cuerpo durante 1 minuto', 'Desliza lentamente tus dedos por la nuca y espalda de tu compañero/a sin romper contacto visual', 'Simula sexo oral en el aire durante 10 segundos', 'Sientalo en una silla, atalo pero solo provoca.', 'Haz un juego de trío imaginario con tu pareja: usen juguetes y describan qué harían si hubiera una tercera persona.',
+                        'Introduce lentamente un juguete anal en tu pareja mientras la estimulas de otra manera', 'Atala y pasa la lengua varias veces por su zona favorita', 'Sientate en su boca y disfruta.', 'Hay muchos lubricantes elige el que mas te guste y que no quede ninguna gota.',
+                ],
+                'Posiciones': ['El misionero', 'La carretilla', 'Ponte encima', 'A cuatro', 'De lado', 'Pierna Arriba', 'Piernas arriba', 'El 69', 'El 96', 'Tijereta', 'En la silla', 'a cuatro fuerte', 'Inclinada a cuatro'],
+                'Castigar': ['10 azotes', 'Dedo por detras', 'Mamada Larga', 'Comida de coño larga', 'Masturbacion con la mano', 'Masturbacion con juguetes', 'Sientate en juguete', 'Vibrador + lubricante', 'Falso Oral', 'Trio', 'Intercambio de ropa', 'Ponte Strapon', 'Chupa Strapon', 'Solo rozar no introducir', 'Manos atada espalada + chupada culo', 'Squirt', 'Cortar Orgasmo'],
+                'Premiar': ['Relajate y disfruta', 'Dejate sacar un orgasmo', 'Masaje en la espalda', 'Besos en el cuello', 'Masturbacion Mutua', 'Dejate dar por detras Strapon', 'Coge tu vibrador favorito y disfruta mientras te penetran', 'Fantasia Trio,', 'Dejate atar y relajate', 'Atada en la silla + Oral', 'Lubricante + dedos', 'Lubricante + sexo oral', 'Penetración lenta'],
+                'Obedecer': ['Sí, amo', 'Estoy a tus órdenes', 'Lo haré', 'Como desees', 'A tu servicio', 'Lo que digas', 'Obedezco', 'Inmediatamente'],
+                'Desafiar': ['No quiero', 'Me niego', 'Hazlo tú', 'No me importa', 'No lo haré', 'Desafío', 'No me someteré', 'No obedeceré'],
+                'Suplicar': ['Por favor', 'Te lo ruego', 'Ten piedad', 'No más', 'Imploro', 'Te suplico', 'Misericordia', 'No puedo más'],
+                'Complacer': ['Te haré feliz', 'Lo que desees', 'Estoy aquí para ti', 'Dime qué hacer', 'Te complaceré', 'Eres mi todo', 'Te satisfaré', 'Haré lo que quieras']
+            };
+
+            document.addEventListener("DOMContentLoaded", function() {
+                loadGame();
+            });
+
+            function startGame() {
+                player1 = document.getElementById('player1-name').value;
+                player2 = document.getElementById('player2-name').value;
+
+                if (player1 === '' || player2 === '') {
+                    alert('Por favor, introduce los nombres de ambos jugadores.');
+                    return;
+                }
+
+                document.getElementById('name-role-selection').style.display = 'none';
+                document.getElementById('gameplay').style.display = 'block';
+                document.getElementById('player1-role').innerText = `${player1} es el Dominante 👑`;
+                document.getElementById('player2-role').innerText = `${player2} es el Sumiso 🙇‍♂️`;
+                document.getElementById('player1-name-display').innerText = player1;
+                document.getElementById('player2-name-display').innerText = player2;
+                saveGame();
+                updateTurnDisplay();
+                document.getElementById('background-music').play();
+            }
+
+            function performAction(action) {
+                let options = actionOptions[action];
+                let randomOptions = getRandomOptions(options, 4); // Seleccionar 4 opciones aleatorias
+                let html = `<h3>Elige una opción (${currentTurn})</h3>`;
+                randomOptions.forEach((option, index) => {
+                    if (currentTurn === 'Dominante') {
+                        html += `<button type="button" class="btn btn-outline-primary action-option" onclick="rollDice('${option}')">${currentTurn} Opción ${index + 1}: ${option}</button><br>`;
+                    } else {
+                        html += `<button type="button" class="btn btn-outline-primary action-option" onclick="executeAction('${option}')">${currentTurn} Opción ${index + 1}: ${option}</button><br>`;
+                    }
+                });
+                document.getElementById('options').innerHTML = html;
+                document.getElementById('options').style.display = 'block';
+            }
+
+            function getRandomOptions(options, count) {
+                let shuffled = options.sort(() => 0.5 - Math.random());
+                return shuffled.slice(0, count);
+            }
+
+            function rollDice(option) {
+                let dominantRoll = Math.floor(Math.random() * 6) + 1;
+                let submissiveRoll = Math.floor(Math.random() * 6) + 1;
+                document.getElementById('dice-result').innerText = `Dominante tira: ${dominantRoll}, Sumiso tira: ${submissiveRoll}`;
+
+                if (dominantRoll > submissiveRoll) {
+                    document.getElementById('action-result').innerText = `Dominante gana: ${option}`;
+                    addToHistory(currentTurn, option);
+                    updatePoints(currentTurn);
+                    document.getElementById('options').style.display = 'none';
+                    nextTurn();
+                } else if (dominantRoll < submissiveRoll) {
+                    document.getElementById('action-result').innerText = `Dominante pierde, no se realiza la acción.`;
+                    document.getElementById('options').style.display = 'none';
+                    nextTurn();
+                } else {
+                    document.getElementById('action-result').innerText = `Empate, vuelve a tirar los dados en 1 segundo...`;
+                    setTimeout(() => {
+                        rollDice(option);
+                    }, 1000);
+                }
+            }
+
+            function executeAction(option) {
+                document.getElementById('action-result').innerText = `${currentTurn} ha seleccionado: ${option}`;
+                addToHistory(currentTurn, option);
+                updatePoints(currentTurn);
+                document.getElementById('options').style.display = 'none';
+                nextTurn();
+            }
+
+            function nextTurn() {
+                currentTurn = currentTurn === 'Dominante' ? 'Sumiso' : 'Dominante';
+                saveGame();
+                updateTurnDisplay();
+            }
+
+            function updateTurnDisplay() {
+                let actions = currentTurn === 'Dominante' ? dominanteActions : sumisoActions;
+                let html = `<h3>Elige una acción (${currentTurn})</h3>`;
+                actions.forEach((action, index) => {
+                    html += `<button type="button" class="btn btn-primary action-option" onclick="performAction('${action}')">${currentTurn} Acción ${index + 1}: ${action}</button><br>`;
+                });
+                document.getElementById('actions').innerHTML = html;
+            }
+
+            function addToHistory(player, action) {
+                const history = document.getElementById('history');
+                const historyItem = document.createElement('div');
+                historyItem.classList.add('history-item');
+                historyItem.innerText = `${player} ha realizado la acción: ${action}`;
+                history.appendChild(historyItem);
+                saveGame();
+            }
+
+            function updatePoints(player) {
+                if (player === 'Dominante') {
+                    player1Points += 10; // Añadir puntos por acción
+                    document.getElementById('player1-points').innerText = player1Points;
+                } else {
+                    player2Points += 10; // Añadir puntos por acción
+                    document.getElementById('player2-points').innerText = player2Points;
+                }
+                saveGame();
+            }
+
+            function saveGame() {
+                const gameState = {
+                    player1,
+                    player2,
+                    player1Points,
+                    player2Points,
+                    currentTurn,
+                    history: document.getElementById('history').innerHTML
+                };
+                localStorage.setItem('gameState', JSON.stringify(gameState));
+            }
+
+            function loadGame() {
+                const savedGame = localStorage.getItem('gameState');
+                if (savedGame) {
+                    const gameState = JSON.parse(savedGame);
+                    player1 = gameState.player1;
+                    player2 = gameState.player2;
+                    player1Points = gameState.player1Points;
+                    player2Points = gameState.player2Points;
+                    currentTurn = gameState.currentTurn;
+
+                    document.getElementById('name-role-selection').style.display = 'none';
+                    document.getElementById('gameplay').style.display = 'block';
+                    document.getElementById('player1-role').innerText = `${player1} es el Dominante 👑`;
+                    document.getElementById('player2-role').innerText = `${player2} es el Sumiso 🙇‍♂️`;
+                    document.getElementById('player1-name-display').innerText = player1;
+                    document.getElementById('player2-name-display').innerText = player2;
+                    document.getElementById('player1-points').innerText = player1Points;
+                    document.getElementById('player2-points').innerText = player2Points;
+                    document.getElementById('history').innerHTML = gameState.history;
+                    updateTurnDisplay();
+                }
+            }
+
+            function resetGame() {
+                localStorage.removeItem('gameState');
+                location.reload();
+            }
+        </script>
+</body>
+</html>
