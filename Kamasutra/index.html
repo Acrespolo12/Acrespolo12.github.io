@@ -147,7 +147,7 @@
         <button id="next-turn">Siguiente Turno</button>
     </div>
 
-    <script>
+     <script>
         const positions = [
             { name: 'Posición 1: La Carretilla', image: 'imagenes/carretilla.PNG' },
             { name: 'Posición 2: El Cabecero', image: 'imagenes/cabecero.PNG' },
@@ -187,7 +187,6 @@
             { name: 'Posición 36: Las Piernas Arriba', image: 'imagenes/piernas-arriba.PNG' },
             { name: 'Posición 37: El Caballo', image: 'imagenes/caballo.PNG' },
             { name: 'Posición 38: La Silla Adaptada', image: 'imagenes/silla-adaptada.PNG' },
-            // Agrega más posiciones según sea necesario
         ];
 
         let currentPlayer = 1;
@@ -219,7 +218,9 @@
             player1Name = '';
             player2Name = '';
             remainingPositions = [...positions];
-            location.reload();
+            document.getElementById('current-player').textContent = 'Jugador 1';
+            document.getElementById('pre-game').style.display = 'block';
+            document.getElementById('game').style.display = 'none';
         };
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -243,6 +244,7 @@
                 preGame.style.display = 'none';
                 game.style.display = 'block';
                 saveGameState();
+                showRandomPosition();
             });
 
             // Mostrar una posición aleatoria
