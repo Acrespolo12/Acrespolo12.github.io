@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Kamasutra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playball&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Playball', cursive;
+            background-color: #2c2c2c;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        #pre-game, #game {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: #ff4081;
+        }
+
+        label, input {
+            display: block;
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+
+        input {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            width: calc(100% - 24px);
+        }
+
+        button {
+            background-color: #ff4081;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background-color: #e91e63;
+        }
+
+        #position-list {
+            margin: 20px 0;
+            display: none;
+        }
+
+        .position {
+            background-color: #ff4081;
+            color: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .position img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        #position-display {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #position-display img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+
+        .large-text {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        #reset-game {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            label, input {
+                font-size: 1em;
+            }
+
+            button {
+                font-size: 1em;
+            }
+
+            .large-text {
+                font-size: 1.2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="pre-game">
+        <h1>Juego Kamasutra para 2 Personas</h1>
+        <label for="player1">Nombre del Jugador 1:</label>
+        <input type="text" id="player1" name="player1"><br><br>
+        <label for="player2">Nombre del Jugador 2:</label>
+        <input type="text" id="player2" name="player2"><br><br>
+        <button id="start-game">Jugar</button>
+    </div>
+
+    <div id="game" style="display: none;">
+        <button id="reset-game">Reiniciar</button>
+        <h1>Juego Kamasutra para 2 Personas</h1>
+        <div id="player-turn" class="large-text">Turno de <span id="current-player">Jugador 1</span></div>
+        <div id="position-display">
+            <div id="position-name" class="large-text"></div>
+            <img id="position-image" src="" alt="Position Image">
+        </div>
+        <button id="next-turn">Siguiente Turno</button>
+    </div>
+
+    <script>
+        const positions = [
+            { name: 'Posición 1: La Carretilla', image: 'imagenes/carretilla.png' },
+            { name: 'Posición 2: El Cabecero', image: 'imagenes/cabecero.png' },
+            { name: 'Posición 3: La Flor de Loto', image: 'imagenes/flor-de-loto.png' },
+            { name: 'Posición 4: El Caracol', image: 'imagenes/caracol.png' },
+            { name: 'Posición 5: El Candado', image: 'imagenes/candado.png' },
+            { name: 'Posición 6: El Trapecista', image: 'imagenes/trapecista.png' },
+            { name: 'Posición 7: El 69 Acrobatico', image: 'imagenes/69-acrobatico.png' },
+            { name: 'Posición 8: El Sacacorchos', image: 'imagenes/sacacorchos.png' },
+            { name: 'Posición 9: La Cascada', image: 'imagenes/cascada.png' },
+            { name: 'Posición 10: La Cucharita', image: 'imagenes/cucharita.png' },
+            { name: 'Posición 11: El Surfero', image: 'imagenes/surfero.png' },
+            { name: 'Posición 12: El Trono del Rey', image: 'imagenes/trono-rey.png' },
+            { name: 'Posición 13: El Delfin', image: 'imagenes/delfin.png' },
+            { name: 'Posición 14: El Amazona Invertida', image: 'imagenes/amazona-invertida.png' },
+            { name: 'Posición 15: El 69', image: 'imagenes/69.png' },
+            { name: 'Posición 16: La Araña', image: 'imagenes/araña.png' },
+            { name: 'Posición 17: La Bicicleta', image: 'imagenes/bicicleta.png' },
+            { name: 'Posición 18: El Pretzler', image: 'imagenes/pretzler.png' },
+            { name: 'Posición 19: La Isla', image: 'imagenes/isla.png' },
+            { name: 'Posición 20: Con Vibrador', image: 'imagenes/vibrador.png' },
+            { name: 'Posición 21: El Acrobata', image: 'imagenes/acrobata.png' },
+            { name: 'Posición 22: La Cobra', image: 'imagenes/cobra.png' },
+            { name: 'Posición 23: El Factor X', image: 'imagenes/factor-x.png' },
+            { name: 'Posición 24: El Potril', image: 'imagenes/potril.png' },
+            { name: 'Posición 25: La Mariposa Reclinada', image: 'imagenes/mariposa.png' },
+            { name: 'Posición 26: El Estandarte', image: 'imagenes/estandarte.png' },
+            { name: 'Posición 27: El Angel de Nieve', image: 'imagenes/angel.png' },
+            { name: 'Posición 28: El Hotgie', image: 'imagenes/Hotgie.png' },
+            { name: 'Posición 29: Las Manos Arriba', image: 'imagenes/manos-arriba.png' },
+            { name: 'Posición 30: El Misionero Adaptado', image: 'imagenes/misionero-adaptada.png' },
+            { name: 'Posición 31: El Perrito Adaptado', image: 'imagenes/perrito-adaptada.png' },
+            { name: 'Posición 32: La Vaquera Adaptada', image: 'imagenes/vaquera-adaptada.png' },
+            { name: 'Posición 33: La H Especial', image: 'imagenes/h-especial.png' },
+            { name: 'Posición 34: La Cucharita Adaptada', image: 'imagenes/cucharita-adaptada.png' },
+            { name: 'Posición 35: La Mesa Adaptada', image: 'imagenes/mesa-adaptada.png' },
+            { name: 'Posición 36: Las Piernas Arriba', image: 'imagenes/piernas-arriba.png' },
+            { name: 'Posición 37: El Caballo', image: 'imagenes/caballo.png' },
+            { name: 'Posición 38: La Silla Adaptada', image: 'imagenes/silla-adaptada.png' },
+            // Agrega más posiciones según sea necesario
+        ];
+
+        let currentPlayer = 1;
+        let player1Name = '';
+        let player2Name = '';
+        let remainingPositions = [...positions];
+
+        const saveGameState = () => {
+            localStorage.setItem('currentPlayer', currentPlayer);
+            localStorage.setItem('player1Name', player1Name);
+            localStorage.setItem('player2Name', player2Name);
+            localStorage.setItem('remainingPositions', JSON.stringify(remainingPositions));
+        };
+
+        const loadGameState = () => {
+            if (localStorage.getItem('currentPlayer')) {
+                currentPlayer = parseInt(localStorage.getItem('currentPlayer'), 10);
+                player1Name = localStorage.getItem('player1Name');
+                player2Name = localStorage.getItem('player2Name');
+                remainingPositions = JSON.parse(localStorage.getItem('remainingPositions'));
+                return true;
+            }
+            return false;
+        };
+
+        const resetGame = () => {
+            localStorage.clear();
+            currentPlayer = 1;
+            player1Name = '';
+            player2Name = '';
+            remainingPositions = [...positions];
+            location.reload();
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const preGame = document.getElementById('pre-game');
+            const game = document.getElementById('game');
+            const player1Input = document.getElementById('player1');
+            const player2Input = document.getElementById('player2');
+            const startGameButton = document.getElementById('start-game');
+            const currentPlayerElement = document.getElementById('current-player');
+            const nextTurnButton = document.getElementById('next-turn');
+            const resetGameButton = document.getElementById('reset-game');
+            const positionDisplay = document.getElementById('position-display');
+            const positionName = document.getElementById('position-name');
+            const positionImage = document.getElementById('position-image');
+
+            // Iniciar el juego
+            startGameButton.addEventListener('click', () => {
+                player1Name = player1Input.value || 'Jugador 1';
+                player2Name = player2Input.value || 'Jugador 2';
+                currentPlayerElement.textContent = player1Name;
+                preGame.style.display = 'none';
+                game.style.display = 'block';
+                saveGameState();
+            });
+
+            // Mostrar una posición aleatoria
+            const showRandomPosition = () => {
+                if (remainingPositions.length === 0) {
+                    alert('No hay más posiciones disponibles.');
+                    return;
+                }
+                const randomIndex = Math.floor(Math.random() * remainingPositions.length);
+                const randomPosition = remainingPositions.splice(randomIndex, 1)[0];
+                positionName.textContent = randomPosition.name;
+                positionImage.src = randomPosition.image;
+                positionDisplay.style.display = 'flex';
+                saveGameState();
+            };
+
+            // Cambiar el turno del jugador y mostrar una posición aleatoria
+            nextTurnButton.addEventListener('click', () => {
+                currentPlayer = currentPlayer === 1 ? 2 : 1;
+                currentPlayerElement.textContent = currentPlayer === 1 ? player1Name : player2Name;
+                showRandomPosition();
+            });
+
+            // Reiniciar el juego
+            resetGameButton.addEventListener('click', resetGame);
+
+            // Cargar el estado del juego si existe
+            if (loadGameState()) {
+                preGame.style.display = 'none';
+                game.style.display = 'block';
+                currentPlayerElement.textContent = currentPlayer === 1 ? player1Name : player2Name;
+                showRandomPosition();
+            } else {
+                showRandomPosition();
+            }
+        });
+    </script>
+</body>
+</html>
