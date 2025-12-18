@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Íntimo para Parejas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a0a0f, #4a0e2a, #1a0a0f);
+            min-height: 100vh;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* PANTALLA DE INICIO */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            background: linear-gradient(135deg, #ff1744, #ff4081, #f50057);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 15px;
+            letter-spacing: 3px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.1em;
+            letter-spacing: 1px;
+        }
+
+        /* CONFIGURACIÓN */
+        .config-section {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 64, 129, 0.3);
+        }
+
+        .config-section h2 {
+            color: #ff4081;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 64, 129, 0.1);
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .checkbox-item:hover {
+            background: rgba(255, 64, 129, 0.2);
+            border-color: rgba(255, 64, 129, 0.5);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: #ff4081;
+        }
+
+        .checkbox-item.checked {
+            background: rgba(255, 64, 129, 0.3);
+            border-color: #ff4081;
+        }
+
+        .intensity-selector {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .intensity-btn {
+            padding: 15px 30px;
+            border: 2px solid rgba(255, 64, 129, 0.5);
+            background: rgba(255, 64, 129, 0.1);
+            color: #fff;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .intensity-btn:hover {
+            background: rgba(255, 64, 129, 0.2);
+            transform: scale(1.05);
+        }
+
+        .intensity-btn.selected {
+            background: linear-gradient(135deg, #ff4081, #f50057);
+            border-color: #ff4081;
+            box-shadow: 0 0 30px rgba(255, 64, 129, 0.6);
+        }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            max-width: 400px;
+            margin: 30px auto 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff4081, #f50057);
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 1.3em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 40px rgba(255, 64, 129, 0.6);
+        }
+
+        /* MODO DE JUEGO */
+        .game-modes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .mode-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 64, 129, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-10px);
+            border-color: #ff4081;
+            box-shadow: 0 15px 40px rgba(255, 64, 129, 0.5);
+        }
+
+        .mode-icon {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .mode-card h3 {
+            color: #ff4081;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .mode-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.95em;
+        }
+
+        /* PANTALLA DE JUEGO */
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 70vh;
+        }
+
+        .challenge-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(255, 64, 129, 0.4);
+            border-radius: 25px;
+            padding: 50px 40px;
+            max-width: 700px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            margin: 30px 0;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #ff4081, #f50057);
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+        }
+
+        .challenge-text {
+            font-size: 1.8em;
+            line-height: 1.6;
+            margin: 30px 0;
+            color: #fff;
+            font-weight: 300;
+        }
+
+        .challenge-text strong {
+            color: #ff4081;
+            font-weight: 600;
+        }
+
+        .timer {
+            font-size: 3em;
+            color: #ff4081;
+            margin: 20px 0;
+            font-weight: 700;
+        }
+
+        .game-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .btn-action {
+            padding: 15px 30px;
+            border: 2px solid rgba(255, 64, 129, 0.5);
+            background: rgba(255, 64, 129, 0.15);
+            color: #fff;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        .btn-action:hover {
+            background: rgba(255, 64, 129, 0.3);
+            transform: scale(1.05);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #ff4081, #f50057);
+            border-color: #ff4081;
+        }
+
+        .btn-next:hover {
+            box-shadow: 0 0 30px rgba(255, 64, 129, 0.6);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4081, #f50057);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .home-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: rgba(255, 64, 129, 0.2);
+            border: 1px solid rgba(255, 64, 129, 0.5);
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .home-btn:hover {
+            background: rgba(255, 64, 129, 0.4);
+            box-shadow: 0 0 20px rgba(255, 64, 129, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .checkbox-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .intensity-selector {
+                flex-direction: column;
+            }
+
+            .challenge-text {
+                font-size: 1.3em;
+            }
+
+            .game-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-action {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="goBack()" style="display: none;" id="backBtn">← Atrás</button>
+        <button class="home-btn" onclick="goHome()" style="display: none;" id="homeBtn">🏠 Inicio</button>
+
+        <!-- PANTALLA 1: CONFIGURACIÓN -->
+        <div class="screen active" id="configScreen">
+            <div class="header">
+                <h1>🔥 Juego Íntimo</h1>
+                <p>Personaliza tu experiencia</p>
+            </div>
+
+            <div class="config-section">
+                <h2>📋 Categorías</h2>
+                <div class="checkbox-grid" id="categoriesGrid"></div>
+            </div>
+
+            <div class="config-section">
+                <h2>🎁 Juguetes Disponibles</h2>
+                <div class="checkbox-grid" id="toysGrid"></div>
+            </div>
+
+            <div class="config-section">
+                <h2>🔥 Nivel de Intensidad</h2>
+                <div class="intensity-selector">
+                    <button class="intensity-btn" data-level="suave">Suave</button>
+                    <button class="intensity-btn selected" data-level="medio">Medio</button>
+                    <button class="intensity-btn" data-level="intenso">Intenso</button>
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="goToModeSelection()">Continuar →</button>
+        </div>
+
+        <!-- PANTALLA 2: SELECCIÓN DE MODO -->
+        <div class="screen" id="modeScreen">
+            <div class="header">
+                <h1>🎮 Elige tu Modo</h1>
+                <p>¿Cómo quieres jugar?</p>
+            </div>
+
+            <div class="game-modes">
+                <div class="mode-card" onclick="startGame('ruleta')">
+                    <div class="mode-icon">🎡</div>
+                    <h3>Ruleta del Placer</h3>
+                    <p>Desafíos completamente aleatorios</p>
+                </div>
+
+                <div class="mode-card" onclick="startGame('progresivo')">
+                    <div class="mode-icon">📈</div>
+                    <h3>Modo Progresivo</h3>
+                    <p>Comienza suave y va subiendo</p>
+                </div>
+
+                <div class="mode-card" onclick="startGame('dados')">
+                    <div class="mode-icon">🎲</div>
+                    <h3>Dados Salvajes</h3>
+                    <p>Tira y descubre tu reto</p>
+                </div>
+
+                <div class="mode-card" onclick="startGame('cartas')">
+                    <div class="mode-icon">🃏</div>
+                    <h3>Cartas Sorpresa</h3>
+                    <p>Saca una carta del mazo</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA 3: JUEGO -->
+        <div class="screen" id="gameScreen">
+            <div class="game-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="category-badge" id="categoryBadge">BDSM</div>
+                    <div class="challenge-text" id="challengeText">
+                        Cargando desafío...
+                    </div>
+                    <div class="timer" id="timer" style="display: none;">3:00</div>
+                </div>
+
+                <div class="game-actions">
+                    <button class="btn-action" onclick="skipChallenge()">⏭️ Saltar</button>
+                    <button class="btn-action btn-next" onclick="nextChallenge()">Siguiente →</button>
+                    <button class="btn-action" onclick="endGame()">🏁 Terminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const categories = [
+            'BDSM', 'Tradicional', 'Fantasías Bisexuales', 
+            'Kamasutra', 'Preliminares', 'Castidad y Provocación'
+        ];
+
+        const toys = [
+            'Strapon', 'Dildo', 'Correas', 'Esposas', 'Plug Anal',
+            'Vibradores', 'Consoladores', 'Lubricantes', 'Corrida Falsa',
+            'Vendas', 'Látigo', 'Pinzas', 'Bolas Chinas'
+        ];
+
+        const challenges = {
+            'BDSM': [
+                'El dominante ata las muñecas del sumiso con {toy:correas} durante 5 minutos',
+                'El sumiso debe obedecer 3 órdenes del dominante sin cuestionar',
+                'Venda los ojos de tu pareja con {toy:vendas} y explora su cuerpo',
+                'Usa {toy:pinzas} en los pezones de tu pareja durante 2 minutos',
+                'El dominante dicta una posición y el sumiso debe mantenerla por 3 minutos',
+                'Nalgadas: 10 con la mano, aumentando intensidad progresivamente',
+                'Ata a tu pareja a la cama con {toy:esposas} y hazle lo que quieras por 5 minutos',
+                'El sumiso debe gatear hasta el dominante y pedir permiso para tocar',
+                'Usa {toy:látigo} suavemente en las nalgas y muslos de tu pareja',
+                'Coloca un {toy:plug anal} a tu pareja y continúa con otras actividades',
+                'El sumiso debe llamar "amo/ama" al dominante durante toda la siguiente actividad',
+                'Castigo: 15 nalgadas contadas en voz alta por el sumiso',
+                'El dominante decide qué parte del cuerpo puede tocar el sumiso durante 5 minutos',
+                'Usa {toy:vendas} y alimenta a tu pareja con algo dulce de tu boca'
+            ],
+            'Tradicional': [
+                'Posición del misionero durante 5 minutos con contacto visual constante',
+                'Sexo oral: concéntrate en dar placer a tu pareja durante 3 minutos',
+                'Penetración en posición de cucharita con caricias suaves',
+                'Masturbación mutua hasta que uno llegue al orgasmo',
+                'Posición de perrito con dominio y control del ritmo',
+                'Ella sobre él: deja que ella controle completamente el ritmo y profundidad',
+                '69: placer oral mutuo simultáneo durante 5 minutos',
+                'Penetración lenta y profunda mientras te besas apasionadamente',
+                'Usa {toy:lubricantes} y explora diferentes velocidades de penetración',
+                'Sexo contra la pared: intensidad y pasión sin control',
+                'Posición de tijeras: contacto íntimo y estimulación del clítoris',
+                'Masturba a tu pareja con {toy:lubricantes} hasta el orgasmo'
+            ],
+            'Fantasías Bisexuales': [
+                'Imagina un trío: describe qué harías con una tercera persona del mismo sexo',
+                'Usa {toy:strapon} para invertir roles - él recibe, ella penetra',
+                'Juego de roles: actúen como dos desconocidos del mismo sexo que se conocen',
+                'Comparte tu fantasía bisexual más secreta con tu pareja',
+                'Usa {toy:dildo} mientras describes una escena con otra persona del mismo sexo',
+                'Ella practica sexo oral en {toy:dildo} como si fuera otra mujer',
+                'Él practica sexo oral en {toy:dildo} imaginando que es otro hombre',
+                'Pegging: ella penetra a él con {toy:strapon} en diferentes posiciones',
+                'Describe en detalle cómo sería estar con alguien del mismo sexo mientras te masturbas',
+                'Usa {toy:corrida falsa} en un juego de roles bisexual',
+                'Imaginen un trío bisexual: cada uno cuenta qué haría con la tercera persona',
+                'Ella usa {toy:strapon} y él debe hacer sexo oral antes de ser penetrado',
+                'Juego de sumisión: él recibe {toy:plug anal} mientras hace oral a {toy:dildo}',
+                'Escenario: están en una orgía - describe qué harías con personas del mismo sexo',
+                'Ella penetra a él con dedos o {toy:strapon} mientras él se masturba'
+            ],
+            'Kamasutra': [
+                'Posición del Loto: siéntense frente a frente, piernas entrelazadas',
+                'La Carretilla: posición desafiante que requiere fuerza y balance',
+                'El Columpio: ella sobre él, balanceándose con control total',
+                'Posición de la Amazona: ella domina el ritmo completamente',
+                'El Arco: posición acrobática con penetración profunda',
+                'La Mariposa: ella en el borde de la cama/mesa, él de pie penetrando',
+                'El Molino: ambos sentados, cara a cara, girando juntos',
+                'La Tigresa: ella a cuatro patas, él detrás con total control',
+                'El Cangrejo: posición invertida que requiere flexibilidad',
+                'La Diosa: ella sentada sobre él mirando hacia sus pies',
+                'El Puente: ella en puente, él penetra desde arriba',
+                'La Serpiente: ambos de lado, él penetra desde atrás con piernas entrelazadas'
+            ],
+            'Preliminares': [
+                'Masaje sensual con {toy:lubricantes} durante 10 minutos',
+                'Besos por todo el cuerpo evitando zonas erógenas por 5 minutos',
+                'Susurra al oído 3 cosas que quieres hacer esta noche',
+                'Desnuda a tu pareja muy lentamente, prenda por prenda',
+                'Usa solo la lengua para explorar el cuello y orejas de tu pareja',
+                'Usa {toy:vibradores} en zonas sensibles evitando genitales durante 5 minutos',
+                'Mordisquea suavemente los muslos internos de tu pareja',
+                'Masaje de pies y piernas subiendo lentamente con {toy:lubricantes}',
+                'Succiona y lame los pezones de tu pareja durante 3 minutos',
+                'Usa cubitos de hielo para recorrer el cuerpo de tu pareja',
+                'Estimulación del perineo con dedos y lengua',
+                'Masaje erótico: explora todo el cuerpo con aceite durante 15 minutos',
+                'Besos franceses apasionados mientras acarician sus partes íntimas',
+                'Ella se masturba mientras él observa sin tocar por 3 minutos',
+                'Él se masturba mientras ella observa y da instrucciones'
+            ],
+            'Castidad y Provocación': [
+                'Tócate frente a tu pareja pero ella/él no puede tocarte por 3 minutos',
+                'Baila de forma sensual haciendo un striptease completo',
+                'Provoca a tu pareja hasta que suplique pero no permitas contacto por 5 minutos',
+                'Masturbación mutua sin llegar al orgasmo durante 10 minutos',
+                'Describe en detalle lo que quieres hacer pero sin tocar durante 3 minutos',
+                'Usa {toy:vibradores} en tu pareja pero detente justo antes del orgasmo - 3 veces',
+                'Sexo oral hasta casi el orgasmo, luego para completamente',
+                'Ella se penetra con {toy:dildo} mientras él solo puede mirar',
+                'Él se masturba con {toy:lubricantes} hasta el borde, sin terminar',
+                'Ata a tu pareja y provócala tocándola en todas partes excepto genitales',
+                'Juego de negación: penetración por solo 10 segundos, luego para - repite 5 veces',
+                'Ella usa {toy:vibradores} en sí misma mientras él está atado y observa',
+                'Él debe aguantar sin correrse mientras ella hace lo que quiera por 10 minutos',
+                'Ruina su orgasmo: estimula hasta el clímax pero detente justo en el momento',
+                'Control total: una persona decide cuándo y cómo puede correrse la otra'
+            ]
+        };
+
+        let selectedCategories = [...categories];
+        let selectedToys = [...toys];
+        let intensity = 'medio';
+        let currentMode = '';
+        let challengeCount = 0;
+        let usedChallenges = [];
+
+        function initConfig() {
+            const categoriesGrid = document.getElementById('categoriesGrid');
+            const toysGrid = document.getElementById('toysGrid');
+
+            // Cargar configuración guardada
+            loadConfig();
+
+            categories.forEach(cat => {
+                const item = createCheckboxItem(cat, selectedCategories.includes(cat));
+                item.onclick = () => toggleSelection(cat, 'category', item);
+                categoriesGrid.appendChild(item);
+            });
+
+            toys.forEach(toy => {
+                const item = createCheckboxItem(toy, selectedToys.includes(toy));
+                item.onclick = () => toggleSelection(toy, 'toy', item);
+                toysGrid.appendChild(item);
+            });
+
+            document.querySelectorAll('.intensity-btn').forEach(btn => {
+                btn.onclick = () => selectIntensity(btn);
+                if (btn.dataset.level === intensity) {
+                    btn.classList.add('selected');
+                }
+            });
+        }
+
+        function createCheckboxItem(text, checked) {
+            const div = document.createElement('div');
+            div.className = 'checkbox-item' + (checked ? ' checked' : '');
+            div.innerHTML = `
+                <input type="checkbox" ${checked ? 'checked' : ''}>
+                <label>${text}</label>
+            `;
+            return div;
+        }
+
+        function toggleSelection(item, type, element) {
+            const checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            element.classList.toggle('checked');
+
+            if (type === 'category') {
+                if (checkbox.checked) {
+                    selectedCategories.push(item);
+                } else {
+                    selectedCategories = selectedCategories.filter(c => c !== item);
+                }
+            } else {
+                if (checkbox.checked) {
+                    selectedToys.push(item);
+                } else {
+                    selectedToys = selectedToys.filter(t => t !== item);
+                }
+            }
+        }
+
+        function selectIntensity(btn) {
+            document.querySelectorAll('.intensity-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            intensity = btn.dataset.level;
+            saveConfig();
+        }
+
+        function saveConfig() {
+            const config = {
+                categories: selectedCategories,
+                toys: selectedToys,
+                intensity: intensity
+            };
+            localStorage.setItem('intimateGameConfig', JSON.stringify(config));
+        }
+
+        function loadConfig() {
+            const saved = localStorage.getItem('intimateGameConfig');
+            if (saved) {
+                const config = JSON.parse(saved);
+                selectedCategories = config.categories || [...categories];
+                selectedToys = config.toys || [...toys];
+                intensity = config.intensity || 'medio';
+            }
+        }
+
+        function goToModeSelection() {
+            if (selectedCategories.length === 0) {
+                alert('Selecciona al menos una categoría');
+                return;
+            }
+            saveConfig();
+            showScreen('modeScreen');
+        }
+
+        function startGame(mode) {
+            currentMode = mode;
+            challengeCount = 0;
+            usedChallenges = [];
+            showScreen('gameScreen');
+            nextChallenge();
+        }
+
+        function nextChallenge() {
+            challengeCount++;
+            const progress = Math.min((challengeCount / 20) * 100, 100);
+            document.getElementById('progressBar').style.width = progress + '%';
+
+            const randomCategory = selectedCategories[Math.floor(Math.random() * selectedCategories.length)];
+            const categoryChalls = challenges[randomCategory];
+            let challenge = categoryChalls[Math.floor(Math.random() * categoryChalls.length)];
+
+            challenge = challenge.replace(/{toy:([^}]+)}/g, (match, toyType) => {
+                const availableToys = selectedToys.filter(t => 
+                    t.toLowerCase().includes(toyType.toLowerCase())
+                );
+                if (availableToys.length > 0) {
+                    return `<strong>${availableToys[Math.floor(Math.random() * availableToys.length)]}</strong>`;
+                }
+                return '<strong>tus manos</strong>';
+            });
+
+            document.getElementById('categoryBadge').textContent = randomCategory;
+            document.getElementById('challengeText').innerHTML = challenge;
+        }
+
+        function skipChallenge() {
+            if (confirm('¿Seguro que quieres saltar este desafío?')) {
+                nextChallenge();
+            }
+        }
+
+        function endGame() {
+            if (confirm('¿Terminar la sesión?')) {
+                showScreen('modeScreen');
+                challengeCount = 0;
+            }
+        }
+
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            
+            const backBtn = document.getElementById('backBtn');
+            const homeBtn = document.getElementById('homeBtn');
+            
+            if (screenId === 'configScreen') {
+                backBtn.style.display = 'none';
+                homeBtn.style.display = 'none';
+            } else {
+                backBtn.style.display = 'block';
+                homeBtn.style.display = 'block';
+            }
+        }
+
+        function goBack() {
+            const currentScreen = document.querySelector('.screen.active').id;
+            if (currentScreen === 'modeScreen') {
+                showScreen('configScreen');
+            } else if (currentScreen === 'gameScreen') {
+                showScreen('modeScreen');
+            }
+        }
+
+        function goHome() {
+            if (confirm('¿Volver al inicio? Se perderá el progreso actual.')) {
+                challengeCount = 0;
+                showScreen('configScreen');
+            }
+        }
+
+        initConfig();
+    </script>
+</body>
+</html>
