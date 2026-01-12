@@ -300,24 +300,6 @@
             color: white;
         }
 
-        .saved-indicator {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 184, 148, 0.9);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-size: 0.9em;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: 100;
-        }
-
-        .saved-indicator.show {
-            opacity: 1;
-        }
-
         .reset-btn {
             background: linear-gradient(135deg, #d63031, #e84393);
             padding: 12px 25px;
@@ -368,48 +350,126 @@
                 <button onclick="closeModal()">Continuar 🔥</button>
             </div>
         </div>
-
-        <div class="saved-indicator" id="saved-indicator">
-            💾 Partida guardada automáticamente
-        </div>
     </div>
 
     <script>
-        const challenges = [
-            "Ata las muñecas de tu pareja con corbata por 3 minutos",
-            "Venda los ojos y masaje sensual completo por 5 minutos",
-            "Acaricia con pluma todo el cuerpo lentamente",
-            "15 nalgadas suaves mientras susurras al oído",
-            "Cubito de hielo por cuello, espalda y zonas sensibles",
-            "Beso francés apasionado durante 1 minuto",
+        // NIVEL 1 (Casillas 1-25): Suave, Juego previo, Sensual
+        const level1 = [
             "Masaje de espalda y hombros por 5 minutos",
             "Besa el cuello sin parar por 2 minutos",
-            "Acaricia todo el cuerpo evitando zonas íntimas",
             "Masaje de pies con aceite aromático",
+            "Acaricia todo el cuerpo evitando zonas íntimas",
+            "Beso francés apasionado durante 1 minuto",
+            "Acaricia con pluma todo el cuerpo lentamente",
+            "¿Qué parte de mi cuerpo te atrae más?",
+            "¿Cuál fue tu primera impresión de mí?",
+            "¿Qué prenda mía te parece más sexy?",
+            "¿Cuándo fue la última vez que fantasteaste conmigo?",
+            "Masaje en cuello y cabeza por 5 minutos",
+            "Besos suaves por todo el rostro",
+            "Abrazo apretado durante 3 minutos",
+            "Susurra al oído lo que más te gusta de tu pareja",
+            "Mordisquea suavemente los labios",
+            "Besos por la clavícula y hombros durante 3 minutos",
+            "Acaricia el cabello de tu pareja mientras la besas",
+            "Masaje en las manos entrelazando dedos",
+            "Besos en la frente, párpados y mejillas",
+            "Abrazo por la espalda durante 2 minutos",
+            "Sopla suavemente en el cuello y orejas",
+            "Besos suaves en los labios sin lengua por 2 minutos",
+            "Acaricia los brazos de arriba a abajo lentamente",
+            "Masaje en el cuero cabelludo",
+            "Besa y mordisquea suavemente las orejas"
+        ];
+
+        // NIVEL 2 (Casillas 26-50): Medio, Más caliente, Toque íntimo
+        const level2 = [
             "Besos por todo el cuerpo durante 5 minutos",
+            "Venda los ojos y masaje sensual completo por 5 minutos",
+            "Cubito de hielo por cuello, espalda y zonas sensibles",
+            "15 nalgadas suaves mientras susurras al oído",
+            "Ata las muñecas de tu pareja con corbata por 3 minutos",
+            "Acaríciense zonas íntimas simultáneamente",
+            "Misionero con contacto visual constante",
+            "Cucharita con caricias íntimas",
+            "Masaje íntimo manual por 7 minutos",
+            "¿Cuál es tu fantasía sexual más secreta?",
+            "¿Qué posición disfrutas más y por qué?",
+            "¿Has fantaseado con alguien más durante sexo?",
+            "¿Cuál ha sido tu mejor orgasmo conmigo?",
+            "Lubricante sabor fresa con oral",
+            "Vibrador bullet en zonas íntimas",
+            "Penetración en misionero lenta y profunda por 5 minutos",
+            "Sexo oral a tu pareja durante 3 minutos",
+            "Besos en el pecho y abdomen por 5 minutos",
+            "Lame y besa los pezones suavemente",
+            "Penetración de lado mirándose a los ojos",
+            "Masaje en los muslos acercándote a zonas íntimas",
+            "Beso negro suave (anilingus) si están cómodos",
+            "Tu pareja encima, ritmo lento y sensual",
+            "Sexo oral mientras acaricias el cuerpo",
+            "Penetración superficial provocadora por 3 minutos",
+            "Besos profundos en el cuello mientras te tocas",
+            "Frota tu cuerpo contra el de tu pareja sin penetración",
+            "Lame desde el ombligo hasta el pecho lentamente",
+            "Penetración sentados cara a cara",
+            "Dedos dentro mientras besas apasionadamente"
+        ];
+
+        // NIVEL 3 (Casillas 51-75): Intenso, Explícito, Juguetes
+        const level3 = [
+            "Sexo oral por 5 minutos cambiando ritmo",
             "Posición del Loto: sentados frente a frente abrazados",
             "Posición de la Diosa: ella encima controlando",
             "Posición del Arado: penetración profunda desde atrás",
             "Posición de la Carretilla: él sostiene sus piernas",
+            "69 simultáneo durante 3 minutos",
+            "Penetración en tu posición favorita",
+            "Perrito con variaciones de velocidad",
+            "Sexo oral con hielo en la boca",
+            "Penetración de pie contra pared",
+            "Masturbación mutua mirándose a los ojos",
+            "Vibrador por 7 minutos variando intensidad",
+            "Anillo vibrador durante penetración",
+            "Dildo realista movimientos lentos",
+            "Satisfyer (succionador) por 5 minutos",
+            "Lubricante efecto calor durante penetración",
+            "Bolas chinas/anales durante juego previo",
+            "¿Has fingido algún orgasmo? ¿Cuándo?",
+            "¿Con qué famoso/a fantaseas?",
+            "¿Qué es lo más sucio que has fantaseado?",
+            "Garganta profunda durante 2 minutos",
+            "Penetración profunda y rápida por 5 minutos",
+            "Sexo oral hasta que tu pareja esté al límite, luego para",
+            "Posición misionero con piernas en los hombros",
+            "Perrito profundo con nalgadas",
+            "Ella encima cabalgando rápido",
+            "Penetración mientras están de rodillas",
+            "Lame todo durante sexo oral: testículos, perineo, todo",
+            "Cowgirl invertida (ella de espaldas encima)",
+            "Penetración en la orilla de la cama, él de pie",
+            "Sexo oral con dedos dentro simultáneamente",
+            "Posición del misionero, ella con rodillas al pecho",
+            "Perrito mientras jalas el cabello suavemente",
+            "Penetración con una pierna arriba en tu hombro",
+            "69 con ella arriba controlando",
+            "Oral profundo mientras masajeas",
+            "Penetración lenta y profunda, aguantando en el fondo",
+            "Besos en todo el cuerpo antes de penetración intensa",
+            "Tu pareja encima moviéndose en círculos",
+            "Penetración desde atrás de pie inclinada"
+        ];
+
+        // NIVEL 4 (Casillas 76-100): Extremo, BDSM, Hardcore
+        const level4 = [
             "Posición del Arco: ella arqueada hacia atrás",
             "Posición de la Mariposa: ella en borde de cama",
             "Posición del Molino: penetración lateral profunda",
             "Posición del Cangrejo: ambos sentados penetración",
             "Posición de la Fusión: penetración con piernas entrelazadas",
-            "Sexo oral por 5 minutos cambiando ritmo",
-            "Misionero con contacto visual constante",
-            "Cucharita con caricias íntimas",
-            "69 simultáneo durante 3 minutos",
-            "Penetración en tu posición favorita",
-            "Masaje íntimo manual por 7 minutos",
-            "Perrito con variaciones de velocidad",
-            "Posición nueva que nunca probaron",
-            "Sexo oral con hielo en la boca",
-            "Penetración de pie contra pared",
             "Tu pareja encima controlando ritmo",
             "Garganta profunda durante oral",
-            "Acaríciense zonas íntimas simultáneamente",
-            "Masturbación mutua mirándose a los ojos",
+            "Posición nueva que nunca probaron",
             "Compartan vibrador mientras se besan",
             "Alternen roles: dominante/sumiso 5 min cada uno",
             "Simula trío con dildo mientras tu pareja te penetra",
@@ -418,20 +478,8 @@
             "Doble penetración simulada: dildo + pene/dedos",
             "Masturbador en él mientras ella se masturba",
             "Dildo eyaculador: corrida falsa en boca/cuerpo",
-            "Uno usa dildo eyaculador en el otro",
             "Trío simulado: dos juguetes simultáneos",
             "Penetración con strap-on mientras recibes oral",
-            "Usa masturbador mientras recibes sexo oral",
-            "Vibrador por 7 minutos variando intensidad",
-            "Vibrador bullet en zonas íntimas",
-            "Anillo vibrador durante penetración",
-            "Bolas chinas/anales durante juego previo",
-            "Dildo realista movimientos lentos",
-            "Satisfyer (succionador) por 5 minutos",
-            "Lubricante sabor fresa con oral",
-            "Lubricante sabor chocolate con masaje íntimo",
-            "Lubricante sabor vainilla en todo el cuerpo",
-            "Lubricante efecto calor durante penetración",
             "Lubricante efecto frío en zonas sensibles",
             "Plug anal pequeño durante penetración",
             "Vibrador de lengua en zonas íntimas",
@@ -466,54 +514,42 @@
             "Sesión foto/video sexual",
             "Edge play: al límite sin orgasmo",
             "Sexo extremo según límites",
-            "¿Qué parte de mi cuerpo te atrae más?",
-            "¿Cuál fue tu primera impresión de mí?",
-            "¿Qué prenda mía te parece más sexy?",
-            "¿Cuándo fue la última vez que fantasteaste conmigo?",
-            "¿Cuál es tu fantasía sexual más secreta?",
-            "¿Qué posición disfrutas más y por qué?",
-            "¿Has fantaseado con alguien más durante sexo?",
-            "¿Cuál ha sido tu mejor orgasmo conmigo?",
-            "¿Has fingido algún orgasmo? ¿Cuándo?",
-            "¿Con qué famoso/a fantaseas?",
-            "¿Qué es lo más sucio que has fantaseado?",
             "¿Te gustaría verme con otra persona?",
             "¿Realmente querrías un trío real?",
             "¿Hay algo que deseas pero no te atreves a pedir?",
-            "¿Cuál es tu mayor secreto sexual?"
+            "¿Cuál es tu mayor secreto sexual?",
+            "Perrito agresivo jalando cabello y nalgadas",
+            "Garganta profunda hasta que llores un poco",
+            "Penetración brutal, lo más fuerte posible",
+            "Sexo oral profundo con arcadas controladas",
+            "Facefuck: controla su cabeza durante oral",
+            "Penetración anal intensa con lubricante",
+            "Ahogamiento con pene durante garganta profunda",
+            "Posición de la pila: piernas dobladas, penetración vertical",
+            "Sexo de pie cargándola contra la pared",
+            "Oral agresivo con cabeza empujada",
+            "Perrito con bofetadas en el culo",
+            "Misionero duro con manos en el cuello",
+            "Ella encima cabalgando salvajemente",
+            "Penetración anal mientras usas vibrador adelante",
+            "Garganta profunda con babeo abundante",
+            "Sexo oral hasta el orgasmo tragándolo todo",
+            "Penetración parada con una pierna levantada",
+            "Perrito profundo con empujones fuertes",
+            "Oral de rodillas mirando hacia arriba",
+            "Penetración con cambios rápidos de ritmo",
+            "Sexo duro en múltiples posiciones sin parar",
+            "Cowgirl con nalgadas mientras cabalga",
+            "Penetración por el culo con dedos en la vagina",
+            "Garganta profunda aguantando hasta el final",
+            "Sexo oral mientras te masturbas viendo",
+            "Penetración intensa hasta correrse dentro",
+            "Perrito con dedos en el ano simultáneamente",
+            "Oral profundo con testículos en la boca también"
         ];
 
         let currentPlayer = 1;
         let positions = {p1: 0, p2: 0};
-
-        // Cargar partida guardada al iniciar
-        function loadGame() {
-            const saved = localStorage.getItem('parejas_game');
-            if (saved) {
-                const data = JSON.parse(saved);
-                positions = data.positions;
-                currentPlayer = data.currentPlayer;
-                return true;
-            }
-            return false;
-        }
-
-        // Guardar partida automáticamente
-        function saveGame() {
-            const data = {
-                positions: positions,
-                currentPlayer: currentPlayer,
-                timestamp: new Date().getTime()
-            };
-            localStorage.setItem('parejas_game', JSON.stringify(data));
-            
-            // Mostrar indicador de guardado
-            const indicator = document.getElementById('saved-indicator');
-            indicator.classList.add('show');
-            setTimeout(() => {
-                indicator.classList.remove('show');
-            }, 2000);
-        }
 
         function getCellLevel(num) {
             if (num === 0) return 'start';
@@ -523,6 +559,19 @@
             if (num <= 50) return 2;
             if (num <= 75) return 3;
             return 4;
+        }
+
+        function getChallenge(pos) {
+            const level = getCellLevel(pos);
+            let challenges;
+            
+            if (level === 1) challenges = level1;
+            else if (level === 2) challenges = level2;
+            else if (level === 3) challenges = level3;
+            else if (level === 4) challenges = level4;
+            else return null;
+            
+            return challenges[Math.floor(Math.random() * challenges.length)];
         }
 
         function initBoard() {
@@ -550,14 +599,6 @@
                 
                 cell.id = `cell-${i}`;
                 board.appendChild(cell);
-            }
-            
-            // Cargar partida guardada si existe
-            const hasGame = loadGame();
-            if (hasGame) {
-                updatePlayerInfo('p1', positions.p1);
-                updatePlayerInfo('p2', positions.p2);
-                updateActive();
             }
             
             updateMarkers();
@@ -593,9 +634,6 @@
             const newPos = Math.min(positions[player] + dice, 100);
             positions[player] = newPos;
             
-            // Guardar partida después de cada movimiento
-            saveGame();
-            
             setTimeout(() => {
                 updateMarkers();
                 updatePlayerInfo(player, newPos);
@@ -609,7 +647,6 @@
                     
                     currentPlayer = currentPlayer === 1 ? 2 : 1;
                     updateActive();
-                    saveGame(); // Guardar también el cambio de turno
                     btn.disabled = false;
                 }, 600);
             }, 500);
@@ -631,7 +668,7 @@
                 document.getElementById('challenge-title').textContent = `🔥 NIVEL ${lvl} DESBLOQUEADO`;
                 document.getElementById('challenge-text').textContent = `¡Has alcanzado el Nivel ${lvl}! Los desafíos serán más intensos. ¡Prepárense! 🌶️`;
             } else {
-                const challenge = challenges[Math.floor(Math.random() * challenges.length)];
+                const challenge = getChallenge(pos);
                 const isQuestion = challenge.includes('?');
                 document.getElementById('challenge-title').textContent = isQuestion ? '💭 VERDAD' : '🔥 RETO';
                 document.getElementById('challenge-text').textContent = challenge;
@@ -658,10 +695,9 @@
         }
 
         function resetGame() {
-            if (confirm('¿Seguro que quieres reiniciar la partida? Se perderá el progreso.')) {
+            if (confirm('¿Seguro que quieres reiniciar la partida?')) {
                 positions = {p1: 0, p2: 0};
                 currentPlayer = 1;
-                localStorage.removeItem('parejas_game');
                 initBoard();
                 updateActive();
                 document.getElementById('p1-pos').textContent = 'SALIDA';

@@ -15,18 +15,25 @@
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #1a0a0f, #4a0e2a, #1a0a0f);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
             color: #fff;
             overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
             padding: 30px 20px;
+            position: relative;
         }
 
-        /* PANTALLA DE INICIO */
         .screen {
             display: none;
             animation: fadeIn 0.5s ease;
@@ -51,8 +58,10 @@
             background: linear-gradient(135deg, #ff1744, #ff4081, #f50057);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             margin-bottom: 15px;
             letter-spacing: 3px;
+            text-shadow: 0 0 30px rgba(255, 64, 129, 0.5);
         }
 
         .header p {
@@ -61,7 +70,6 @@
             letter-spacing: 1px;
         }
 
-        /* CONFIGURACIÓN */
         .config-section {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(20px);
@@ -69,6 +77,12 @@
             padding: 30px;
             margin-bottom: 25px;
             border: 1px solid rgba(255, 64, 129, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .config-section:hover {
+            border-color: rgba(255, 64, 129, 0.6);
+            box-shadow: 0 10px 30px rgba(255, 64, 129, 0.2);
         }
 
         .config-section h2 {
@@ -97,6 +111,7 @@
         .checkbox-item:hover {
             background: rgba(255, 64, 129, 0.2);
             border-color: rgba(255, 64, 129, 0.5);
+            transform: translateX(5px);
         }
 
         .checkbox-item input[type="checkbox"] {
@@ -117,6 +132,7 @@
             gap: 15px;
             justify-content: center;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
 
         .intensity-btn {
@@ -165,7 +181,6 @@
             box-shadow: 0 10px 40px rgba(255, 64, 129, 0.6);
         }
 
-        /* MODO DE JUEGO */
         .game-modes {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -182,6 +197,23 @@
             text-align: center;
             cursor: pointer;
             transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 64, 129, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .mode-card:hover::before {
+            left: 100%;
         }
 
         .mode-card:hover {
@@ -193,6 +225,7 @@
         .mode-icon {
             font-size: 4em;
             margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(255, 64, 129, 0.5));
         }
 
         .mode-card h3 {
@@ -206,7 +239,6 @@
             font-size: 0.95em;
         }
 
-        /* PANTALLA DE JUEGO */
         .game-container {
             display: flex;
             flex-direction: column;
@@ -225,6 +257,12 @@
             text-align: center;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             margin: 30px 0;
+            animation: cardPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes cardPulse {
+            0%, 100% { box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
+            50% { box-shadow: 0 20px 60px rgba(255, 64, 129, 0.3); }
         }
 
         .category-badge {
@@ -237,6 +275,7 @@
             letter-spacing: 1px;
             margin-bottom: 25px;
             text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(255, 64, 129, 0.4);
         }
 
         .challenge-text {
@@ -257,6 +296,17 @@
             color: #ff4081;
             margin: 20px 0;
             font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 64, 129, 0.8);
+        }
+
+        .timer.warning {
+            color: #ff1744;
+            animation: timerBlink 1s infinite;
+        }
+
+        @keyframes timerBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
         }
 
         .game-actions {
@@ -307,41 +357,118 @@
             background: linear-gradient(90deg, #ff4081, #f50057);
             border-radius: 10px;
             transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(255, 64, 129, 0.8);
         }
 
-        .back-btn {
-            position: absolute;
+        .challenge-counter {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .back-btn, .home-btn {
+            position: fixed;
             top: 20px;
-            left: 20px;
             padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 10px;
             color: #fff;
             cursor: pointer;
             transition: all 0.3s ease;
+            z-index: 100;
+            border: none;
+            font-size: 1em;
+            font-weight: 600;
+        }
+
+        .back-btn {
+            left: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
         .back-btn:hover {
             background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
         }
 
         .home-btn {
-            position: absolute;
-            top: 20px;
             right: 20px;
-            padding: 10px 20px;
             background: rgba(255, 64, 129, 0.2);
             border: 1px solid rgba(255, 64, 129, 0.5);
-            border-radius: 10px;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .home-btn:hover {
             background: rgba(255, 64, 129, 0.4);
             box-shadow: 0 0 20px rgba(255, 64, 129, 0.5);
+            transform: translateX(5px);
+        }
+
+        .dice-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .dice {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: #1a0a0f;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .dice.rolling {
+            animation: diceRoll 0.5s ease-in-out;
+        }
+
+        @keyframes diceRoll {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(90deg); }
+            50% { transform: rotate(180deg); }
+            75% { transform: rotate(270deg); }
+        }
+
+        .card-deck {
+            perspective: 1000px;
+            margin: 30px 0;
+        }
+
+        .card {
+            width: 200px;
+            height: 280px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, #ff4081, #f50057);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4em;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .card:hover {
+            transform: translateY(-10px) rotateY(10deg);
+        }
+
+        .card.flipping {
+            animation: cardFlip 0.6s ease-in-out;
+        }
+
+        @keyframes cardFlip {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(90deg); }
+            100% { transform: rotateY(0deg); }
         }
 
         @media (max-width: 768px) {
@@ -368,6 +495,11 @@
 
             .btn-action {
                 width: 100%;
+            }
+
+            .back-btn, .home-btn {
+                padding: 8px 15px;
+                font-size: 0.9em;
             }
         }
     </style>
@@ -397,9 +529,9 @@
             <div class="config-section">
                 <h2>🔥 Nivel de Intensidad</h2>
                 <div class="intensity-selector">
-                    <button class="intensity-btn" data-level="suave">Suave</button>
-                    <button class="intensity-btn selected" data-level="medio">Medio</button>
-                    <button class="intensity-btn" data-level="intenso">Intenso</button>
+                    <button class="intensity-btn" data-level="suave">🌸 Suave</button>
+                    <button class="intensity-btn selected" data-level="medio">🔥 Medio</button>
+                    <button class="intensity-btn" data-level="intenso">💥 Intenso</button>
                 </div>
             </div>
 
@@ -443,21 +575,34 @@
         <!-- PANTALLA 3: JUEGO -->
         <div class="screen" id="gameScreen">
             <div class="game-container">
+                <div class="challenge-counter" id="challengeCounter">Desafío 0 de 20</div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressBar" style="width: 0%"></div>
                 </div>
 
+                <!-- Dados (modo dados) -->
+                <div class="dice-container" id="diceContainer" style="display: none;">
+                    <div class="dice" id="dice1">🎲</div>
+                    <div class="dice" id="dice2">🎲</div>
+                </div>
+
+                <!-- Carta (modo cartas) -->
+                <div class="card-deck" id="cardDeck" style="display: none;">
+                    <div class="card" id="card" onclick="drawCard()">🃏</div>
+                </div>
+
                 <div class="challenge-card">
-                    <div class="category-badge" id="categoryBadge">BDSM</div>
+                    <div class="category-badge" id="categoryBadge">CATEGORÍA</div>
                     <div class="challenge-text" id="challengeText">
-                        Cargando desafío...
+                        Haz clic en "Siguiente" para comenzar
                     </div>
-                    <div class="timer" id="timer" style="display: none;">3:00</div>
+                    <div class="timer" id="timer" style="display: none;">5:00</div>
                 </div>
 
                 <div class="game-actions">
                     <button class="btn-action" onclick="skipChallenge()">⏭️ Saltar</button>
-                    <button class="btn-action btn-next" onclick="nextChallenge()">Siguiente →</button>
+                    <button class="btn-action" onclick="startTimer()" id="timerBtn" style="display: none;">⏱️ Iniciar Timer</button>
+                    <button class="btn-action btn-next" onclick="nextChallenge()" id="nextBtn">Siguiente →</button>
                     <button class="btn-action" onclick="endGame()">🏁 Terminar</button>
                 </div>
             </div>
@@ -477,101 +622,182 @@
         ];
 
         const challenges = {
-            'BDSM': [
-                'El dominante ata las muñecas del sumiso con {toy:correas} durante 5 minutos',
-                'El sumiso debe obedecer 3 órdenes del dominante sin cuestionar',
-                'Venda los ojos de tu pareja con {toy:vendas} y explora su cuerpo',
-                'Usa {toy:pinzas} en los pezones de tu pareja durante 2 minutos',
-                'El dominante dicta una posición y el sumiso debe mantenerla por 3 minutos',
-                'Nalgadas: 10 con la mano, aumentando intensidad progresivamente',
-                'Ata a tu pareja a la cama con {toy:esposas} y hazle lo que quieras por 5 minutos',
-                'El sumiso debe gatear hasta el dominante y pedir permiso para tocar',
-                'Usa {toy:látigo} suavemente en las nalgas y muslos de tu pareja',
-                'Coloca un {toy:plug anal} a tu pareja y continúa con otras actividades',
-                'El sumiso debe llamar "amo/ama" al dominante durante toda la siguiente actividad',
-                'Castigo: 15 nalgadas contadas en voz alta por el sumiso',
-                'El dominante decide qué parte del cuerpo puede tocar el sumiso durante 5 minutos',
-                'Usa {toy:vendas} y alimenta a tu pareja con algo dulce de tu boca'
-            ],
-            'Tradicional': [
-                'Posición del misionero durante 5 minutos con contacto visual constante',
-                'Sexo oral: concéntrate en dar placer a tu pareja durante 3 minutos',
-                'Penetración en posición de cucharita con caricias suaves',
-                'Masturbación mutua hasta que uno llegue al orgasmo',
-                'Posición de perrito con dominio y control del ritmo',
-                'Ella sobre él: deja que ella controle completamente el ritmo y profundidad',
-                '69: placer oral mutuo simultáneo durante 5 minutos',
-                'Penetración lenta y profunda mientras te besas apasionadamente',
-                'Usa {toy:lubricantes} y explora diferentes velocidades de penetración',
-                'Sexo contra la pared: intensidad y pasión sin control',
-                'Posición de tijeras: contacto íntimo y estimulación del clítoris',
-                'Masturba a tu pareja con {toy:lubricantes} hasta el orgasmo'
-            ],
-            'Fantasías Bisexuales': [
-                'Imagina un trío: describe qué harías con una tercera persona del mismo sexo',
-                'Usa {toy:strapon} para invertir roles - él recibe, ella penetra',
-                'Juego de roles: actúen como dos desconocidos del mismo sexo que se conocen',
-                'Comparte tu fantasía bisexual más secreta con tu pareja',
-                'Usa {toy:dildo} mientras describes una escena con otra persona del mismo sexo',
-                'Ella practica sexo oral en {toy:dildo} como si fuera otra mujer',
-                'Él practica sexo oral en {toy:dildo} imaginando que es otro hombre',
-                'Pegging: ella penetra a él con {toy:strapon} en diferentes posiciones',
-                'Describe en detalle cómo sería estar con alguien del mismo sexo mientras te masturbas',
-                'Usa {toy:corrida falsa} en un juego de roles bisexual',
-                'Imaginen un trío bisexual: cada uno cuenta qué haría con la tercera persona',
-                'Ella usa {toy:strapon} y él debe hacer sexo oral antes de ser penetrado',
-                'Juego de sumisión: él recibe {toy:plug anal} mientras hace oral a {toy:dildo}',
-                'Escenario: están en una orgía - describe qué harías con personas del mismo sexo',
-                'Ella penetra a él con dedos o {toy:strapon} mientras él se masturba'
-            ],
-            'Kamasutra': [
-                'Posición del Loto: siéntense frente a frente, piernas entrelazadas',
-                'La Carretilla: posición desafiante que requiere fuerza y balance',
-                'El Columpio: ella sobre él, balanceándose con control total',
-                'Posición de la Amazona: ella domina el ritmo completamente',
-                'El Arco: posición acrobática con penetración profunda',
-                'La Mariposa: ella en el borde de la cama/mesa, él de pie penetrando',
-                'El Molino: ambos sentados, cara a cara, girando juntos',
-                'La Tigresa: ella a cuatro patas, él detrás con total control',
-                'El Cangrejo: posición invertida que requiere flexibilidad',
-                'La Diosa: ella sentada sobre él mirando hacia sus pies',
-                'El Puente: ella en puente, él penetra desde arriba',
-                'La Serpiente: ambos de lado, él penetra desde atrás con piernas entrelazadas'
-            ],
-            'Preliminares': [
-                'Masaje sensual con {toy:lubricantes} durante 10 minutos',
-                'Besos por todo el cuerpo evitando zonas erógenas por 5 minutos',
-                'Susurra al oído 3 cosas que quieres hacer esta noche',
-                'Desnuda a tu pareja muy lentamente, prenda por prenda',
-                'Usa solo la lengua para explorar el cuello y orejas de tu pareja',
-                'Usa {toy:vibradores} en zonas sensibles evitando genitales durante 5 minutos',
-                'Mordisquea suavemente los muslos internos de tu pareja',
-                'Masaje de pies y piernas subiendo lentamente con {toy:lubricantes}',
-                'Succiona y lame los pezones de tu pareja durante 3 minutos',
-                'Usa cubitos de hielo para recorrer el cuerpo de tu pareja',
-                'Estimulación del perineo con dedos y lengua',
-                'Masaje erótico: explora todo el cuerpo con aceite durante 15 minutos',
-                'Besos franceses apasionados mientras acarician sus partes íntimas',
-                'Ella se masturba mientras él observa sin tocar por 3 minutos',
-                'Él se masturba mientras ella observa y da instrucciones'
-            ],
-            'Castidad y Provocación': [
-                'Tócate frente a tu pareja pero ella/él no puede tocarte por 3 minutos',
-                'Baila de forma sensual haciendo un striptease completo',
-                'Provoca a tu pareja hasta que suplique pero no permitas contacto por 5 minutos',
-                'Masturbación mutua sin llegar al orgasmo durante 10 minutos',
-                'Describe en detalle lo que quieres hacer pero sin tocar durante 3 minutos',
-                'Usa {toy:vibradores} en tu pareja pero detente justo antes del orgasmo - 3 veces',
-                'Sexo oral hasta casi el orgasmo, luego para completamente',
-                'Ella se penetra con {toy:dildo} mientras él solo puede mirar',
-                'Él se masturba con {toy:lubricantes} hasta el borde, sin terminar',
-                'Ata a tu pareja y provócala tocándola en todas partes excepto genitales',
-                'Juego de negación: penetración por solo 10 segundos, luego para - repite 5 veces',
-                'Ella usa {toy:vibradores} en sí misma mientras él está atado y observa',
-                'Él debe aguantar sin correrse mientras ella hace lo que quiera por 10 minutos',
-                'Ruina su orgasmo: estimula hasta el clímax pero detente justo en el momento',
-                'Control total: una persona decide cuándo y cómo puede correrse la otra'
-            ]
+            'BDSM': {
+                suave: [
+                    'El dominante ata las muñecas del sumiso con {toy:correas} durante 3 minutos',
+                    'Venda los ojos de tu pareja con {toy:vendas} y acaricia su cuerpo',
+                    'El sumiso debe obedecer 2 órdenes simples del dominante',
+                    'Nalgadas suaves: 5 con la mano',
+                    'Usa {toy:vendas} y alimenta a tu pareja con algo dulce'
+                ],
+                medio: [
+                    'El dominante ata las muñecas del sumiso con {toy:correas} durante 5 minutos',
+                    'Usa {toy:pinzas} en los pezones de tu pareja durante 2 minutos',
+                    'El dominante dicta una posición y el sumiso debe mantenerla por 3 minutos',
+                    'Nalgadas: 10 con la mano, aumentando intensidad progresivamente',
+                    'Ata a tu pareja a la cama con {toy:esposas} y hazle lo que quieras por 5 minutos',
+                    'El sumiso debe gatear hasta el dominante y pedir permiso para tocar',
+                    'Usa {toy:látigo} suavemente en las nalgas y muslos de tu pareja',
+                    'Coloca un {toy:plug anal} a tu pareja y continúa con otras actividades'
+                ],
+                intenso: [
+                    'El sumiso debe llamar "amo/ama" al dominante durante toda la siguiente actividad',
+                    'Castigo: 20 nalgadas contadas en voz alta por el sumiso',
+                    'Ata las cuatro extremidades y usa {toy:látigo} durante 5 minutos',
+                    'El dominante decide TODO por 10 minutos: posiciones, ritmo, intensidad',
+                    'Usa {toy:pinzas} y {toy:látigo} simultáneamente',
+                    'Dominación completa: collar, correa y órdenes por 15 minutos',
+                    'Castigo extremo: 30 nalgadas con {toy:látigo}',
+                    'Asfixia erótica controlada (con señal de seguridad)',
+                    'Humillación verbal mientras está atado/a'
+                ]
+            },
+            'Tradicional': {
+                suave: [
+                    'Besos apasionados durante 3 minutos sin tocar otras partes',
+                    'Masaje sensual en la espalda durante 5 minutos',
+                    'Acaricia todo el cuerpo de tu pareja lentamente',
+                    'Posición del misionero suave con contacto visual',
+                    'Sexo oral gentil durante 3 minutos'
+                ],
+                medio: [
+                    'Posición del misionero durante 5 minutos con contacto visual constante',
+                    'Sexo oral: concéntrate en dar placer a tu pareja durante 5 minutos',
+                    'Penetración en posición de cucharita con caricias suaves',
+                    'Masturbación mutua hasta que uno llegue al orgasmo',
+                    'Posición de perrito con dominio y control del ritmo',
+                    'Ella sobre él: deja que ella controle completamente el ritmo y profundidad',
+                    '69: placer oral mutuo simultáneo durante 5 minutos',
+                    'Penetración lenta y profunda mientras te besas apasionadamente'
+                ],
+                intenso: [
+                    'Usa {toy:lubricantes} y explora diferentes velocidades de penetración',
+                    'Sexo contra la pared: intensidad y pasión sin control',
+                    'Penetración rápida e intensa en tu posición favorita',
+                    'Sexo oral profundo hasta el orgasmo',
+                    'Cambia de posición cada 2 minutos durante 10 minutos',
+                    'Penetración dura en perrito con nalgadas',
+                    'Ella encima cabalgando lo más rápido posible',
+                    'Sexo intenso hasta que ambos lleguen al orgasmo'
+                ]
+            },
+            'Fantasías Bisexuales': {
+                suave: [
+                    'Comparte tu curiosidad sobre personas del mismo sexo',
+                    'Describe cómo besarías a alguien del mismo sexo',
+                    'Usa {toy:dildo} mientras hablas de fantasías bisexuales',
+                    'Imagina un encuentro suave con alguien del mismo sexo'
+                ],
+                medio: [
+                    'Imagina un trío: describe qué harías con una tercera persona del mismo sexo',
+                    'Usa {toy:strapon} para invertir roles - él recibe, ella penetra',
+                    'Juego de roles: actúen como dos desconocidos del mismo sexo que se conocen',
+                    'Comparte tu fantasía bisexual más secreta con tu pareja',
+                    'Usa {toy:dildo} mientras describes una escena con otra persona del mismo sexo',
+                    'Ella practica sexo oral en {toy:dildo} como si fuera otra mujer',
+                    'Él practica sexo oral en {toy:dildo} imaginando que es otro hombre',
+                    'Pegging: ella penetra a él con {toy:strapon} en posición suave'
+                ],
+                intenso: [
+                    'Describe en detalle cómo sería estar con alguien del mismo sexo mientras te masturbas',
+                    'Usa {toy:corrida falsa} en un juego de roles bisexual intenso',
+                    'Imaginen un trío bisexual: cada uno cuenta qué haría con la tercera persona',
+                    'Ella usa {toy:strapon} y él debe hacer sexo oral profundo antes de ser penetrado',
+                    'Juego de sumisión: él recibe {toy:plug anal} mientras hace oral a {toy:dildo}',
+                    'Escenario: están en una orgía - describe en detalle qué harías con personas del mismo sexo',
+                    'Ella penetra a él con {toy:strapon} de forma intensa mientras él se masturba',
+                    'Doble penetración simulada: {toy:strapon} y {toy:dildo} simultáneamente',
+                    'Pegging duro con cambios de posición'
+                ]
+            },
+            'Kamasutra': {
+                suave: [
+                    'Posición del Loto: siéntense frente a frente, piernas entrelazadas, movimientos lentos',
+                    'El Columpio suave: ella sobre él, balanceándose con control',
+                    'Abrazo del elefante: ambos de pie, abrazados, penetración suave',
+                    'La mariposa: ella recostada en el borde, él de pie, ritmo lento'
+                ],
+                medio: [
+                    'Posición del Loto: siéntense frente a frente, piernas entrelazadas',
+                    'La Carretilla: posición desafiante que requiere fuerza y balance',
+                    'El Columpio: ella sobre él, balanceándose con control total',
+                    'Posición de la Amazona: ella domina el ritmo completamente',
+                    'La Mariposa: ella en el borde de la cama/mesa, él de pie penetrando',
+                    'El Molino: ambos sentados, cara a cara, girando juntos',
+                    'La Tigresa: ella a cuatro patas, él detrás con total control',
+                    'La Serpiente: ambos de lado, él penetra desde atrás con piernas entrelazadas'
+                ],
+                intenso: [
+                    'El Arco: posición acrobática con penetración profunda',
+                    'El Cangrejo: posición invertida que requiere flexibilidad',
+                    'La Diosa: ella sentada sobre él mirando hacia sus pies',
+                    'El Puente: ella en puente, él penetra desde arriba',
+                    'La Carretilla profunda con movimientos intensos',
+                    'Posición del arado: penetración máxima',
+                    'Posiciones acrobáticas durante 10 minutos',
+                    'Cambia entre 3 posiciones del Kamasutra cada 2 minutos'
+                ]
+            },
+            'Preliminares': {
+                suave: [
+                    'Masaje suave en cuello y hombros durante 5 minutos',
+                    'Besos tiernos por todo el rostro',
+                    'Acaricia el cabello de tu pareja mientras la besas',
+                    'Susurra cosas lindas al oído',
+                    'Masaje de pies con {toy:lubricantes}'
+                ],
+                medio: [
+                    'Masaje sensual con {toy:lubricantes} durante 10 minutos',
+                    'Besos por todo el cuerpo evitando zonas erógenas por 5 minutos',
+                    'Susurra al oído 3 cosas que quieres hacer esta noche',
+                    'Desnuda a tu pareja muy lentamente, prenda por prenda',
+                    'Usa solo la lengua para explorar el cuello y orejas de tu pareja',
+                    'Usa {toy:vibradores} en zonas sensibles evitando genitales durante 5 minutos',
+                    'Mordisquea suavemente los muslos internos de tu pareja',
+                    'Masaje de pies y piernas subiendo lentamente con {toy:lubricantes}'
+                ],
+                intenso: [
+                    'Succiona y lame los pezones de tu pareja durante 5 minutos',
+                    'Usa cubitos de hielo para recorrer el cuerpo de tu pareja',
+                    'Estimulación del perineo con dedos y lengua',
+                    'Masaje erótico: explora todo el cuerpo con aceite durante 15 minutos',
+                    'Besos franceses apasionados mientras acarician sus partes íntimas',
+                    'Ella se masturba mientras él observa sin tocar por 5 minutos',
+                    'Él se masturba mientras ella observa y da instrucciones',
+                    'Oral intenso sin llegar al orgasmo',
+                    'Estimulación de todas las zonas erógenas simultáneamente'
+                ]
+            },
+            'Castidad y Provocación': {
+                suave: [
+                    'Baila de forma sensual para tu pareja',
+                    'Tócate suavemente frente a tu pareja por 2 minutos',
+                    'Describe lo que quieres hacer sin tocarse',
+                    'Besos provocativos sin contacto corporal',
+                    'Striptease lento y sensual'
+                ],
+                medio: [
+                    'Tócate frente a tu pareja pero ella/él no puede tocarte por 3 minutos',
+                    'Baila de forma sensual haciendo un striptease completo',
+                    'Provoca a tu pareja hasta que suplique pero no permitas contacto por 5 minutos',
+                    'Masturbación mutua sin llegar al orgasmo durante 10 minutos',
+                    'Describe en detalle lo que quieres hacer pero sin tocar durante 3 minutos',
+                    'Usa {toy:vibradores} en tu pareja pero detente justo antes del orgasmo - 3 veces',
+                    'Sexo oral hasta casi el orgasmo, luego para completamente',
+                    'Ella se penetra con {toy:dildo} mientras él solo puede mirar'
+                ],
+                intenso: [
+                    'Él se masturba con {toy:lubricantes} hasta el borde, sin terminar - 3 veces',
+                    'Ata a tu pareja y provócala tocándola en todas partes excepto genitales',
+                    'Juego de negación: penetración por solo 10 segundos, luego para - repite 5 veces',
+                    'Ella usa {toy:vibradores} en sí misma mientras él está atado y observa',
+                    'Él debe aguantar sin correrse mientras ella hace lo que quiera por 10 minutos',
+                    'Ruina su orgasmo: estimula hasta el clímax pero detente justo en el momento',
+                    'Control total: una persona decide cuándo y cómo puede correrse la otra',
+                    'Orgasmo denegado: lleva al borde 5 veces sin dejar terminar',
+                    'Castidad extrema: atado/a y provocado/a sin alivio por 15 minutos'
+                ]
+            }
         };
 
         let selectedCategories = [...categories];
@@ -580,12 +806,14 @@
         let currentMode = '';
         let challengeCount = 0;
         let usedChallenges = [];
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let progressiveLevel = 0;
 
         function initConfig() {
             const categoriesGrid = document.getElementById('categoriesGrid');
             const toysGrid = document.getElementById('toysGrid');
 
-            // Cargar configuración guardada
             loadConfig();
 
             categories.forEach(cat => {
@@ -636,6 +864,7 @@
                     selectedToys = selectedToys.filter(t => t !== item);
                 }
             }
+            saveConfig();
         }
 
         function selectIntensity(btn) {
@@ -666,7 +895,7 @@
 
         function goToModeSelection() {
             if (selectedCategories.length === 0) {
-                alert('Selecciona al menos una categoría');
+                alert('⚠️ Selecciona al menos una categoría');
                 return;
             }
             saveConfig();
@@ -677,17 +906,48 @@
             currentMode = mode;
             challengeCount = 0;
             usedChallenges = [];
+            progressiveLevel = 0;
+            
+            document.getElementById('diceContainer').style.display = 'none';
+            document.getElementById('cardDeck').style.display = 'none';
+            document.getElementById('timerBtn').style.display = 'none';
+            
+            if (mode === 'dados') {
+                document.getElementById('diceContainer').style.display = 'flex';
+            } else if (mode === 'cartas') {
+                document.getElementById('cardDeck').style.display = 'block';
+            }
+            
             showScreen('gameScreen');
-            nextChallenge();
+            updateCounter();
         }
 
         function nextChallenge() {
+            if (currentMode === 'dados') {
+                rollDice();
+            } else if (currentMode === 'cartas') {
+                alert('🃏 Haz clic en la carta para sacar un desafío');
+            } else {
+                generateChallenge();
+            }
+        }
+
+        function generateChallenge() {
             challengeCount++;
-            const progress = Math.min((challengeCount / 20) * 100, 100);
-            document.getElementById('progressBar').style.width = progress + '%';
+            updateCounter();
+            updateProgress();
+
+            let level = intensity;
+            
+            if (currentMode === 'progresivo') {
+                progressiveLevel = Math.floor(challengeCount / 7);
+                if (progressiveLevel === 0) level = 'suave';
+                else if (progressiveLevel === 1) level = 'medio';
+                else level = 'intenso';
+            }
 
             const randomCategory = selectedCategories[Math.floor(Math.random() * selectedCategories.length)];
-            const categoryChalls = challenges[randomCategory];
+            const categoryChalls = challenges[randomCategory][level];
             let challenge = categoryChalls[Math.floor(Math.random() * categoryChalls.length)];
 
             challenge = challenge.replace(/{toy:([^}]+)}/g, (match, toyType) => {
@@ -702,18 +962,128 @@
 
             document.getElementById('categoryBadge').textContent = randomCategory;
             document.getElementById('challengeText').innerHTML = challenge;
+            
+            if (challenge.includes('minutos') || challenge.includes('durante')) {
+                document.getElementById('timerBtn').style.display = 'inline-block';
+            } else {
+                document.getElementById('timerBtn').style.display = 'none';
+            }
+
+            stopTimer();
+
+            if (challengeCount >= 20) {
+                setTimeout(() => {
+                    alert('🏆 ¡Felicidades! Han completado 20 desafíos. ¡Qué noche increíble!');
+                    showScreen('modeScreen');
+                }, 1000);
+            }
+        }
+
+        function rollDice() {
+            const dice1 = document.getElementById('dice1');
+            const dice2 = document.getElementById('dice2');
+            
+            dice1.classList.add('rolling');
+            dice2.classList.add('rolling');
+
+            setTimeout(() => {
+                const roll1 = Math.floor(Math.random() * 6) + 1;
+                const roll2 = Math.floor(Math.random() * 6) + 1;
+                
+                dice1.textContent = roll1;
+                dice2.textContent = roll2;
+                
+                dice1.classList.remove('rolling');
+                dice2.classList.remove('rolling');
+                
+                generateChallenge();
+            }, 500);
+        }
+
+        function drawCard() {
+            const card = document.getElementById('card');
+            card.classList.add('flipping');
+            
+            setTimeout(() => {
+                card.classList.remove('flipping');
+                generateChallenge();
+            }, 600);
+        }
+
+        function startTimer() {
+            const timerText = document.getElementById('challengeText').textContent;
+            const match = timerText.match(/(\d+)\s*minutos?/);
+            
+            if (match) {
+                timerSeconds = parseInt(match[1]) * 60;
+            } else {
+                timerSeconds = 300; // 5 minutos por defecto
+            }
+            
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.style.display = 'block';
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+                
+                if (timerSeconds <= 30) {
+                    timerDisplay.classList.add('warning');
+                }
+                
+                if (timerSeconds <= 0) {
+                    stopTimer();
+                    alert('⏰ ¡Tiempo terminado!');
+                }
+            }, 1000);
+            
+            document.getElementById('timerBtn').textContent = '⏹️ Detener';
+            document.getElementById('timerBtn').onclick = stopTimer;
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.style.display = 'none';
+            timerDisplay.classList.remove('warning');
+            document.getElementById('timerBtn').textContent = '⏱️ Iniciar Timer';
+            document.getElementById('timerBtn').onclick = startTimer;
+        }
+
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            document.getElementById('timer').textContent = 
+                `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateCounter() {
+            document.getElementById('challengeCounter').textContent = 
+                `Desafío ${challengeCount} de 20`;
+        }
+
+        function updateProgress() {
+            const progress = Math.min((challengeCount / 20) * 100, 100);
+            document.getElementById('progressBar').style.width = progress + '%';
         }
 
         function skipChallenge() {
-            if (confirm('¿Seguro que quieres saltar este desafío?')) {
+            if (confirm('¿Seguro que quieres saltar este desafío? 😏')) {
                 nextChallenge();
             }
         }
 
         function endGame() {
-            if (confirm('¿Terminar la sesión?')) {
-                showScreen('modeScreen');
+            if (confirm('¿Terminar la sesión? El progreso se perderá.')) {
+                stopTimer();
                 challengeCount = 0;
+                updateCounter();
+                updateProgress();
+                showScreen('modeScreen');
             }
         }
 
@@ -738,13 +1108,19 @@
             if (currentScreen === 'modeScreen') {
                 showScreen('configScreen');
             } else if (currentScreen === 'gameScreen') {
-                showScreen('modeScreen');
+                if (confirm('¿Volver a selección de modo? Se perderá el progreso actual.')) {
+                    stopTimer();
+                    showScreen('modeScreen');
+                }
             }
         }
 
         function goHome() {
             if (confirm('¿Volver al inicio? Se perderá el progreso actual.')) {
+                stopTimer();
                 challengeCount = 0;
+                updateCounter();
+                updateProgress();
                 showScreen('configScreen');
             }
         }
