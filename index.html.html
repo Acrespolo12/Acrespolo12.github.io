@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Entre los dos</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;1,600&family=Figtree:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f1f7;--panel:#fff;--ink:#241830;--mute:#6f6379;--line:#e3d9e8;--a:#d62c68;--b:#0a8f89;--on:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14101c;--panel:#201829;--ink:#f3ecf8;--mute:#a597b3;--line:#35294a;--a:#ff6b9a;--b:#4fd6cd;--on:#14101c}}
+:root[data-theme="dark"]{--bg:#14101c;--panel:#201829;--ink:#f3ecf8;--mute:#a597b3;--line:#35294a;--a:#ff6b9a;--b:#4fd6cd;--on:#14101c}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Figtree,system-ui,sans-serif;min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.15;margin:0 0 .5rem}
+h1{font-size:2.6rem}h2{font-size:1.5rem}
+main{max-width:560px;margin:0 auto;padding:16px 16px 96px}
+p{margin:.4rem 0}.mute{color:var(--mute);font-size:.92rem}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:12px 16px;min-height:46px}
+button:focus-visible,input:focus-visible{outline:3px solid var(--b);outline-offset:2px}
+.pri{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:700;width:100%}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+input[type=text]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);margin:4px 0 12px}
+select,input[type=date]{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);margin:4px 0 12px}input[type=password],textarea{width:100%;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--panel);color:var(--ink);margin:4px 0 12px;font:inherit}
+.hide{position:fixed;left:12px;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:20;min-height:40px;padding:6px 14px;border-radius:99px;font-size:.9rem}
+button.s{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;margin:12px 0}
+.score{display:flex;gap:8px;margin:8px 0}
+.chip{flex:1;border-radius:14px;padding:10px 12px;border:2px solid var(--line);background:var(--panel)}
+.chip.on{border-color:var(--c)}.chip b{display:block;color:var(--c);font-family:Fraunces,serif;font-size:1.6rem}
+.card{border:3px solid var(--c);border-radius:22px;padding:20px;background:var(--panel);margin:12px 0}
+.card .txt{font-family:Fraunces,Georgia,serif;font-size:1.35rem;line-height:1.35;margin:.5rem 0 1rem}
+.tag{display:inline-block;border-radius:99px;padding:2px 10px;background:var(--c);color:var(--on);font-size:.85rem;font-weight:700;margin-right:6px}
+.ring{display:block;margin:6px auto;width:170px;height:170px}
+.ring text{font-family:Fraunces,serif;font-size:34px;fill:var(--ink)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--panel);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+nav button{flex:1;border:0;border-radius:0;background:none;min-height:56px;font-size:.8rem;padding:8px 2px}
+nav button.on{font-weight:700;box-shadow:inset 0 3px 0 var(--ink)}
+.lv{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.seg{display:flex;gap:4px}.seg button{padding:8px 10px;min-height:40px;font-size:.9rem}
+.seg button.s{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pause{position:fixed;right:12px;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:20;background:#c1121f;color:#fff;border:0;font-weight:700;border-radius:99px;min-height:40px;padding:6px 14px}
+.ov{position:fixed;inset:0;z-index:30;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:84px;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;z-index:25;max-width:90%}
+@media (prefers-reduced-motion:no-preference){.card{animation:in .35s ease}@keyframes in{from{transform:scale(.96);opacity:0}}}
+</style>
+</head>
+<body>
+<button class="hide" id="hd" aria-label="Ocultar pantalla">Ocultar</button>
+<button class="pause" id="pz" aria-label="Pausa, palabra de seguridad">Pausa</button>
+<main id="app"></main>
+<nav id="nav"></nav>
+<div id="ovl"></div>
+<div id="lock"></div>
+<script>
+const K="entre-los-dos-v1";
+const PR=[["sen","Sensualidad y masajes"],["tra","Sexo tradicional"],["ora","Sexo oral"],["jug","Juguetes"],["rol","Juegos de rol"],["bon","Ataduras suaves"],["dom","Dominación y sumisión"],["azo","Azotes"],["con","Control del orgasmo"],["sup","Strap-on"],["peg","Pegging"]];
+const LV=["Suave","Medio","Intenso"];
+const C=[
+["sen",1,"{A} da a {B} un masaje lento con aceite en espalda y piernas. {B} solo recibe.",300],
+["sen",1,"Besos durante 2 minutos solo con labios, sin manos.",120],
+["sen",2,"{A} recorre el cuerpo de {B} alternando hielo y lengua.",240],
+["tra",1,"Misionero con contacto visual y sin prisa.",300],
+["tra",2,"{B} encima marcando el ritmo. {A} solo puede agarrar caderas y mirar.",300],
+["tra",2,"Cucharita lenta mientras {A} susurra al oído lo que quiere hacerle después.",300],
+["tra",3,"De pie contra la pared: intensidad alta y {B} decide cuándo cambiar.",300],
+["tra",3,"Por detrás, {A} lleva el ritmo y {B} dice 'más' o 'menos' cuando quiera.",300],
+["ora",1,"{A} hace sexo oral a {B} a su ritmo hasta que suene el tiempo.",240],
+["ora",2,"Oral con pausas: {A} para dos veces justo antes del final, {B} decide cuándo.",300],
+["ora",3,"Un 69 sin poder parar hasta que suene la alarma.",240],
+["jug",1,"{A} usa un vibrador en {B} subiendo la intensidad poco a poco.",240],
+["jug",2,"{B} usa el juguete que {A} elija mientras se acarician.",300],
+["jug",3,"{B} lleva puesto un juguete con mando durante 10 minutos y {A} lo controla vestidos.",600],
+["rol",1,"Os conocéis hoy en un bar: ligad, seducíos y acabad en la cama.",600],
+["rol",2,"Jefe/a y empleado/a: {A} da las órdenes, {B} negocia.",600],
+["rol",3,"Antes de empezar pactad 3 reglas. {A} las impone y {B} las cumple.",600],
+["bon",1,"{A} venda los ojos de {B} y le acaricia y besa por sorpresa.",240],
+["bon",2,"Muñecas de {B} atadas con una bufanda. {A} explora con calma.",300],
+["bon",3,"{B} atado/a a la cama (nudo que se suelta rápido) y {A} manda del todo.",420],
+["dom",1,"5 minutos: {B} obedece las órdenes sensuales de {A}.",300],
+["dom",2,"{B} de rodillas pide permiso para cada caricia.",300],
+["dom",3,"{A} domina por completo 10 minutos: órdenes, trato firme y sin prisa.",600],
+["azo",1,"Cuatro azotes suaves con mano abierta. {B} dice si quiere más.",120],
+["azo",2,"10 azotes con caricia entre cada uno. {B} los cuenta.",180],
+["azo",3,"Azotes con pala o cinturón ligero. {A} empieza flojo y {B} pide la intensidad.",240],
+["con",1,"{A} lleva a {B} casi al final y para. Repetid 3 veces.",360],
+["con",2,"{B} no puede terminar hasta que {A} lo permita. Premio al final: lo que pida {B}.",480],
+["con",3,"{A} controla todo 10 minutos y {B} tiene que pedir permiso para terminar.",600],
+["sup",1,"{A} se pone el arnés y {B} lo explora. Después, caricias u oral.",300],
+["sup",2,"Strap-on: {A} penetra a {B} despacio con mucho lubricante.",420],
+["sup",3,"Strap-on intenso: {B} elige postura y {A} sigue sus indicaciones.",420],
+["peg",1,"Calentamiento: masaje anal externo con lubricante y solo yemas de los dedos.",240],
+["peg",2,"Pegging: {A} con strap-on, {B} recibe. Mucho lubricante, muy lento y {B} manda.",420],
+["peg",3,"Pegging profundo: {B} elige postura y {A} solo avanza cuando {B} lo dice.",480],
+["sen",1,"{A} y {B} se desnudan despacio el uno al otro, sin prisa y sin tocar zonas íntimas.",180],
+["sen",2,"{A} dibuja con un dedo en la espalda de {B} lo que le gustaría hacerle. {B} adivina.",240],
+["tra",1,"Sexo a oscuras: sin hablar, solo respiración y tacto.",300],
+["ora",1,"{A} recorre con la boca el cuerpo de {B} de pies a cabeza y termina donde {B} diga.",300],
+["jug",1,"Masaje erótico con aceite o vela de masaje. {A} elige el ritmo.",300],
+["rol",1,"Masajista y cliente: {A} da un masaje que se vuelve cada vez menos profesional.",420],
+["bon",1,"{A} sujeta las muñecas de {B} contra la cama solo con las manos mientras lo besa.",180],
+["dom",1,"{A} da 3 órdenes sencillas a {B}. {B} las cumple y {A} premia con caricias.",180],
+["sup",2,"{B} se pone el arnés y {A} elige cómo disfrutarlo: oral, caricias o montarlo.",420],
+["peg",1,"Hablad 5 minutos antes: qué os apetece, qué no, ritmo y palabra de pausa. Después, caricias suaves.",300],
+["con",1,"{A} masturba a {B} muy despacio y para cada vez que {B} diga 'espera'.",300],
+["sen",2,"{A} da un masaje con manos y boca a {B} sin tocar sus zonas íntimas hasta que {B} lo pida.",300],
+["sen",3,"Cera de vela de masaje a goteo lento sobre la espalda de {B}. {A} prueba antes la temperatura en su muñeca.",300],
+["tra",2,"Sexo fuera de la cama, con cambio de postura cada 2 minutos.",360],
+["tra",2,"Os turnáis para elegir la postura cada 3 minutos.",420],
+["tra",3,"Sin prisas: tres cambios de postura y un cierre en el que {B} elige cómo terminar.",600],
+["ora",2,"{A} hace oral a {B} mientras {B} le guía solo con palabras.",300],
+["ora",3,"Oral y manos: {A} combina boca y dedos y {B} marca con 'más' o 'más despacio'.",300],
+["jug",2,"{A} usa con {B} un juguete que {B} no ve, con los ojos vendados.",300],
+["jug",3,"Juguete de pareja: probadlo juntos a un ritmo que elijáis entre los dos.",360],
+["rol",2,"Desconocidos en un viaje: {A} se hace pasar por alguien que {B} acaba de conocer.",600],
+["rol",2,"Entrevista de trabajo muy poco profesional: {A} entrevista y {B} intenta convencer.",480],
+["rol",3,"Policía y sospechoso, con reglas pactadas antes y palabra de pausa a mano.",600],
+["bon",2,"{A} ata los tobillos de {B} con tela y llena de besos y caricias lo que alcance.",300],
+["bon",3,"{B} con ojos vendados y muñecas atadas. {A} usa pluma, hielo y dedos.",420],
+["dom",2,"{A} elige la ropa de {B} esta noche y {B} desfila antes de empezar.",300],
+["dom",3,"{A} manda 10 minutos y {B} solo puede responder 'sí' y obedecer.",600],
+["azo",2,"{A} calienta con caricias y 8 azotes más firmes en las nalgas de {B}.",180],
+["azo",3,"Azotes con cuenta atrás de 20. {B} pide más o para en cualquier momento.",240],
+["con",2,"{A} lleva a {B} al límite 5 veces y {B} termina a la sexta.",600],
+["con",3,"{B} pide permiso en cada paso y {A} decide cuándo termina.",600],
+["sup",2,"Strap-on con la postura elegida por {B}, ritmo lento y pausas para hablar.",420],
+["sup",3,"{A} lleva el arnés y domina por completo; {B} sigue las órdenes con la palabra de pausa a mano.",480],
+["peg",2,"Pegging: {B} elige postura, {A} lleva el strap-on y suben el ritmo cuando {B} lo diga.",420],
+["peg",3,"Pegging largo con juguete de preparación y mucho lubricante. {A} guía y {B} controla.",480],
+["sen",1,"Bañaos juntos con luz baja y turnaos para lavaros.",600],
+["sen",1,"{A} susurra al oído de {B} tres cosas que le excitan de {B}.",120],
+["sen",2,"Besos lentos desde el cuello hasta el ombligo. {B} guía con la mano si quiere más abajo.",240],
+["sen",3,"Masaje corporal completo con aceite, terminando donde {B} pida.",600],
+["tra",1,"De lado y abrazados, despacio y mirándoos, sin cambiar de postura 5 minutos.",300],
+["tra",1,"Elegid una postura nueva y probadla con mucha risa.",300],
+["tra",2,"En una silla o al borde de la cama: {B} sentado y {A} encima con ritmo lento.",300],
+["tra",3,"Dos rondas: la primera suave y la segunda sin freno. {B} avisa cuándo cambiar.",600],
+["ora",1,"Oral lento con pausas para besarse. {B} decide cuándo seguir.",240],
+["ora",2,"{A} hace oral y {B} no puede moverse ni tocar durante 3 minutos.",180],
+["jug",1,"Probad un lubricante nuevo, de sabor o de calor suave. {A} lo extiende y {B} opina.",240],
+["jug",2,"{A} controla un juguete a distancia mientras {B} prepara algo en la cocina.",300],
+["jug",3,"Juguete en {B} mientras {A} hace oral. {B} marca la intensidad con la mano.",360],
+["rol",1,"Reencuentro tras un año sin veros: contad cuánto os habéis echado de menos.",480],
+["rol",2,"Anfitrión e invitado en una fiesta privada, con tensión y poca ropa.",480],
+["rol",2,"Fotógrafo/a y modelo: {A} dirige las poses y {B} las sigue.",420],
+["rol",3,"Amo/a y sirviente con reglas de tres frases pactadas antes. {A} las impone.",600],
+["bon",1,"{A} ata un pañuelo a las muñecas de {B} sin apretar y {B} pide cuándo soltarse.",240],
+["bon",2,"{B} con ojos vendados y {A} elige sorpresas: pluma, hielo y besos.",300],
+["bon",3,"Atadura con cuerda suave y tijera de seguridad al lado. {A} cuida y {B} se entrega.",480],
+["dom",1,"{B} pide permiso para besar a {A} y {A} dice sí o no.",180],
+["dom",2,"{A} pone tres reglas para esta noche y {B} las cumple.",300],
+["azo",1,"Azotes suaves con caricia sobre la ropa interior, a ritmo lento.",120],
+["azo",2,"{B} elige entre mano, pala o cinturón ligero y {A} empieza por la intensidad más baja.",240],
+["con",1,"{B} no puede moverse ni hablar mientras {A} lo lleva al borde dos veces.",300],
+["con",2,"Pausa larga: 5 minutos de abrazo sin tocar nada íntimo y luego {A} decide cómo seguir.",420],
+["sup",1,"{A} se pone el arnés y {B} elige cómo empezar: oral, manos o mirar.",300],
+["sup",2,"{B} encima de {A}, que lleva el strap-on. {B} marca todo.",420],
+["sup",3,"Strap-on por detrás con {A} dominante y las palabras que {B} pidió.",480],
+["peg",1,"Hablad antes de la preparación y de qué juguete pequeño probar. {A} empieza solo con besos.",240],
+["peg",2,"Pegging en cuchara: lo más cómodo, con pausas para respirar.",420],
+["peg",3,"Pegging con ritmo creciente. {B} da la señal de subir cada 2 minutos.",480]
+];
+const SHOP=[["Comodín: saltar una carta",25,"skip"],["Elige tú la categoría",30,"cat"],["Masaje de 20 min",35,"vale"],["Desayuno en la cama",40,"vale"],["Mandas 10 minutos",55,"vale"],["Noche con elección total",90,"vale"],["Elijo yo el plan del día",45,"vale"],["Un día libre de tareas",60,"vale"],["Vale de abrazo de 10 min sin móvil",15,"vale"],["Elijo la música de la noche",15,"vale"],["Elijo la película o serie esta noche",20,"vale"],["Masaje de pies o de pelo",25,"vale"],["Dormir hasta tarde sin hacer nada",30,"vale"],["Café o cena que paga el otro",35,"vale"],["Comida a domicilio elegida por mí",40,"vale"],["Me haces la compra de la semana",45,"vale"],["Baño con velas que prepara el otro",50,"vale"],["Cita elegida por mí",70,"vale"],["Un deseo cumplido, dentro de los límites",120,"vale"],["Escapada de fin de semana elegida por mí",200,"vale"],["Elijo qué cenamos",15,"vale"],["Elijo la ropa que llevas esta noche",30,"vale"],["Me dices 5 cosas que te encantan de mí",20,"vale"],["Una tarde sin tareas",35,"vale"],["Salimos a donde yo diga",40,"vale"],["Gano una discusión tonta",40,"vale"],["Masaje de cuerpo entero",55,"vale"],["Me perdonas una tontería",25,"vale"],["Me dices 3 cosas sucias al oído",25,"vale"],["Elijo la postura esta noche",30,"vale"],["Striptease privado",50,"vale"],["Masaje erótico de 20 minutos",40,"vale"],["Oral solo para mí, sin devolverlo",45,"vale"],["Azotes suaves a mi petición",45,"vale"],["Sexo en un sitio distinto de la casa",50,"vale"],["Ducha juntos con final feliz",55,"vale"],["Mando yo 15 minutos en la cama",60,"vale"],["Sexo con el juguete que yo elija",60,"vale"],["Un orgasmo extra de regalo",65,"vale"],["Una hora de preliminares sin penetración",70,"vale"],["Me atas con un pañuelo y haces lo que quieras, dentro de los límites",70,"vale"],["Noche de strap-on o pegging, elijo yo",90,"vale"],["Una noche sin límite de tiempo",110,"vale"],["Una fantasía hecha realidad, hablada antes",150,"vale"],["Un beso largo donde yo elija",20,"vale"],["Me desnudas despacio",25,"vale"],["Duermes desnudo/a abrazado/a a mí",30,"vale"],["Me dices lo que quieres hacerme, solo con palabras",30,"vale"],["Sexo con luz encendida y sin prisa",35,"vale"],["Me pides lo que te gusta y lo hago sin quejarme",35,"vale"],["Me hablas al oído mientras me tocas",40,"vale"],["Una carta de nivel intenso a mi elección",45,"vale"],["Te toco mientras te miras al espejo",50,"vale"],["Me vendas los ojos y me sorprendes",55,"vale"],["Una sesión de edging a mi ritmo",60,"vale"],["Me dices que no puedo terminar hasta que tú lo permitas",65,"vale"],["Una noche de roles a mi elección",70,"vale"],["Jugamos con hielo, plumas y cera de masaje",75,"vale"],["Sexo oral hasta el final, sin parar",80,"vale"],["Me haces todo lo que te pido durante 30 minutos",100,"vale"],["Un día de preliminares: todo el día mensajes y juego, por la noche el final",120,"vale"],["Una noche de estreno: probamos algo nuevo que elijo yo",130,"vale"]];
+const PD=[["Mensaje atrevido por la mañana",10,null],["Audio susurrando lo que te gustaría esta noche",15,null],["Hacer una tarea de casa sin que te la pidan",15,null],["10 minutos de masaje sin pedir nada a cambio",20,"Vale de masaje de 20 min"],["Cena sin móviles",10,null],["Decir 3 cosas que te encantan de tu pareja",10,null],["Llevar la ropa interior que elija tu pareja",20,"Vale: elijo la primera carta"],["Preparar un desayuno o café sorpresa",15,null],["Contar una fantasía que nunca hayas contado",25,"Mandas 10 minutos"],["Esconder una nota escrita a mano",15,null],["Pasear de la mano 20 minutos",10,null],["Cita sorpresa organizada por ti",40,"Desayuno en la cama"],["Ducha juntos con calma",20,null],["Día de espera: hoy solo flirteo, sin sexo",20,"Vale de deseo acumulado: empiezas tú la noche"],["Dar las gracias por algo concreto de esta semana",10,null],["Estirar o hacer deporte juntos 15 minutos",15,null],["Mandar una foto de algo que te recuerde a tu pareja",10,null],["Hacer la cena favorita de tu pareja",20,null],["Escribir 3 recuerdos bonitos de los dos",15,null],["Planear algo para el fin de semana",10,null],["Bailar una canción en casa",10,null],["Un beso de 10 segundos sin prisa",10,null],["Preguntar: ¿qué necesitas hoy de mí? y hacerlo",20,null],["Hacer la cama o recoger la cocina sin que lo pida",10,null],["Cocinar juntos con la música de tu pareja",15,null],["Contar una ilusión o sueño de futuro",15,null],["Llevarle su bebida o snack favorito",10,null],["Una hora sin pantallas juntos",15,null],["Masaje de cuello mientras ve algo en la tele",15,"Vale de masaje de 20 min"],["Elegir ropa interior bonita para esta noche",15,null],["Salir a caminar sin móvil",10,null],["Preparar el café o té de tu pareja",10,null],["Mandar un audio diciendo que le echas de menos",10,null],["Hacer la compra juntos con música",15,null],["Preguntar cómo ha ido el día y escuchar 10 minutos sin móvil",20,null],["Planear a escondidas una cita sorpresa",25,null],["Hacer una foto bonita de los dos",10,null],["Elegir una canción para esta noche y compartirla",10,null],["Un masaje de manos de 5 minutos",15,null],["Escribir qué os gustaría hacer este mes juntos",15,null],["Cenar con una vela, aunque sea comida rápida",15,null],["Pedir perdón por una tontería pasada",10,null],["Lavarle el pelo o peinarle",15,null],["Hacer algo que suele evitar sin quejarte",15,null],["Probar una comida nueva juntos",15,null],["Un abrazo de 20 segundos al llegar a casa",10,null]];
+const NIGHT=[["Calentamiento",1,["sen","rol"]],["Seducción",2,["ora","jug","bon","dom"]],["Plato fuerte",3,null],["Plato fuerte",3,null],["Cierre",1,["sen"]]];
+const DC=[["sen",1,"{A} manda un audio susurrando 1 minuto lo que le gustaría hacerle a {B} cuando se vean.",120],["sen",1,"Videollamada: {A} y {B} se miran en silencio 2 minutos y luego dicen lo que echan de menos.",240],["sen",2,"Por mensajes: {A} describe con calma un beso que le daría a {B}. {B} responde con otro.",300],["sen",1,"Escribid cada uno un mensaje largo sobre lo que haréis cuando os reencontréis.",300],["tra",1,"Describid por audio cómo sería una noche perfecta de reencuentro.",300],["rol",1,"Por mensajes, jugad a que os conocéis hoy y ligad como desconocidos.",600],["rol",2,"Videollamada: cena a distancia con ropa elegante. {A} seduce a {B}.",900],["dom",1,"{A} da tres órdenes a {B} por mensaje. {B} las cumple y responde con un audio.",300],["dom",2,"{A} decide qué se pone {B} para la videollamada de hoy y {B} desfila.",300],["con",1,"{A} cuenta por audio, paso a paso, lo que haría con calma al verle, sin dejar que {B} se toque.",300],["con",2,"Videollamada: {B} no puede tocarse hasta que {A} lo permita.",600],["jug",1,"Los dos con juguete en casa por videollamada: {A} marca el ritmo con la voz.",600],["jug",2,"{A} controla el juguete de {B} (si tiene app) mientras hablan por videollamada.",600],["ora",1,"{A} susurra por audio lo que le haría a {B} con la boca. {B} responde con otro audio.",240],["bon",1,"{A} describe por audio cómo ataría las manos de {B} y qué haría después. {B} comenta.",300]];
+const TH=[["Calentamiento",["sen","tra"]],["Romántico",["sen","rol"]],["Juegos",["jug","rol"]],["Oral",["ora","sen"]],["Atrevido",["bon","dom"]],["Aventura",["rol","tra"]],["Pasión",["tra","ora"]],["Cómplices",["jug","con"]],["Control",["con","dom"]],["Misterio",["bon","rol"]],["Intenso",["azo","dom"]],["Fantasía",["sup","peg"]]];
+const theme=()=>TH[new Date().getMonth()];
+function seasonAdd(){const m=today().slice(0,7);if(!S.ms||S.ms.m!==m)S.ms={m,n:0,ok:false};S.ms.n++;if(!S.ms.ok&&S.ms.n>=8){S.ms.ok=true;S.seasons=(S.seasons||0)+1;S.pts[0]+=80;S.pts[1]+=80;toast("Temporada superada: +80 puntos para cada uno")}}
+const BD=[["b1","Primera carta","completad una carta",()=>(S.cnt||0)>=1],["b2","Diez cartas","10 cartas completadas",()=>(S.cnt||0)>=10],["b3","Veinticinco cartas","25 cartas completadas",()=>(S.cnt||0)>=25],["b4","Racha de 3 días","tres días seguidos con planes",()=>S.st&&Math.max(S.st[0].n,S.st[1].n)>=3],["b5","Racha de 7 días","una semana entera de planes",()=>S.st&&Math.max(S.st[0].n,S.st[1].n)>=7],["b6","Todas las categorías","completad algo de cada categoría",()=>(S.seen||[]).length>=PR.length],["b7","Noche completa","terminad una noche guiada",()=>(S.nights||0)>=1],["b8","Primera cita","marcad una cita como hecha",()=>(S.cd||0)>=1],["b9","Deseo cumplido","cumplid un deseo del buzón",()=>(S.wd||0)>=1],["b10","Plan romántico","haced un plan romántico canjeado",()=>(S.pdone||0)>=1],["b11","Diez gratitudes","escribid 10 cosas bonitas",()=>(S.grat||[]).length>=10],["b12","Temporada superada","completad el reto del mes",()=>(S.seasons||0)>=1],["b13","Diario","escribid 3 entradas",()=>(S.dia||[]).length>=3]];
+function checkBadges(){S.bd=S.bd||[];let n=0;BD.forEach(b=>{if(!S.bd.includes(b[0])&&b[3]()){S.bd.push(b[0]);S.pts[0]+=10;S.pts[1]+=10;n++;toast("Insignia: "+b[1]+". +10 puntos para cada uno")}});if(n)save()}
+function annInfo(){if(!S.ann)return"";const now=new Date(),[y,m,dd]=S.ann.split("-").map(Number),t0=new Date(now.getFullYear(),now.getMonth(),now.getDate());let nx=new Date(now.getFullYear(),m-1,dd);if(nx<t0)nx=new Date(now.getFullYear()+1,m-1,dd);const n=Math.round((nx-t0)/864e5);return n===0?"Hoy es vuestro aniversario. Celebradlo en Más.":"Aniversario en "+n+" días"}
+function hoyBox(){const d=today(),D=S.day&&S.day.d===d?S.day:null,W=weekly(),pl=D?D.done[0].length+D.done[1].length:0,nx=(S.dates||[]).filter(x=>x[0]>=d)[0],th=theme(),ms=S.ms&&S.ms.m===d.slice(0,7)?S.ms.n:0,l=[];
+ l.push("Planes de hoy hechos: "+pl);l.push("Reto semanal: "+(W.done[0]&&W.done[1]?"hecho por los dos":"pendiente"));
+ if(nx){const n=Math.round((new Date(nx[0]+"T00:00")-new Date(d+"T00:00"))/864e5);l.push("Próxima cita: "+esc(nx[1])+", "+(n===0?"hoy":"en "+n+" días"))}
+ l.push("Temporada "+th[0]+": "+Math.min(ms,8)+" de 8 cartas");const an=annInfo();if(an)l.push(an);
+ return `<div class="box"><p><b>Hoy</b></p>${l.map(x=>`<p class="mute">${x}</p>`).join("")}</div>`}
+const hh=t=>{let h=5381;for(const c of t)h=((h<<5)+h+c.charCodeAt(0))>>>0;return String(h)};
+let locked=null,covered=false;
+function lockUI(){const o=$("#lock");if(locked===null)locked=!!S.pin;
+ if(covered){o.innerHTML=`<div class="ov"><div style="width:100%;max-width:420px;text-align:left"><h2 id="cvt">Lista de la compra</h2><p>Leche<br>Pan<br>Huevos<br>Tomates<br>Detergente</p></div></div>`;$("#cvt").ondblclick=()=>{covered=false;if(S.pin)locked=true;lockUI()};return}
+ if(locked&&S.pin){o.innerHTML=`<div class="ov"><div><h1>Entre los dos</h1><p>Introduce tu código</p><input type="password" id="pi" inputmode="numeric" maxlength="8" style="text-align:center"><button class="pri" id="pk">Entrar</button></div></div>`;$("#pk").onclick=()=>{if(hh($("#pi").value)===S.pin){locked=false;lockUI()}else toast("Código incorrecto")};return}
+ o.innerHTML=""}
+function nightStep(){if(!S.night)return;S.night.step++;if(S.night.step>=5){S.night=null;S.nights=(S.nights||0)+1;S.pts[0]+=20;S.pts[1]+=20;toast("Noche completa: +20 puntos para cada uno")}}
+const WK=[["Un detalle cada día para tu pareja: nota, mensaje o gesto",50,"Vale de masaje de 20 min"],["Tres noches sin móvil después de cenar",50,"Vale: elijo la primera carta"],["Cada uno cuenta algo que le gusta de vuestra intimidad",40,"Mandas 10 minutos"],["Una cita fuera de casa esta semana",60,"Desayuno en la cama"],["Probad una carta nueva que no hayáis jugado",50,"Vale de deseo acumulado: empiezas tú la noche"],["Cada día una pregunta: ¿qué te apetece?, y escucharla",50,"Mandas 10 minutos"],["Una noche de desconexión con masaje mutuo de 15 minutos cada uno",60,"Vale de masaje de 20 min"],["Una carta de nivel más alto del habitual, hablada antes",50,"Vale: elijo la primera carta"],["Un día entero sin quejas, solo cosas positivas",40,"Desayuno en la cama"],["Una salida a un sitio nuevo",60,"Un día libre de tareas"]];
+const GIFT=[5,10,10,15,20,25];
+const SEC=["Haz reír a tu pareja tres veces","Dale un beso inesperado","Dile un cumplido que nunca le hayas dicho","Toca su mano o su cintura sin motivo durante la cena","Mándale un mensaje que le haga sonreír sin pedir nada","Susurra algo al oído de tu pareja en público","Mírale a los ojos 10 segundos sin decir nada","Prepara algo pequeño que sabes que le gusta","Cuéntale algo que te pareció sexy de él o de ella esta semana","Hazle una caricia lenta en la espalda mientras hace otra cosa","Ofrécele tu sitio, tu comida o tu turno sin que lo pida","Déjale una nota con una orden sensual para esta noche","Invita a tu pareja a darte un beso largo cuando menos se lo espere","Pídele un abrazo de 20 segundos y quédate sin prisa dentro de él","Invita a tu pareja a darte un beso en la frente o en la mano","Pídele un abrazo por la espalda mientras hace algo","Invita a tu pareja a besarte antes de salir de casa","Pídele un beso de buenas noches de los de antes","Invita a tu pareja a un abrazo largo al llegar a casa","Dile 'te quiero' mirándole a los ojos sin que haya un motivo","Dile cuánto la o lo amas con tres cosas concretas que haya hecho esta semana","Dile 'me haces feliz porque...' y termina la frase con algo sincero","Dile algo que te enamoró de ella o de él al principio","Dile 'gracias' por algo pequeño que normalmente das por hecho","Dile 'estoy orgulloso/a de ti' y explica por qué","Dile a tu pareja qué te hace sentir querido/a y pídele que lo haga más","Pide con cariño una cosa pequeña que te gustaría que mejorara entre vosotros","Reconoce una cosa que tú podrías hacer mejor como pareja y proponte cambiarla","Pregunta: ¿hay algo que pueda hacer para que estés más a gusto conmigo? y escucha sin defenderte","Pregunta qué sería un día perfecto para tu pareja y apúntalo","Pide perdón por algo que hiciste mal estos días sin buscar excusas","Cuenta qué te hace sentir más conectado/a con tu pareja","Pregunta cómo se siente de verdad hoy y escucha sin dar consejos","Dile algo que te gustaría más de vuestra vida íntima, con cariño y sin presión","Pídele que te cuente una fantasía suave y escucha sin juzgar","Hazle un masaje de 5 minutos sin pedir nada","Invita a tu pareja a dormir abrazados toda la noche","Acaricia su pelo o su cara con calma mientras habláis","Dale un beso en el cuello cuando esté distraído/a","Deja que tu pareja elija hoy qué hacer y tú te adaptas con una sonrisa","Guarda el móvil cuando tu pareja te hable y mírale durante toda la conversación","Baila un par de minutos con tu pareja sin motivo","Cuéntale un recuerdo vuestro que te haga sonreír","Invítale a una cita de 10 minutos: café, paseo o sentarse en el balcón","Susúrrale una cosa que te gustaría hacerle esta noche","Pide un beso lento y de los que dejan sin aliento","Dile 'te echo de menos' aunque estéis en la misma casa"];
+const RP=[["Noche de spa en casa",60,"Bañera, velas, mascarillas y masaje por turnos.","casa"],["Cena romántica cocinada juntos",40,"Elegid menú, poned vela y música y cocinad a medias.","casa"],["Maratón de películas con mantas",25,"Sofá, snacks y una película elegida por cada uno.","casa"],["Noche de juegos con apuesta",30,"El que pierda hace un favor al otro.","casa"],["Desayuno de hotel en la cama",35,"Uno lo prepara todo y el otro solo disfruta.","casa"],["Cata de vino o chocolate en casa",45,"Comprad tres opciones y puntuadlas a ciegas.","casa"],["Baile en el salón",25,"Luces bajas, vuestra lista de canciones y nada de móviles.","casa"],["Pícnic en el salón",20,"Manta en el suelo, comida para picar y charla larga.","casa"],["Cartas de amor",25,"Escribidlas a mano y leedlas en voz alta el uno al otro.","casa"],["Taller de masajes",40,"Aprended una técnica nueva y practicadla por turnos.","casa"],["Paseo al atardecer con helado",25,"Sin prisa, de la mano y sin hablar de problemas.","fuera"],["Cine con palomitas",40,"Elige uno la película y el otro los snacks.","fuera"],["Atardecer en un mirador",35,"Manta, bebida y vistas. Llevad algo de abrigo.","fuera"],["Brunch de domingo",45,"Un sitio nuevo y sin mirar el reloj.","fuera"],["Museo o exposición",35,"Elegid cada uno una obra favorita y contad por qué.","fuera"],["Cena en un restaurante nuevo",60,"Reservad con antelación y pedid algo que nunca hayáis probado.","fuera"],["Copas con música en directo",50,"Un local pequeño donde se pueda charlar y bailar.","fuera"],["Día de playa o río",50,"Baño, comida y siesta sin planes.","fuera"],["Clase de baile o cocina para dos",90,"Aprended algo juntos y reíros de los errores.","fuera"],["Cena con vistas",100,"Un sitio especial, ropa bonita y mesa junto a la ventana.","fuera"],["Tarde de spa o termas",120,"Circuito de aguas y masaje para los dos.","esc"],["Ruta de senderismo y comida en un pueblo",80,"Caminad por un sitio bonito y premiaos con una buena comida.","esc"],["Noche en un hotel de la ciudad",220,"Desconectad a pocos minutos de casa, con desayuno.","esc"],["Noche de hotel con jacuzzi",280,"Sin horarios, sin móviles y con tiempo para vosotros.","esc"],["Fin de semana en una casa rural",300,"Chimenea, paseos y cenas tranquilas.","esc"],["Viaje sorpresa elegido por uno",400,"Quien paga elige el destino y el otro solo prepara la maleta.","esc"]];
+const RK=[[0,"Curiosos"],[5,"Cómplices"],[15,"Atrevidos"],[30,"Amantes"],[50,"Imparables"],[80,"Leyenda"],[120,"Insaciables"]];
+function rank(){const n=S.cnt||0;let r=RK[0][1];for(const x of RK)if(n>=x[0])r=x[1];return r}
+function lvUp(){if([5,15,30,50,80,120].includes(S.cnt)){S.pts[0]+=30;S.pts[1]+=30;toast("Nuevo nivel de pareja: "+rank()+". +30 puntos para cada uno")}}
+function weekly(){const d=new Date(),j=new Date(d.getFullYear(),0,1),k=d.getFullYear()+"-"+Math.ceil(((d-j)/864e5+j.getDay()+1)/7);if(!S.wk||S.wk.k!==k){let h=0;for(const ch of k)h=(h*31+ch.charCodeAt(0))>>>0;S.wk={k,i:h%WK.length,done:[false,false]}}return S.wk}
+const ymd=x=>x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0");
+const today=()=>ymd(new Date());
+function mkDay(d){let h=0;for(const ch of d)h=(h*31+ch.charCodeAt(0))>>>0;const ids=PD.map((_,i)=>i);for(let i=ids.length-1;i>0;i--){h=(h*1103515245+12345)>>>0;const j=h%(i+1);[ids[i],ids[j]]=[ids[j],ids[i]]}return{d,ids:ids.slice(0,6),done:[[],[]],cust:[],nosee:false}}
+function planOf(k){const n=+k.slice(1);return k[0]==="p"?PD[n]:[S.day.cust[n],15,null]}
+function streak(p){const s=S.st[p],d=today();if(s.last===d)return;const y=new Date();y.setDate(y.getDate()-1);s.n=s.last===ymd(y)?s.n+1:1;s.last=d;if(s.n%3===0){S.pts[p]+=15;toast("Racha de "+s.n+" días: +15 puntos")}}
+function doPlan(p,k){const D=S.day;if(D.done[p].includes(k))return;const it=planOf(k);D.done[p].push(k);S.pts[p]+=it[1];if(it[2])S.inv[p].push(it[2]);streak(p);toast("+"+it[1]+" puntos"+(it[2]?" y un vale":""))}
+const $=s=>document.querySelector(s);
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fresh=()=>({stage:"setup",names:["",""],lim:[{},{}],pts:[0,0],turn:0,used:[],card:null,max:3,inv:[[],[]],fb:[{},{}],tab:"play",li:0,first:true,sp:0,paused:false,ch:null});
+let S=(()=>{try{const x=JSON.parse(localStorage.getItem(K));if(x&&x.stage)return x}catch(e){}return fresh()})();
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const nm=i=>esc(S.names[i]||("Jugador "+(i+1)));
+const col=i=>i?"var(--b)":"var(--a)";
+let toastT;
+function toast(t){const e=document.createElement("div");e.className="toast";e.textContent=t;document.body.appendChild(e);clearTimeout(toastT);toastT=setTimeout(()=>e.remove(),2600)}
+const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+function beep(){if(S.mute)return;try{const a=new (window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator();o.connect(a.destination);o.frequency.value=660;o.start();setTimeout(()=>{o.stop();a.close()},350);navigator.vibrate&&navigator.vibrate([200,100,200])}catch(e){}}
+const round=()=>Math.floor(S.turn/4)+1;
+const cap=()=>Math.min(S.max,1+Math.floor((round()-1)/2));
+const isWish=()=>Math.floor(S.turn/2)%3===2;
+
+function draw(only){
+  const t=S.turn%2,wish=isWish(),act=wish?1-t:t,rcv=wish?t:1-t;
+  const AL=(S.dist?DC:C).concat((S.mine||[]).map(x=>["mia",1,x[0],x[1]])),ph=S.night?NIGHT[S.night.step%5]:null,lv=ph?Math.min(ph[1],S.max):cap(),ok=c=>c[1]<=lv&&(c[0]==="mia"||(S.lim[0][c[0]]>0&&S.lim[1][c[0]]>0))&&(!ph||!ph[2]||ph[2].includes(c[0])||c[0]==="mia");
+  let pool=AL.filter((c,i)=>ok(c)&&!S.used.includes(i)&&(!only||c[0]===only));
+  if(!pool.length){S.used=[];pool=AL.filter(c=>ok(c)&&(!only||c[0]===only))}
+  if(!pool.length&&ph){pool=AL.filter(c=>c[1]<=cap()&&(c[0]==="mia"||(S.lim[0][c[0]]>0&&S.lim[1][c[0]]>0)))}if(!pool.length){toast("No hay cartas posibles: revisad los límites.");return}
+  const w=c=>(theme()[1].includes(c[0])?2:0)+1+(S.lim[rcv][c[0]]===2?3:0)+Math.max(0,S.fb[rcv][c[0]]||0)+(wish&&S.lim[t][c[0]]===2?2:0);
+  let sum=pool.reduce((a,c)=>a+w(c),0),r=Math.random()*sum,pick=pool[0];
+  for(const c of pool){r-=w(c);if(r<=0){pick=c;break}}
+  S.used.push(AL.indexOf(pick));if(only){const k=S.inv[t].indexOf("Elige tú la categoría");if(k>=0)S.inv[t].splice(k,1)}
+  S.card={pr:pick[0],lvl:pick[1],txt:pick[2],secs:pick[3],act,rcv,wish,left:pick[3],run:false,end:0,done:false,maybe:S.lim[0][pick[0]]===1||S.lim[1][pick[0]]===1};
+  save();render()
+}
+function finish(fb){
+  const c=S.card,pts=(10*c.lvl+(fb===1?5:0))*(c.bet?2:1);S.log=S.log||[];S.log.unshift([today(),c.pr,c.act,c.rcv,pts]);S.log=S.log.slice(0,30);
+  S.pts[c.act]+=pts;S.cnt=(S.cnt||0)+1;lvUp();nightStep();
+  if(fb===1)S.fb[c.rcv][c.pr]=(S.fb[c.rcv][c.pr]||0)+2;
+  if(fb===-1){S.lim[c.rcv][c.pr]=0;S.fb[c.rcv][c.pr]=-5;S.ban=S.ban||[[],[]];if(c.pr!=="mia"&&!S.ban[c.rcv].includes(c.pr))S.ban[c.rcv].push(c.pr)}S.seen=S.seen||[];if(c.pr!=="mia"&&!S.seen.includes(c.pr))S.seen.push(c.pr);seasonAdd();
+  toast(nm(c.act)+" suma "+pts+" puntos");
+  S.card=null;S.turn++;
+  if(S.turn%4===0){const b=5+Math.floor(Math.random()*11);S.pts[0]+=b;S.pts[1]+=b;S.ch="Fin de ronda: cofre de "+b+" puntos para cada uno. Parad un minuto: agua, un abrazo y una pregunta, ¿qué ha sido lo mejor de esta ronda?"}
+  save();render()
+}
+function skip(){
+  const c=S.card,p=S.turn%2,i=S.inv[p].indexOf("Comodín: saltar una carta");
+  if(i>=0)S.inv[p].splice(i,1);else S.pts[p]=Math.max(0,S.pts[p]-5);if(c.bet)S.pts[p]=Math.max(0,S.pts[p]-10);nightStep();
+  S.card=null;S.turn++;save();render()
+}
+function toggle(){const c=S.card;if(c.run){c.left=Math.max(0,Math.round((c.end-Date.now())/1000));c.run=false}else{c.end=Date.now()+c.left*1000;c.run=true}save();render()}
+setInterval(()=>{const c=S.card;if(!c||!c.run||S.paused)return;const l=Math.max(0,Math.round((c.end-Date.now())/1000));const e=$("#tm");if(e){e.textContent=fmt(l);$("#rg").style.strokeDashoffset=String(472*(1-l/c.secs))}if(l<=0){c.run=false;c.left=0;save();beep();render()}},250);
+
+function render(){
+  const a=$("#app"),n=$("#nav");n.innerHTML="";$("#pz").style.display=S.stage==="play"?"":"none";if(S.stage==="play")checkBadges();
+  if(S.stage==="setup"){a.innerHTML=`<h1>Entre los dos</h1><p>Un juego de turnos para pareja que mezcla lo que le gusta a cada uno. Se juega con un solo móvil y se guarda solo.</p>
+  <div class="box"><p><b>Reglas de oro</b></p><p class="mute">Solo adultos. Todo es voluntario y se puede decir "paso" sin dar explicaciones. El botón Pausa siempre está arriba. Las ataduras y el pegging requieren lubricante, calma y una forma rápida de soltarse. Hablad después de cada ronda.</p></div>
+  <label>Jugador 1<input type="text" id="n0" maxlength="20" placeholder="Nombre" value="${esc(S.names[0])}"></label>
+  <label>Jugador 2<input type="text" id="n1" maxlength="20" placeholder="Nombre" value="${esc(S.names[1])}"></label>
+  <p><b>Intensidad máxima</b></p><div class="row seg" id="mx">${LV.map((l,i)=>`<button data-v="${i+1}" class="${S.max===i+1?"s":""}">${l}</button>`).join("")}</div>
+  <p class="mute">El juego empieza suave y sube de intensidad cada dos rondas hasta ese máximo.</p><br><button class="pri" id="go">Elegir límites</button>`;
+  $("#mx").onclick=e=>{if(e.target.dataset.v){S.max=+e.target.dataset.v;nameSave();render()}};
+  $("#go").onclick=()=>{nameSave();S.stage="lim";S.li=0;S.first=true;save();render()};return}
+  if(S.stage==="lim"){const i=S.li;
+  a.innerHTML=`<h2 style="color:${col(i)}">${nm(i)}, tus límites</h2><p class="mute">${S.first&&i===0?"Que "+nm(1)+" no mire. ":""}Sí = me apetece. Quizá = según el momento. No = fuera del juego. La otra persona nunca ve tus respuestas, solo se usan para elegir las cartas.</p>
+  <div class="box">${PR.map(([k,l])=>`<div class="lv"><span>${l}</span><div class="seg" data-k="${k}">${["No","Quizá","Sí"].map((t,v)=>`<button data-v="${v}" class="${S.lim[i][k]===v?"s":""}">${t}</button>`).join("")}</div></div>`).join("")}</div>
+  <button class="pri" id="ok">${S.first&&i===0?"Listo, pasar el móvil":"Listo"}</button>`;
+  a.onclick=e=>{const b=e.target.closest(".seg button");if(!b)return;S.lim[i][b.parentNode.dataset.k]=+b.dataset.v;save();const y=scrollY;render();scrollTo(0,y)};
+  $("#ok").onclick=()=>{if(PR.some(([k])=>S.lim[i][k]===undefined)){toast("Marca una opción en cada fila");return}
+   if(S.first&&i===0){S.li=1}else{S.stage="play";S.tab="play";S.first=false}save();render();scrollTo(0,0)};return}
+  const t=S.turn%2;
+  n.innerHTML=[["play","Juego"],["day","Día a día"],["wish","Deseos"],["shop","Premios"],["plan","Planes"],["more","Más"]].map(([k,l])=>`<button data-t="${k}" class="${S.tab===k?"on":""}">${l}</button>`).join("");
+  n.onclick=e=>{const k=e.target.dataset.t;if(!k)return;if(k==="lim"){S.stage="lim";S.li=t;S.first=false}else S.tab=k;save();render()};
+  const sc=`<div class="score">${[0,1].map(i=>`<div class="chip ${t===i?"on":""}" style="--c:${col(i)}">${nm(i)}<b>${S.pts[i]}</b></div>`).join("")}</div>`;
+  if(S.tab==="day"){const p=S.sp;S.st=S.st||[{n:0,last:""},{n:0,last:""}];if(!S.day||S.day.d!==today())S.day=mkDay(today());const D=S.day,items=D.ids.map(i=>"p"+i).concat(D.cust.map((_,i)=>"c"+i));
+   a.innerHTML=`<h2>Día a día</h2><p class="mute">Planes pequeños para estar más cerca fuera de la cama. Cada plan da puntos y algunos dan vales. Se renuevan cada día.</p>${sc}<div class="row seg">${[0,1].map(i=>`<button data-p="${i}" class="${p===i?"s":""}">${nm(i)}</button>`).join("")}</div><p class="mute">Racha de ${nm(p)}: ${S.st[p].n} día${S.st[p].n===1?"":"s"} seguidos. Cada 3 días dan 15 puntos extra.</p>
+   ${items.map(k=>{const it=planOf(k),dn=D.done[p].includes(k);return `<div class="lv"><span>${esc(it[0])}<br><span class="mute">+${it[1]} puntos${it[2]?" y vale: "+esc(it[2]):""}</span></span>${dn?"<span>Hecho</span>":`<button data-c="${k}">Hecho</button>`}</div>`}).join("")}
+   ${(()=>{const W=weekly();return `<div class="box"><p><b>Reto de la semana</b></p><p>${esc(WK[W.i][0])}</p><p class="mute">+${WK[W.i][1]} puntos y un vale: ${esc(WK[W.i][2])}</p>${W.done[p]?"<p>Hecho por "+nm(p)+".</p>":'<button data-wk="1" class="pri">Marcar hecho por '+nm(p)+'</button>'}</div>`})()}
+   <div class="box"><p><b>Gratitud de hoy</b></p><p class="mute">Escribe una cosa bonita que le agradeces a tu pareja de hoy: +5 puntos. Se guarda en Más.</p>${(D.gr=D.gr||[false,false])[p]?"<p>Ya la has escrito hoy.</p>":'<input type="text" id="gt" maxlength="100" placeholder="Hoy te agradezco..."><button data-gr="1">Guardar, +5</button>'}</div>
+   <div class="box"><p><b>Misión secreta de ${nm(p)}</b></p><p class="mute">Que no la vea tu pareja. Si la cumples sin que lo note, ganas 20 puntos.</p>${D.sm&&D.sm[p]>=0?`<p><b>${esc(SEC[D.sm[p]])}</b></p>${D.smd&&D.smd[p]?"<p>Cumplida.</p>":'<button data-smd="1">Cumplida, +20</button>'}`:'<button data-sm="1">Ver mi misión</button>'}</div>
+   <div class="box"><p><b>Regalo del día</b></p><p class="mute">Cada uno puede abrir uno al día: de 5 a 25 puntos.</p>${(D.gift=D.gift||[false,false])[p]?"<p>Ya recogido hoy por "+nm(p)+".</p>":'<button data-gift="1">Abrir regalo de '+nm(p)+'</button>'}</div>
+   <div class="box"><p><b>Hoy no nos vemos</b></p><p class="mute">Si hoy no os veis, los dos ganan 20 puntos y un vale de reencuentro para canjear cuando volváis.</p>${D.nosee?"<p>Ya canjeado hoy.</p>":'<button data-x="1" class="pri">Hoy no nos vemos</button>'}</div>
+   <div class="box"><p><b>Inventa un plan de hoy</b></p><input type="text" id="ct" maxlength="60" placeholder="Ej: preparar su plato favorito"><button data-add="1">Añadir (+15 puntos)</button></div>`;
+   a.onclick=e=>{const d=e.target.dataset;if(d.p!==undefined)S.sp=+d.p;else if(d.c)doPlan(p,d.c);else if(d.gr){if((D.gr=D.gr||[false,false])[p]){toast("Ya has escrito la de hoy");return}const v=$("#gt").value.trim();if(!v)return;D.gr[p]=true;S.pts[p]+=5;(S.grat=S.grat||[]).unshift([today(),p,v]);S.grat=S.grat.slice(0,50);toast("+5 puntos")}else if(d.sm){D.sm=D.sm||[-1,-1];if(D.sm[p]<0)D.sm[p]=Math.floor(Math.random()*SEC.length)}else if(d.smd){D.smd=D.smd||[false,false];if(D.smd[p])return;D.smd[p]=true;S.pts[p]+=20;toast("Misión cumplida: +20")}else if(d.wk){const W=weekly();if(W.done[p])return;W.done[p]=true;S.pts[p]+=WK[W.i][1];S.inv[p].push(WK[W.i][2]);toast("Reto semanal: +"+WK[W.i][1]+" puntos y un vale")}else if(d.gift){if((D.gift=D.gift||[false,false])[p])return;D.gift[p]=true;const g=GIFT[Math.floor(Math.random()*GIFT.length)];S.pts[p]+=g;toast("Regalo del día: +"+g+" puntos")}else if(d.x){D.nosee=true;[0,1].forEach(i=>{S.pts[i]+=20;S.inv[i].push("Vale de reencuentro: elijo la primera carta de la noche")});toast("Vale de reencuentro para los dos")}else if(d.add){const v=$("#ct").value.trim();if(!v)return;D.cust.push(v)}else return;save();render()};return}
+  if(S.tab==="plan"){const p=S.sp;S.plans=S.plans||[];S.dates=S.dates||[];const F=S.pf||"all",CT=[["all","Todos"],["casa","En casa"],["fuera","Fuera"],["esc","Escapadas"]],rn=i=>S.names[i]||("Jugador "+(i+1)),cost=c=>S.split?[Math.ceil(c/2),Math.floor(c/2)]:(p?[0,c]:[c,0]);
+   a.innerHTML=`<h2>Planes románticos</h2><p class="mute">Canjea puntos por planes para hacer juntos. Si ponéis fecha, se apunta en Más, en Próximas citas.</p>${sc}<div class="row seg">${[0,1].map(i=>`<button data-p="${i}" class="${p===i&&!S.split?"s":""}">Paga ${nm(i)}</button>`).join("")}<button data-sp="1" class="${S.split?"s":""}">A medias</button></div>
+   <div class="row seg" style="margin-top:8px">${CT.map(x=>`<button data-f="${x[0]}" class="${F===x[0]?"s":""}">${x[1]}</button>`).join("")}</div>
+   <label>Fecha, si ya la sabéis<input type="date" id="pd"></label>
+   <div class="box"><p><b>Plan sorpresa, 30 puntos</b></p><p class="mute">Se elige un plan al azar de casa o de fuera y no sabéis cuál es hasta canjearlo.</p><button class="pri" data-sur="1">Canjear plan sorpresa</button></div>
+   ${RP.map((x,i)=>({x,i})).filter(o=>F==="all"||o.x[3]===F).map(o=>`<div class="lv"><span><b>${esc(o.x[0])}</b><br><span class="mute">${esc(o.x[2])}<br>${o.x[1]} puntos</span></span><button data-r="${o.i}">Canjear</button></div>`).join("")}
+   <h3 style="margin-top:20px">Planes canjeados</h3>${S.plans.length?S.plans.map((x,i)=>`<div class="lv"><span>${esc(x.n)}<br><span class="mute">${x.d?x.d:"sin fecha"}</span></span><span class="seg"><button data-pd="${i}">Hecho +10</button><button data-pc="${i}">Cancelar</button></span></div>`).join(""):'<p class="mute">Todavía no habéis canjeado ninguno.</p>'}`;
+   a.onclick=e=>{const d=e.target.dataset;const buy=(n,c)=>{const k=cost(c);if(S.pts[0]<k[0]||S.pts[1]<k[1]){const q=S.pts[0]<k[0]?0:1;toast("Faltan "+(k[q]-S.pts[q])+" puntos de "+rn(q));return}S.pts[0]-=k[0];S.pts[1]-=k[1];const dt=$("#pd").value;S.plans.push({n,c:k,d:dt});if(dt){S.dates.push([dt,n]);S.dates.sort()}toast("Plan canjeado: "+n)};
+    if(d.p!==undefined){S.sp=+d.p;S.split=false}else if(d.sp)S.split=!S.split;else if(d.f)S.pf=d.f;else if(d.r!==undefined){const x=RP[+d.r];buy(x[0],x[1])}else if(d.sur){const pl=RP.filter(x=>x[3]!=="esc"&&x[1]<=100),x=pl[Math.floor(Math.random()*pl.length)];buy(x[0],30)}else if(d.pd!==undefined){S.pdone=(S.pdone||0)+1;[0,1].forEach(i=>S.pts[i]+=10);S.plans.splice(+d.pd,1);toast("Plan hecho: +10 puntos para cada uno")}else if(d.pc!==undefined){const x=S.plans.splice(+d.pc,1)[0];S.pts[0]+=x.c[0];S.pts[1]+=x.c[1];toast("Plan cancelado: puntos devueltos")}else return;save();render()};return}
+  if(S.tab==="more"){S.mine=S.mine||[];S.dates=S.dates||[];S.log=S.log||[];
+   const w7=ymd(new Date(Date.now()-6*864e5)),L=S.log.filter(e=>e[0]>=w7),g=[0,1].map(i=>L.filter(e=>e[2]===i).length),cc={};L.forEach(e=>{if(e[1]!=="wish")cc[e[1]]=(cc[e[1]]||0)+1});const top=Object.keys(cc).sort((x,y)=>cc[y]-cc[x])[0];
+   const st=L.length?`${L.length} cartas en los últimos 7 días. ${nm(0)} ha dado ${g[0]} y ${nm(1)} ${g[1]}.${top?" Categoría que más sale: "+(top==="mia"?"cartas propias":(PR.find(x=>x[0]===top)||[0,top])[1])+".":""}${Math.abs(g[0]-g[1])>=3?" Ojo al equilibrio: le toca dar más a "+nm(g[0]<g[1]?0:1)+".":""}`:"Todavía no hay datos de esta semana.";
+   a.innerHTML=`<h2>Más</h2>${sc}<div class="box"><p><b>Resumen de la semana</b></p><p class="mute">${st}</p></div>
+   <div class="box"><p><b>Próximas citas</b></p>${S.dates.length?S.dates.map((x,i)=>{const n=Math.round((new Date(x[0]+"T00:00")-new Date(today()+"T00:00"))/864e5);return `<div class="lv"><span>${esc(x[1])}<br><span class="mute">${x[0]}, ${n===0?"hoy":n>0?"en "+n+" días":"pasó hace "+(-n)+" días"}</span></span><span class="seg"><button data-dn="${i}">Hecha +30</button><button data-dx="${i}">Quitar</button></span></div>`}).join(""):'<p class="mute">No hay citas apuntadas. Pensad una que les haga ilusión a los dos.</p>'}<input type="date" id="dd"><input type="text" id="dt" maxlength="60" placeholder="Qué vais a hacer"><button data-nd="1">Añadir cita</button></div>
+   <div class="box"><p><b>Vuestras propias cartas</b></p><p class="mute">Usa {A} para quien actúa y {B} para quien recibe. Entran al mazo sin pasar por los límites, así que escribe solo cosas que ya hayáis hablado.</p>${S.mine.map((x,i)=>`<div class="lv"><span>${esc(x[0])}</span><button data-mx="${i}">Quitar</button></div>`).join("")}<input type="text" id="mt" maxlength="140" placeholder="Ej: {A} prepara un baño para {B}"><button data-nm="1">Añadir carta</button></div>
+   <div class="box"><p><b>Cosas bonitas que os habéis dicho</b></p>${(S.grat||[]).slice(0,6).map(x=>`<div class="lv"><span>${esc(x[2])}<br><span class="mute">${nm(x[1])}, ${x[0]}</span></span></div>`).join("")||'<p class="mute">Aún no hay ninguna. Se escriben en Día a día.</p>'}</div>
+   <div class="box"><p><b>Insignias (${(S.bd||[]).length} de ${BD.length})</b></p>${BD.map(b=>{const g=(S.bd||[]).includes(b[0]);return `<p class="${g?"":"mute"}">${g?"Conseguida":"Bloqueada"}: <b>${b[1]}</b>, ${b[2]}</p>`}).join("")}</div>
+   <div class="box"><p><b>Diario de después de la noche</b></p><p class="mute">Cada entrada da 10 puntos y hace que salga más lo que más os gustó.</p><div class="row seg">${[0,1].map(i=>`<button data-dp="${i}" class="${(S.dp||0)===i?"s":""}">${nm(i)}</button>`).join("")}</div><select id="dk"><option value="">Lo que más me gustó...</option>${PR.map(([k,l])=>`<option value="${k}">${l}</option>`).join("")}</select><input type="text" id="dc" maxlength="120" placeholder="Algo que cambiaría o probaría la próxima vez"><button data-dia="1">Guardar entrada</button>${(S.dia||[]).slice(0,3).map(x=>`<p class="mute">${x[0]}, ${nm(x[1])}: ${esc(x[3]||"sin comentarios")}</p>`).join("")}</div>
+   ${(S.ban||[[],[]]).some(q=>q.length)?`<div class="box"><p><b>Categorías bloqueadas</b></p><p class="mute">Las que alguien marcó como No repetir. Elige de quién quieres ver la lista, que no mire la otra persona.</p><div class="row seg">${[0,1].map(i=>`<button data-bv="${i}" class="${S.bv===i?"s":""}">${nm(i)}</button>`).join("")}</div>${S.bv!=null?(S.ban[S.bv]||[]).map(k=>`<div class="lv"><span>${(PR.find(x=>x[0]===k)||[0,k])[1]}</span><button data-un="${S.bv}|${k}">Reactivar</button></div>`).join("")||'<p class="mute">Ninguna.</p>':""}</div>`:""}
+   <div class="box"><p><b>Ajustes</b></p><p class="mute">Cambiar límites: que no mire la otra persona.</p><div class="row"><button data-lim="0">Límites de ${nm(0)}</button><button data-lim="1">Límites de ${nm(1)}</button></div><br><button data-th="1" style="width:100%">Cambiar tema claro u oscuro</button><br><br><button data-snd="1" style="width:100%">Sonido y vibración: ${S.mute?"apagados":"activados"}</button>
+   <p style="margin-top:14px"><b>Aniversario</b></p><input type="date" id="an" value="${S.ann||""}"><button data-an="1">Guardar fecha</button>${(S.ann&&S.ann.slice(5)===today().slice(5)&&S.annY!==today().slice(0,4))?'<br><br><button class="pri" data-anc="1">Celebrar aniversario, +50 cada uno</button>':""}
+   <p style="margin-top:14px"><b>Código de bloqueo</b></p><p class="mute">${S.pin?"Activado. Se pide al volver a la página.":"Opcional, de 4 a 8 cifras."} El botón Ocultar de arriba cambia la pantalla por una lista de la compra: toca dos veces el título para volver.</p><input type="password" id="pn" inputmode="numeric" maxlength="8" placeholder="Nuevo código"><div class="row"><button data-pin="1">Guardar código</button>${S.pin?'<button data-pinx="1">Quitar</button>':""}</div>
+   <p style="margin-top:14px"><b>Copia de seguridad</b></p><p class="mute">Crea el código, guárdalo en un sitio seguro y pégalo aquí para restaurar la partida.</p><textarea id="bk" rows="3"></textarea><div class="row"><button data-ex="1">Crear código</button><button data-im="1">Restaurar</button></div></div>`;
+   a.onclick=e=>{const d=e.target.dataset;if(d.nd){const dd=$("#dd").value,tt=$("#dt").value.trim();if(!dd||!tt){toast("Pon fecha y plan");return}S.dates.push([dd,tt]);S.dates.sort()}else if(d.dn!==undefined){S.cd=(S.cd||0)+1;[0,1].forEach(i=>S.pts[i]+=30);S.dates.splice(+d.dn,1);toast("Cita hecha: +30 puntos para cada uno")}else if(d.dx!==undefined)S.dates.splice(+d.dx,1);else if(d.snd){S.mute=!S.mute}else if(d.dp!==undefined){S.dp=+d.dp}else if(d.dia){const k=$("#dk").value,tx=$("#dc").value.trim(),q=S.dp||0;if(!k&&!tx){toast("Elige algo o escribe un comentario");return}(S.dia=S.dia||[]).unshift([today(),q,k,tx]);S.dia=S.dia.slice(0,40);if(k)S.fb[q][k]=(S.fb[q][k]||0)+3;S.pts[q]+=10;toast("+10 puntos")}else if(d.bv!==undefined){S.bv=S.bv===+d.bv?null:+d.bv}else if(d.un){const [i,k]=d.un.split("|");S.lim[+i][k]=1;S.fb[+i][k]=0;S.ban[+i]=S.ban[+i].filter(x=>x!==k)}else if(d.an){const v=$("#an").value;if(!v)return;S.ann=v;S.annY=null;toast("Aniversario guardado")}else if(d.anc){S.pts[0]+=50;S.pts[1]+=50;S.annY=today().slice(0,4);toast("Feliz aniversario: +50 puntos para cada uno")}else if(d.pin){const v=$("#pn").value.trim();if(!/^\d{4,8}$/.test(v)){toast("Usa de 4 a 8 cifras");return}S.pin=hh(v);toast("Código guardado")}else if(d.pinx){S.pin=null;locked=false;toast("Código quitado")}else if(d.ex){const cd=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$("#bk").value=cd;try{navigator.clipboard.writeText(cd)}catch(e){}toast("Código creado. Guárdalo.");return}else if(d.im){try{const o=JSON.parse(decodeURIComponent(escape(atob($("#bk").value.trim()))));if(!o||!o.stage)throw 0;S=o;locked=null;toast("Partida restaurada")}catch(e){toast("El código no es válido");return}}else if(d.nm){const v=$("#mt").value.trim();if(!v)return;S.mine.push([v,300])}else if(d.mx!==undefined)S.mine.splice(+d.mx,1);else if(d.lim!==undefined){S.stage="lim";S.li=+d.lim;S.first=false}else if(d.th){S.theme=S.theme==="dark"?"light":"dark";document.documentElement.dataset.theme=S.theme}else return;save();render()};return}
+  if(S.tab==="wish"){const p=S.sp;S.wish=S.wish||[[],[]];S.log=S.log||[];const lab=k=>k==="wish"?"Deseo":(PR.find(x=>x[0]===k)||[0,k==="mia"?"Carta propia":k])[1];
+   a.innerHTML=`<h2>Buzón de deseos</h2><p class="mute">Escribe en secreto lo que te gustaría probar. Tu pareja no puede leerlo: solo lo descubre cuando abre un deseo al azar y entonces pasa a ser una carta.</p>${sc}<div class="row seg">${[0,1].map(i=>`<button data-p="${i}" class="${p===i?"s":""}">${nm(i)}</button>`).join("")}</div>
+   ${S.ow?`<div class="card" style="--c:${col(S.ow.f)}"><span class="tag">Deseo de ${nm(S.ow.f)}</span><div class="txt">${esc(S.ow.x)}</div><p class="mute">${nm(S.ow.t)} lo cumple. Si ahora no apetece, se devuelve al buzón.</p><div class="row"><button class="pri" data-ok="1">Cumplido, +30</button><button data-back="1">Devolver</button></div></div>`:""}
+   <div class="box"><p><b>Escribir un deseo de ${nm(p)}</b></p><p class="mute">Guardados en secreto: ${S.wish[p].length}</p><input type="text" id="wt" maxlength="120" placeholder="Algo que me gustaría probar"><button data-add="1">Guardar en secreto</button></div>
+   <div class="box"><p><b>Abrir un deseo de ${nm(1-p)}</b></p><p class="mute">Sale uno al azar y lo cumple ${nm(p)}. Hay ${S.wish[1-p].length} en el buzón.</p><button class="pri" data-open="1">Abrir deseo</button></div>
+   <h3>Últimas cartas</h3>${S.log.length?S.log.slice(0,8).map(e=>`<div class="lv"><span>${e[0]}: ${lab(e[1])} de ${nm(e[2])} para ${nm(e[3])}</span><span>+${e[4]}</span></div>`).join(""):'<p class="mute">Todavía no habéis completado ninguna.</p>'}`;
+   a.onclick=e=>{const d=e.target.dataset;if(d.p!==undefined)S.sp=+d.p;else if(d.add){const v=$("#wt").value.trim();if(!v)return;S.wish[p].push(v);toast("Guardado en secreto")}else if(d.open){if(S.ow){toast("Resuelve primero el deseo abierto");return}const w=S.wish[1-p];if(!w.length){toast("No hay deseos en el buzón");return}S.ow={f:1-p,t:p,x:w.splice(Math.floor(Math.random()*w.length),1)[0]}}else if(d.ok){S.wd=(S.wd||0)+1;S.pts[S.ow.t]+=30;S.log.unshift([today(),"wish",S.ow.t,S.ow.f,30]);S.log=S.log.slice(0,30);S.ow=null;toast("+30 puntos")}else if(d.back){S.wish[S.ow.f].push(S.ow.x);S.ow=null}else return;save();render()};return}
+  if(S.tab==="shop"){a.onclick=null;const p=S.sp;
+   a.innerHTML=`<h2>Premios</h2>${sc}<div class="row seg">${[0,1].map(i=>`<button data-p="${i}" class="${p===i?"s":""}">${nm(i)}</button>`).join("")}</div>
+   <div class="row seg">${[["all","Todos"],["a","Hasta 30"],["b","31 a 60"],["c","Más de 60"]].map(x=>`<button data-sf="${x[0]}" class="${(S.sf||"all")===x[0]?"s":""}">${x[1]}</button>`).join("")}</div>${(()=>{const nx=SHOP.map(q=>q[1]).filter(c=>c>S.pts[p]).sort((x,y)=>x-y)[0];return nx?`<p class="mute">A ${nm(p)} le faltan ${nx-S.pts[p]} puntos para el siguiente premio, de ${nx}.</p>`:""})()}
+   ${SHOP.map((q,i)=>({q,i})).filter(o=>{const f=S.sf||"all",c=o.q[1];return f==="all"||(f==="a"&&c<=30)||(f==="b"&&c>30&&c<=60)||(f==="c"&&c>60)}).sort((x,y)=>x.q[1]-y.q[1]).map(o=>`<div class="lv"><span>${o.q[0]}<br><span class="mute">${o.q[1]} puntos${S.pts[p]>=o.q[1]?"":", faltan "+(o.q[1]-S.pts[p])}</span></span><button data-b="${o.i}">Canjear</button></div>`).join("")}
+   <div class="box"><p><b>Ruleta de la suerte</b></p><p class="mute">Cuesta 15 puntos. Puede dar puntos, un vale o nada.</p><button data-spin="1" class="pri">Girar</button></div><h3 style="margin-top:20px">Vales de ${nm(p)}</h3>${S.inv[p].length?S.inv[p].map((v,i)=>`<div class="lv"><span>${v}</span>${v.startsWith("Comodín")||v.startsWith("Elige")?'<span class="mute">se usa en el juego</span>':`<button data-u="${i}">Usar</button>`}</div>`).join(""):'<p class="mute">Todavía no tiene ninguno.</p>'}<h3 style="margin-top:20px">Vales ya usados</h3>${(S.vh||[]).slice(0,6).map(x=>`<p class="mute">${x[0]}: ${esc(x[2])} (${nm(x[1])})</p>`).join("")||'<p class="mute">Todavía no se ha usado ninguno.</p>'}`;
+   a.onclick=e=>{const d=e.target.dataset;if(d.p!==undefined){S.sp=+d.p}else if(d.sf){S.sf=d.sf}else if(d.b!==undefined){const s=SHOP[d.b];if(S.pts[p]<s[1]){toast("Faltan "+(s[1]-S.pts[p])+" puntos");return}S.pts[p]-=s[1];S.inv[p].push(s[0]);toast("Canjeado: "+s[0])}else if(d.u!==undefined){toast("Usado: "+S.inv[p][d.u]);(S.vh=S.vh||[]).unshift([today(),p,S.inv[p][d.u]]);S.vh=S.vh.slice(0,20);S.inv[p].splice(+d.u,1)}else if(d.spin){if(S.pts[p]<15){toast("Faltan puntos");return}S.pts[p]-=15;const V=x=>()=>S.inv[p].push(x),R=[["+40 puntos",()=>S.pts[p]+=40],["+20 puntos",()=>S.pts[p]+=20],["+25 puntos",()=>S.pts[p]+=25],["Vale: elijo la primera carta de la noche",V("Vale: elijo la primera carta de la noche")],["Vale de masaje de 20 min",V("Vale de masaje de 20 min")],["Comodín: saltar una carta",V("Comodín: saltar una carta")],["Nada esta vez, un beso de consolación",()=>0]],r=R[Math.floor(Math.random()*R.length)];r[1]();toast("Ruleta: "+r[0])}else return;save();render()};return}
+  const c=S.card;let h=sc;
+  if(S.ch){h+=`<div class="box">${S.ch}</div>`;S.ch=null;save()}
+  h+=`<p class="mute">Ronda ${round()}, intensidad ${LV[cap()-1]}, nivel de pareja: ${rank()} (${S.cnt||0} cartas)</p>`;h+=S.night?`<div class="box"><b>Noche guiada: ${NIGHT[S.night.step][0]}</b> (fase ${S.night.step+1} de 5)${c?"":' <button id="nt">Terminar noche</button>'}</div>`:(c?"":'<button id="nt" style="width:100%;margin-bottom:8px">Empezar noche guiada de 5 cartas</button>');h+=c?"":hoyBox()+`<button id="ds" style="width:100%;margin-bottom:8px">${S.dist?"Modo a distancia activado (tocar para quitar)":"Activar modo a distancia"}</button>`;
+  if(!c){h+=`<div class="box" style="border-color:${col(t)}"><h2>Turno de ${nm(t)}</h2><p class="mute">${isWish()?"Esta vez toca tu deseo: sacas una carta de lo que más te apetece a ti y tu pareja la cumple.":"Sacas una carta pensada para darle a tu pareja algo que le gusta."}</p>${S.inv[t].includes("Elige tú la categoría")?'<p><b>Tienes un vale de categoría</b></p><select id="cs"><option value="">Elegir categoría...</option>'+PR.map(([k,l])=>`<option value="${k}">${l}</option>`).join("")+'</select>':""}<br><button class="pri" id="dr">Sacar carta</button></div>`}
+  else{const txt=esc(c.txt).replace(/\{A\}/g,"<b>"+nm(c.act)+"</b>").replace(/\{B\}/g,"<b>"+nm(c.rcv)+"</b>");
+   const L=c.left;h+=`<div class="card" style="--c:${col(c.act)}"><span class="tag">${c.wish?"Deseo de "+nm(c.rcv):"Regalo"}</span><span class="tag" style="background:var(--ink);color:var(--bg)">${LV[c.lvl-1]}</span>${c.maybe?'<p class="mute">Alguno marcó "quizá" en esto. Se puede pasar sin explicaciones.</p>':""}
+   <div class="txt">${txt}</div>
+   <svg class="ring" viewBox="0 0 170 170"><circle cx="85" cy="85" r="75" fill="none" stroke="var(--line)" stroke-width="10"/><circle id="rg" cx="85" cy="85" r="75" fill="none" stroke="var(--c)" stroke-width="10" stroke-linecap="round" stroke-dasharray="472" stroke-dashoffset="${472*(1-L/c.secs)}" transform="rotate(-90 85 85)"/><text id="tm" x="85" y="95" text-anchor="middle">${fmt(L)}</text></svg>
+   <div class="row"><button id="tg">${c.run?"Pausar":"Empezar tiempo"}</button><button id="pl">+30 s</button></div>
+   ${c.done?`<p style="margin-top:14px"><b>¿Cómo fue para ${nm(c.rcv)}?</b></p><div class="row"><button data-f="1">Repetir</button><button data-f="0">Normal</button><button data-f="-1">No repetir</button></div>`:`<br><button id="bt" class="${c.bet?"s":""}" style="width:100%;margin-bottom:8px">${c.bet?"Doble o nada activado: x2 si lo hacéis, -10 si saltáis":"Apostar doble o nada"}</button><button class="pri" id="dn">Hecho</button><br><br><button id="sk">Saltar (${S.inv[t].includes("Comodín: saltar una carta")?"usa comodín":"-5 puntos"})</button>`}</div>`}
+  a.innerHTML=h;a.onclick=null;const nt=$("#nt");if(nt)nt.onclick=()=>{S.night=S.night?null:{step:0};save();render()};const ds=$("#ds");if(ds)ds.onclick=()=>{S.dist=!S.dist;S.used=[];save();render()};
+  if(!c){$("#dr").onclick=()=>draw();const cs=$("#cs");if(cs)cs.onchange=()=>{if(cs.value)draw(cs.value)}}else{$("#tg").onclick=toggle;$("#pl").onclick=()=>{if(c.run)c.end+=30000;else c.left+=30;c.secs+=30;save();render()};
+   if(c.done)a.onclick=e=>{const f=e.target.dataset.f;if(f!==undefined)finish(+f)};else{$("#dn").onclick=()=>{if(c.run){c.run=false}c.done=true;save();render()};$("#sk").onclick=skip;const bt=$("#bt");if(bt)bt.onclick=()=>{c.bet=!c.bet;save();render()}}}
+}
+function nameSave(){const a=$("#n0"),b=$("#n1");if(a)S.names[0]=a.value.trim();if(b)S.names[1]=b.value.trim();save()}
+$("#pz").onclick=()=>{const c=S.card;if(c&&c.run){c.left=Math.max(0,Math.round((c.end-Date.now())/1000));c.run=false}S.paused=true;save();pauseUI()};
+function pauseUI(){const o=$("#ovl");if(!S.paused){o.innerHTML="";return}
+ o.innerHTML=`<div class="ov" role="alertdialog"><div><h1>Pausa</h1><p>Todo se detiene. Respirad, hablad de cómo estáis y retomad solo si los dos queréis. Un abrazo y agua también cuentan.</p><br><button class="pri" id="rs">Continuar</button><br><br><button id="ex">Terminar y empezar de cero</button></div></div>`;
+ $("#rs").onclick=()=>{S.paused=false;save();pauseUI();render()};
+ $("#ex").onclick=()=>{if(confirm("Se borrará todo el progreso, ¿seguro?")){S=fresh();save();pauseUI();render()}}}
+if(S.theme)document.documentElement.dataset.theme=S.theme;
+$("#hd").onclick=()=>{covered=true;lockUI()};document.addEventListener("visibilitychange",()=>{if(document.hidden&&S.pin){locked=true;lockUI()}});lockUI();pauseUI();render();
+</script>
+</body>
+</html>
